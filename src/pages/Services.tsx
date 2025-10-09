@@ -96,11 +96,17 @@ const Services = () => {
       {/* Services Grid */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
             {services.map((service, index) => (
               <div 
                 key={index} 
-                className={`${index >= 3 ? "lg:col-span-1" : ""}`}
+                className={
+                  index < 3 
+                    ? "lg:col-span-2" 
+                    : index === 3 
+                      ? "lg:col-span-2 lg:col-start-2" 
+                      : "lg:col-span-2 lg:col-start-4"
+                }
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <ServiceCard {...service} />
