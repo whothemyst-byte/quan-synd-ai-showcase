@@ -41,6 +41,11 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const handleNavClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -60,6 +65,7 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={handleNavClick}
                 className={`px-4 py-2 rounded-lg transition-all duration-300 ${
                   isActive(item.path)
                     ? "bg-primary text-primary-foreground"
@@ -108,7 +114,7 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={handleNavClick}
                 className={`block px-4 py-2 rounded-lg transition-all ${
                   isActive(item.path)
                     ? "bg-primary text-primary-foreground"

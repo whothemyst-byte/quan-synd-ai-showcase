@@ -1,18 +1,27 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowRight, Calendar, Tag, TrendingUp } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import featuredImage from "@/assets/blog-agentic-ai.jpg";
+import designSystemsImage from "@/assets/blog-design-systems.jpg";
+import ethicalAiImage from "@/assets/blog-ethical-ai.jpg";
+import uxResearchImage from "@/assets/blog-ux-research.jpg";
+import generativeAiImage from "@/assets/blog-generative-ai.jpg";
+import multiAgentImage from "@/assets/blog-multi-agent.jpg";
+import companyExpansionImage from "@/assets/blog-company-expansion.jpg";
 
 const Blog = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const featuredPost = {
     title: "The Rise of Agentic AI: Autonomous Systems Reshaping Business",
     excerpt: "Explore how autonomous AI agents are revolutionizing decision-making processes and creating new possibilities for business automation.",
     category: "AI Innovation",
     date: "October 5, 2025",
     readTime: "8 min read",
-    image: "🤖",
+    image: featuredImage,
   };
 
   const blogPosts = [
@@ -22,7 +31,7 @@ const Blog = () => {
       category: "Design",
       date: "October 2, 2025",
       readTime: "6 min read",
-      image: "🎨",
+      image: designSystemsImage,
     },
     {
       title: "Ethical AI: Building Responsible Systems",
@@ -30,7 +39,7 @@ const Blog = () => {
       category: "AI Ethics",
       date: "September 28, 2025",
       readTime: "10 min read",
-      image: "⚖️",
+      image: ethicalAiImage,
     },
     {
       title: "UX Research Methods for AI Products",
@@ -38,7 +47,7 @@ const Blog = () => {
       category: "UX Research",
       date: "September 25, 2025",
       readTime: "7 min read",
-      image: "🔍",
+      image: uxResearchImage,
     },
     {
       title: "The Future of Generative AI in Design",
@@ -46,7 +55,7 @@ const Blog = () => {
       category: "AI Innovation",
       date: "September 20, 2025",
       readTime: "9 min read",
-      image: "✨",
+      image: generativeAiImage,
     },
     {
       title: "Building Multi-Agent AI Systems",
@@ -54,7 +63,7 @@ const Blog = () => {
       category: "Technology",
       date: "September 15, 2025",
       readTime: "12 min read",
-      image: "🔧",
+      image: multiAgentImage,
     },
     {
       title: "Company Update: Expanding Our Global Reach",
@@ -62,11 +71,15 @@ const Blog = () => {
       category: "Company",
       date: "September 10, 2025",
       readTime: "4 min read",
-      image: "🌍",
+      image: companyExpansionImage,
     },
   ];
 
-  const categories = ["All", "AI Innovation", "Design", "UX Research", "Technology", "Company"];
+  const categories = ["All", "AI Innovation", "Design", "UX Research", "Technology", "Company", "AI Ethics"];
+
+  const filteredPosts = selectedCategory === "All" 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === selectedCategory);
 
   return (
     <div className="min-h-screen">
@@ -92,8 +105,13 @@ const Blog = () => {
         <div className="container mx-auto px-4">
           <Card className="glass-card overflow-hidden max-w-5xl mx-auto hover-scale glow-effect">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-              <div className="bg-gradient-ai flex items-center justify-center p-12">
-                <div className="text-9xl">{featuredPost.image}</div>
+              <div className="relative h-64 md:h-auto overflow-hidden">
+                <img 
+                  src={featuredPost.image} 
+                  alt={featuredPost.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-ai opacity-20" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-center">
                 <div className="flex items-center space-x-4 mb-4 text-sm">
@@ -129,9 +147,10 @@ const Blog = () => {
             {categories.map((category) => (
               <Button
                 key={category}
-                variant={category === "All" ? "default" : "outline"}
+                variant={selectedCategory === category ? "default" : "outline"}
                 size="sm"
-                className="rounded-full"
+                className="rounded-full transition-all hover:scale-105"
+                onClick={() => setSelectedCategory(category)}
               >
                 {category}
               </Button>
@@ -144,13 +163,19 @@ const Blog = () => {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
+            {filteredPosts.map((post, index) => (
               <Card
                 key={index}
-                className="glass-card overflow-hidden hover-scale glow-effect group cursor-pointer"
+                className="glass-card overflow-hidden hover-scale glow-effect group cursor-pointer animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="bg-gradient-ai flex items-center justify-center h-48">
-                  <div className="text-6xl">{post.image}</div>
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={post.image} 
+                    alt={post.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-ai opacity-20 group-hover:opacity-30 transition-opacity" />
                 </div>
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
