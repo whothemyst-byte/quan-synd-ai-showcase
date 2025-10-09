@@ -1,0 +1,99 @@
+import { Link } from "react-router-dom";
+import { Mail, Phone, Linkedin, Twitter, Github } from "lucide-react";
+
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="bg-primary text-primary-foreground">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold gradient-text">QuanSynd</h3>
+            <p className="text-sm opacity-90">
+              A Scube company pioneering AI-driven design and consulting solutions globally.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link to="/about" className="opacity-90 hover:opacity-100 transition-opacity">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/services" className="opacity-90 hover:opacity-100 transition-opacity">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link to="/case-studies" className="opacity-90 hover:opacity-100 transition-opacity">
+                  Case Studies
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="opacity-90 hover:opacity-100 transition-opacity">
+                  Blog
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h4 className="font-semibold mb-4">Services</h4>
+            <ul className="space-y-2 text-sm">
+              <li className="opacity-90">UI Design</li>
+              <li className="opacity-90">UX Research</li>
+              <li className="opacity-90">Graphic Design</li>
+              <li className="opacity-90">AI Consulting</li>
+              <li className="opacity-90">Agentic AI</li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="font-semibold mb-4">Get in Touch</h4>
+            <div className="space-y-3 text-sm">
+              <a
+                href="mailto:contact@quansynd.com"
+                className="flex items-center space-x-2 opacity-90 hover:opacity-100 transition-opacity"
+              >
+                <Mail className="h-4 w-4" />
+                <span>contact@quansynd.com</span>
+              </a>
+              <a
+                href="tel:+1234567890"
+                className="flex items-center space-x-2 opacity-90 hover:opacity-100 transition-opacity"
+              >
+                <Phone className="h-4 w-4" />
+                <span>+1 (234) 567-890</span>
+              </a>
+              <div className="flex space-x-4 pt-2">
+                <a href="#" className="opacity-90 hover:opacity-100 transition-opacity">
+                  <Linkedin className="h-5 w-5" />
+                </a>
+                <a href="#" className="opacity-90 hover:opacity-100 transition-opacity">
+                  <Twitter className="h-5 w-5" />
+                </a>
+                <a href="#" className="opacity-90 hover:opacity-100 transition-opacity">
+                  <Github className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm opacity-90">
+          <p>© {currentYear} QuanSynd - A Scube Company. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
