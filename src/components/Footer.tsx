@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="bg-[hsl(263,70%,50%)] text-white dark:bg-[hsl(263,70%,50%)] dark:text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -67,11 +67,11 @@ const Footer = () => {
                 <span>contact@quansynd.com</span>
               </a>
               <a
-                href="tel:+1234567890"
+                href="tel:+919500594498"
                 className="flex items-center space-x-2 opacity-90 hover:opacity-100 transition-opacity"
               >
                 <Phone className="h-4 w-4" />
-                <span>+1 (234) 567-890</span>
+                <span>+91 95005 94498</span>
               </a>
               <div className="flex space-x-4 pt-2">
                 <a href="#" className="opacity-90 hover:opacity-100 transition-opacity">

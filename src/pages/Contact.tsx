@@ -92,10 +92,10 @@ const Contact = () => {
                     <div>
                       <p className="font-medium">Phone</p>
                       <a
-                        href="tel:+1234567890"
+                        href="tel:+919500594498"
                         className="text-sm text-muted-foreground hover:text-accent transition-colors"
                       >
-                        +1 (234) 567-890
+                        +91 95005 94498
                       </a>
                     </div>
                   </div>
@@ -105,12 +105,12 @@ const Contact = () => {
                     <div>
                       <p className="font-medium">WhatsApp</p>
                       <a
-                        href="https://wa.me/1234567890"
+                        href="https://wa.me/919500594498"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm text-muted-foreground hover:text-accent transition-colors"
                       >
-                        +1 (234) 567-890
+                        +91 95005 94498
                       </a>
                     </div>
                   </div>
@@ -120,8 +120,8 @@ const Contact = () => {
                     <div>
                       <p className="font-medium">Office</p>
                       <p className="text-sm text-muted-foreground">
-                        Global Offices<br />
-                        North America • Europe • Asia
+                        93/2, Thippe Gounder Street EXT., Ondidipudur<br />
+                        Coimbatore, Tamil Nadu, India
                       </p>
                     </div>
                   </div>
@@ -170,7 +170,7 @@ const Contact = () => {
                     <span>Closed</span>
                   </div>
                   <p className="text-xs opacity-90 pt-2">
-                    * Times shown in EST. We operate across multiple time zones.
+                    * Times shown in IST. We operate across multiple time zones.
                   </p>
                 </CardContent>
               </Card>
