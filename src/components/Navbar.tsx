@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logoDark from "@/assets/logo-dark.png";
+import logoLight from "@/assets/logo-light.png";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,8 +57,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="text-2xl font-bold gradient-text">QuanSynd</div>
+          <Link to="/" className="flex items-center space-x-2 group" onClick={handleNavClick}>
+            <img 
+              src={theme === "light" ? logoLight : logoDark} 
+              alt="QuanSynd Logo" 
+              className="h-8 w-auto transition-opacity hover:opacity-80"
+            />
           </Link>
 
           {/* Desktop Navigation */}
