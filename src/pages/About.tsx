@@ -60,7 +60,7 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="glass-card p-8 hover-scale glow-effect">
               <div className="inline-flex p-3 rounded-xl bg-gradient-ai mb-6">
-                <Target className="h-8 w-8 text-primary-foreground" />
+                <Target className="h-8 w-8 text-white dark:text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
               <p className="text-muted-foreground">
@@ -72,7 +72,7 @@ const About = () => {
 
             <div className="glass-card p-8 hover-scale glow-effect">
               <div className="inline-flex p-3 rounded-xl bg-gradient-ai mb-6">
-                <Eye className="h-8 w-8 text-primary-foreground" />
+                <Eye className="h-8 w-8 text-white dark:text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
               <p className="text-muted-foreground">
@@ -84,7 +84,7 @@ const About = () => {
 
             <div className="glass-card p-8 hover-scale glow-effect">
               <div className="inline-flex p-3 rounded-xl bg-gradient-ai mb-6">
-                <Heart className="h-8 w-8 text-primary-foreground" />
+                <Heart className="h-8 w-8 text-white dark:text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-4">Our Values</h3>
               <ul className="space-y-2 text-muted-foreground">
@@ -138,7 +138,7 @@ const About = () => {
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Let's collaborate to bring your vision to life with AI-powered innovation
           </p>
-          <Button asChild size="lg" className="bg-gradient-ai hover:shadow-ai transition-all">
+          <Button asChild size="lg" variant="gradient">
             <Link to="/contact">
               Reach Out Today
               <ArrowRight className="ml-2 h-5 w-5" />

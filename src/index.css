@@ -132,6 +132,25 @@
   .glass-card {
     @apply bg-card/80 backdrop-blur-xl border border-border/50;
   }
+
+  /* 
+   * Accessibility Enhancement - 2025-10-13
+   * Ensures WCAG AA contrast compliance (≥4.5:1) for gradient backgrounds
+   * Forces white text on gradient backgrounds in all modes for optimal readability
+   */
+  .gradient-accessible-text {
+    @apply text-white;
+  }
+
+  /* Gradient button with accessible text colors */
+  .btn-gradient {
+    background: var(--gradient-ai);
+    @apply text-white hover:shadow-ai transition-all;
+  }
+
+  .btn-gradient:hover {
+    @apply shadow-ai;
+  }
 }
 
 @layer utilities {

@@ -77,16 +77,16 @@ const CaseStudies = () => {
                       {study.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
-                          className="px-3 py-1 bg-primary-foreground/20 rounded-full text-sm text-primary-foreground"
+                          className="px-3 py-1 bg-white/20 rounded-full text-sm text-white dark:text-white"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <CardTitle className="text-3xl md:text-4xl text-primary-foreground">
+                    <CardTitle className="text-3xl md:text-4xl text-white dark:text-white">
                       {study.title}
                     </CardTitle>
-                    <p className="text-primary-foreground/90 text-lg mt-2">
+                    <p className="text-white/90 dark:text-white/90 text-lg mt-2">
                       Client: {study.client}
                     </p>
                   </CardHeader>

@@ -152,7 +152,7 @@ const Contact = () => {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card bg-gradient-ai text-primary-foreground">
+              <Card className="glass-card bg-gradient-ai text-white dark:text-white">
                 <CardHeader>
                   <CardTitle>Office Hours</CardTitle>
                 </CardHeader>
@@ -276,7 +276,7 @@ const Contact = () => {
                       />
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full bg-gradient-ai hover:shadow-ai transition-all">
+                    <Button type="submit" size="lg" variant="gradient" className="w-full">
                       Send Message
                       <Send className="ml-2 h-5 w-5" />
                     </Button>

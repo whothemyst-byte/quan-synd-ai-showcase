@@ -129,7 +129,7 @@ const Blog = () => {
                 </CardDescription>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">{featuredPost.readTime}</span>
-                  <Button variant="default" className="bg-gradient-ai">
+                  <Button variant="gradient" className="text-white dark:text-white">
                     Read More
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>

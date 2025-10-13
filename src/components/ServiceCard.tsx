@@ -13,7 +13,7 @@ const ServiceCard = ({ icon: Icon, title, description, features }: ServiceCardPr
     <Card className="group hover-scale glass-card glow-effect hover:shadow-card-hover transition-all duration-300 h-full">
       <CardHeader>
         <div className="mb-4 inline-flex p-3 rounded-xl bg-gradient-ai">
-          <Icon className="h-8 w-8 text-primary-foreground" />
+          <Icon className="h-8 w-8 text-white dark:text-white" />
         </div>
         <CardTitle className="text-2xl mb-2">{title}</CardTitle>
         <CardDescription className="text-base">{description}</CardDescription>
