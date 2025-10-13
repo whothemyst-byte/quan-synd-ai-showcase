@@ -1,8 +1,31 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, Linkedin, Twitter, Github } from "lucide-react";
+import { useState, useEffect } from "react";
+import logoDark from "@/assets/logo-dark.png";
+import logoLight from "@/assets/logo-light.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+    setTheme(initialTheme);
+
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains("dark");
+      setTheme(isDark ? "dark" : "light");
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <footer className="bg-[hsl(263,70%,20%)] text-white dark:bg-[hsl(263,70%,20%)] dark:text-white">
@@ -10,7 +33,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold gradient-text">QuanSynd</h3>
+            <img 
+              src={theme === "light" ? logoLight : logoDark} 
+              alt="QuanSynd Logo" 
+              className="h-8 w-auto"
+            />
             <p className="text-sm opacity-90">
               A Scube company pioneering AI-driven design and consulting solutions globally.
             </p>
