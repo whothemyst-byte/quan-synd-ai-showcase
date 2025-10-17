@@ -34,7 +34,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <img 
-              src={theme === "light" ? logoLight : logoDark} 
+              src={logoDark} 
               alt="QuanSynd Logo" 
               className="h-8 w-auto"
             />
@@ -87,11 +87,11 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Get in Touch</h4>
             <div className="space-y-3 text-sm">
               <a
-                href="mailto:contact@quansynd.com"
+                href="mailto:info@quansynd.com"
                 className="flex items-center space-x-2 opacity-90 hover:opacity-100 transition-opacity"
               >
                 <Mail className="h-4 w-4" />
-                <span>contact@quansynd.com</span>
+                <span>info@quansynd.com</span>
               </a>
               <a
                 href="tel:+919500594498"
