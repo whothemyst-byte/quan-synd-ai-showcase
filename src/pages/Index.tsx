@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
 import AIBackground from "@/components/AIBackground";
-import AnimatedCounter from "@/components/AnimatedCounter";
 
 const Index = () => {
   const services = [
@@ -150,27 +149,6 @@ const Index = () => {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 animated-gradient opacity-20" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <AnimatedCounter end={500} suffix="+" />
-              <p className="text-lg mt-2 opacity-90">Projects Delivered</p>
-            </div>
-            <div className="text-center">
-              <AnimatedCounter end={98} suffix="%" />
-              <p className="text-lg mt-2 opacity-90">Client Satisfaction</p>
-            </div>
-            <div className="text-center">
-              <AnimatedCounter end={50} suffix="+" />
-              <p className="text-lg mt-2 opacity-90">AI Solutions Deployed</p>
-            </div>
           </div>
         </div>
       </section>
