@@ -16,6 +16,7 @@ import companyExpansionImage from "@/assets/blog-company-expansion.jpg";
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const featuredPost = {
+    slug: "rise-of-agentic-ai",
     title: "The Rise of Agentic AI: Autonomous Systems Reshaping Business",
     excerpt: "Explore how autonomous AI agents are revolutionizing decision-making processes and creating new possibilities for business automation.",
     category: "AI Innovation",
@@ -26,6 +27,7 @@ const Blog = () => {
 
   const blogPosts = [
     {
+      slug: "design-systems-age-of-ai",
       title: "Design Systems in the Age of AI",
       excerpt: "How AI is transforming the way we build and maintain design systems at scale.",
       category: "Design",
@@ -34,6 +36,7 @@ const Blog = () => {
       image: designSystemsImage,
     },
     {
+      slug: "ethical-ai-responsible-systems",
       title: "Ethical AI: Building Responsible Systems",
       excerpt: "Best practices for ensuring your AI implementations are ethical, transparent, and fair.",
       category: "AI Ethics",
@@ -42,6 +45,7 @@ const Blog = () => {
       image: ethicalAiImage,
     },
     {
+      slug: "ux-research-ai-products",
       title: "UX Research Methods for AI Products",
       excerpt: "Adapting traditional UX research methodologies for AI-powered applications.",
       category: "UX Research",
@@ -50,6 +54,7 @@ const Blog = () => {
       image: uxResearchImage,
     },
     {
+      slug: "future-generative-ai-design",
       title: "The Future of Generative AI in Design",
       excerpt: "How generative AI tools are empowering designers and transforming creative workflows.",
       category: "AI Innovation",
@@ -58,6 +63,7 @@ const Blog = () => {
       image: generativeAiImage,
     },
     {
+      slug: "building-multi-agent-ai-systems",
       title: "Building Multi-Agent AI Systems",
       excerpt: "Technical deep-dive into coordinating multiple AI agents for complex problem-solving.",
       category: "Technology",
@@ -66,6 +72,7 @@ const Blog = () => {
       image: multiAgentImage,
     },
     {
+      slug: "company-expanding-global-reach",
       title: "Company Update: Expanding Our Global Reach",
       excerpt: "QuanSynd announces new partnerships and office locations across three continents.",
       category: "Company",
@@ -129,9 +136,11 @@ const Blog = () => {
                 </CardDescription>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">{featuredPost.readTime}</span>
-                  <Button variant="gradient" className="text-white dark:text-white">
-                    Read More
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button asChild variant="gradient" className="text-white dark:text-white">
+                    <Link to={`/blog/${featuredPost.slug}`}>
+                      Read More
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -164,10 +173,10 @@ const Blog = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post, index) => (
-              <Card
-                key={index}
-                className="glass-card overflow-hidden hover-scale glow-effect group cursor-pointer animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
+              <Link key={post.slug} to={`/blog/${post.slug}`}>
+                <Card
+                  className="glass-card overflow-hidden hover-scale glow-effect group cursor-pointer animate-fade-in h-full"
+                  style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img 
@@ -196,13 +205,14 @@ const Blog = () => {
                       <Calendar className="h-3 w-3 mr-1" />
                       {post.date}
                     </span>
-                    <Button variant="ghost" size="sm" className="group-hover:text-accent">
+                    <span className="text-sm group-hover:text-accent flex items-center">
                       Read More
                       <ArrowRight className="ml-1 h-4 w-4" />
-                    </Button>
+                    </span>
                   </div>
                 </CardContent>
               </Card>
+            </Link>
             ))}
           </div>
 
