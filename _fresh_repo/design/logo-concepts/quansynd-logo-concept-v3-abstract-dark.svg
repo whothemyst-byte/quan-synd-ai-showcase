@@ -1,0 +1,23 @@
+﻿<svg width="900" height="900" viewBox="0 0 900 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="markGoldD" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d79a3d"/>
+      <stop offset="100%" stop-color="#b8802b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="900" rx="180" fill="#090807"/>
+
+  <!-- Abstract tri-arc signal -->
+  <g transform="translate(450,450)">
+    <path d="M -220 10 C -190 -180, 190 -180, 220 10" stroke="url(#markGoldD)" stroke-width="34" stroke-linecap="round" fill="none"/>
+    <path d="M -180 78 C -150 -82, 150 -82, 180 78" stroke="url(#markGoldD)" stroke-width="28" stroke-linecap="round" stroke-opacity="0.85" fill="none"/>
+    <path d="M -132 140 C -110 46, 110 46, 132 140" stroke="url(#markGoldD)" stroke-width="24" stroke-linecap="round" stroke-opacity="0.72" fill="none"/>
+
+    <!-- intelligent cut / forward notch -->
+    <path d="M 40 -10 L 198 -170" stroke="#090807" stroke-width="54" stroke-linecap="round"/>
+
+    <!-- nexus node -->
+    <circle cx="176" cy="-152" r="22" fill="#d79a3d"/>
+  </g>
+</svg>

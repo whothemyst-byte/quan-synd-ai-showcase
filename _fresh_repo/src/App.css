@@ -1,0 +1,36 @@
+/* App-level base reset — all design tokens are in index.css */
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Smooth scroll for all anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove default link underlines globally */
+a {
+  text-decoration: none;
+}
+
+/* Remove select/button default appearance */
+select,
+button {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Bounce animation used in hero scroll cue */
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
