@@ -531,8 +531,9 @@
 
 .qb-expand-panel {
   grid-column: 1 / -1;
-  background: var(--ink);
-  color: var(--paper);
+  /* Uses "always-dark" QB tokens so dark mode doesn't invert this panel */
+  background: var(--qb-method-bg);
+  color: var(--qb-method-text);
   border-radius: 14px;
   padding: 28px 32px;
   display: grid;
