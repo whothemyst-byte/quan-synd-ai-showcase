@@ -1,0 +1,151 @@
+/* ═══════════════════════════════════════════════════════
+   QUANSYND — RESPONSIVE LAYOUT
+   All breakpoint overrides for the editorial design system
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 900px) ────────────────────────────────── */
+@media (max-width: 900px) {
+
+    /* Navbar */
+    .qs-nav-desktop {
+        display: none !important;
+    }
+
+    .qs-hamburger {
+        display: flex !important;
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 32px !important;
+    }
+
+    /* Service card top-row — 2 cols */
+    .svc-grid-top {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Service card bottom-row — 2 cols centered */
+    .svc-grid-bot {
+        grid-template-columns: repeat(2, 1fr) !important;
+        justify-content: center !important;
+    }
+
+    /* About story split */
+    .about-story-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* About mission/vision/values */
+    .about-mvv-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Contact form layout */
+    .contact-split {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Blog article grid */
+    .blog-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Index hero text */
+    .hero-headline {
+        font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
+    }
+}
+
+/* ── Mobile (≤ 640px) ────────────────────────────────── */
+@media (max-width: 640px) {
+
+    /* Footer — 1 column */
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+    }
+
+    /* All service grids collapse to 1 column */
+    .svc-grid-top,
+    .svc-grid-bot {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* About all grids — 1 col */
+    .about-mvv-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Blog grid — 1 col */
+    .blog-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Contact name/email row — 1 col */
+    .contact-name-email {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Section padding tightened */
+    .page-section-pad {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    /* Hero padding */
+    .hero-section {
+        padding-top: 100px !important;
+        padding-bottom: 60px !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    /* CTA buttons stack */
+    .cta-buttons-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .cta-buttons-row a,
+    .cta-buttons-row button {
+        text-align: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+
+    /* Hero headline */
+    .hero-headline {
+        font-size: clamp(2rem, 8vw, 3rem) !important;
+    }
+
+    /* About vision dark section: stack left/right */
+    .about-vision-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Tools strip: tighter wrapping */
+    .tools-strip {
+        gap: 8px !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Stats row in About */
+    .about-stats-row {
+        flex-wrap: wrap !important;
+        gap: 16px !important;
+    }
+}
+
+/* ── Small mobile (≤ 400px) ─────────────────────────── */
+@media (max-width: 400px) {
+    .hero-headline {
+        font-size: 1.9rem !important;
+    }
+
+    /* Navbar logo: smaller */
+    nav img {
+        height: 26px !important;
+    }
+}

@@ -1,190 +1,468 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Brain, Palette, Search } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
-import AIBackground from "@/components/AIBackground";
+
+const services = [
+  {
+    icon: Palette,
+    title: "UI Design",
+    category: "Design",
+    description: "Craft beautiful, intuitive interfaces that users love and businesses trust.",
+    features: [
+      "Modern, responsive designs",
+      "Design system creation",
+      "Prototyping & wireframing",
+      "Brand-aligned aesthetics",
+    ],
+  },
+  {
+    icon: Search,
+    title: "UX Research",
+    category: "Research",
+    description: "Deep insights into user behavior and needs to drive informed decisions.",
+    features: [
+      "User interviews & testing",
+      "Journey mapping",
+      "Competitive analysis",
+      "Data-driven recommendations",
+    ],
+  },
+  {
+    icon: Sparkles,
+    title: "Graphic Design",
+    category: "Creative",
+    description: "Stunning visual content that captures attention and builds brand identity.",
+    features: [
+      "Brand identity design",
+      "Marketing materials",
+      "Illustration & iconography",
+      "Print & digital assets",
+    ],
+  },
+  {
+    icon: Brain,
+    title: "AI Consulting",
+    category: "AI",
+    description: "Strategic guidance for seamless AI integration and business transformation.",
+    features: [
+      "AI strategy development",
+      "Technology assessment",
+      "Implementation roadmap",
+      "Risk mitigation",
+    ],
+  },
+  {
+    icon: Zap,
+    title: "Agentic AI",
+    category: "AI",
+    description: "Next-generation autonomous AI systems that learn, adapt, and optimise.",
+    features: [
+      "Intelligent automation",
+      "Autonomous decision-making",
+      "Multi-agent systems",
+      "Self-improving algorithms",
+    ],
+  },
+];
+
+const tools = ["Figma", "Adobe XD", "TensorFlow", "PyTorch", "OpenAI", "React", "Python", "AWS"];
 
 const Index = () => {
-  const services = [
-    {
-      icon: Palette,
-      title: "UI Design",
-      description: "Craft beautiful, intuitive interfaces that users love",
-      features: [
-        "Modern, responsive designs",
-        "Design system creation",
-        "Prototyping & wireframing",
-        "Brand-aligned aesthetics",
-      ],
-    },
-    {
-      icon: Search,
-      title: "UX Research",
-      description: "Deep insights into user behavior and needs",
-      features: [
-        "User interviews & testing",
-        "Journey mapping",
-        "Competitive analysis",
-        "Data-driven recommendations",
-      ],
-    },
-    {
-      icon: Sparkles,
-      title: "Graphic Design",
-      description: "Stunning visual content that captures attention",
-      features: [
-        "Brand identity design",
-        "Marketing materials",
-        "Illustration & iconography",
-        "Print & digital assets",
-      ],
-    },
-    {
-      icon: Brain,
-      title: "AI Consulting",
-      description: "Strategic guidance for AI integration",
-      features: [
-        "AI strategy development",
-        "Technology assessment",
-        "Implementation roadmap",
-        "Risk mitigation",
-      ],
-    },
-    {
-      icon: Zap,
-      title: "Agentic AI",
-      description: "Next-generation autonomous AI systems",
-      features: [
-        "Intelligent automation",
-        "Autonomous decision-making",
-        "Multi-agent systems",
-        "Self-improving algorithms",
-      ],
-    },
-  ];
-
   return (
-    <div className="min-h-screen">
+    <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <AIBackground />
-        <div className="absolute inset-0 bg-gradient-glow opacity-30" />
-        
-        <div className="container mx-auto px-4 py-20 relative z-10">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <div className="inline-block animate-pulse-glow">
-              <span className="px-4 py-2 rounded-full bg-accent/10 border border-accent/30 text-accent text-sm font-medium">
-                Pioneering the Future of AI
-              </span>
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              Welcome to the Future of{" "}
-              <span className="gradient-text">AI Innovation</span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-              QuanSynd pioneers cutting-edge artificial intelligence solutions that transform 
-              businesses and shape tomorrow's technology landscape.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button asChild size="lg" variant="gradient" className="group">
-                <Link to="/contact">
-                  Start Your Project
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-2">
-                <Link to="/services">Explore Services</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-muted-foreground rounded-full flex justify-center">
-            <div className="w-1.5 h-3 bg-muted-foreground rounded-full mt-2 animate-pulse" />
-          </div>
-        </div>
-      </section>
-
-      {/* Services Preview */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Our <span className="gradient-text">Services</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive AI and design solutions tailored to your business needs
-            </p>
+      {/* ── HERO ─────────────────────────────────────────────── */}
+      <section
+        className="dot-grid-bg"
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "120px 24px 80px",
+          position: "relative",
+        }}
+      >
+        <div style={{ maxWidth: "760px", width: "100%", textAlign: "center" }}>
+          {/* Eyebrow */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "32px",
+              borderLeft: "2px solid var(--amber)",
+              paddingLeft: "12px",
+            }}
+          >
+            <span className="amber-label">A Scube Company</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
-            {services.map((service, index) => (
-              <div 
-                key={index} 
-                className={
-                  index < 3 
-                    ? "lg:col-span-2" 
-                    : index === 3 
-                      ? "lg:col-span-2 lg:col-start-2" 
-                      : "lg:col-span-2 lg:col-start-4"
-                }
-              >
-                <ServiceCard {...service} />
-              </div>
-            ))}
-          </div>
+          {/* Headline */}
+          <h1
+            style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontWeight: 400,
+              fontSize: "clamp(3rem, 6vw, 5rem)",
+              lineHeight: "1.1",
+              letterSpacing: "-0.02em",
+              color: "var(--ink)",
+              marginBottom: "24px",
+            }}
+          >
+            Designing Intelligence.{" "}
+            <em style={{ fontStyle: "italic" }}>Building the Future.</em>
+          </h1>
 
-          <div className="text-center">
-            <Button asChild size="lg" variant="outline">
-              <Link to="/services">
-                View All Services
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Software/Tools Stripe */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-sm text-muted-foreground mb-8">
-            POWERED BY INDUSTRY-LEADING TOOLS
+          {/* Subheadline */}
+          <p
+            style={{
+              fontFamily: "'Geist', sans-serif",
+              fontSize: "18px",
+              lineHeight: "1.7",
+              color: "var(--muted-ui)",
+              maxWidth: "580px",
+              margin: "0 auto 40px",
+            }}
+          >
+            QuanSynd pioneers cutting-edge AI consulting, design systems, and agentic solutions
+            that transform how organisations think, work, and grow.
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60">
-            {["Figma", "Adobe XD", "TensorFlow", "PyTorch", "OpenAI", "React", "Python", "AWS"].map((tool) => (
-              <div key={tool} className="text-lg md:text-xl font-semibold hover:opacity-100 transition-opacity">
-                {tool}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-20 relative">
-        <div className="absolute inset-0 bg-gradient-ai opacity-10" />
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Let's build the future together with cutting-edge AI solutions
-          </p>
-          <Button asChild size="lg" variant="gradient">
-            <Link to="/contact">
-              Get Started Today
-              <ArrowRight className="ml-2 h-5 w-5" />
+          {/* CTAs */}
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link
+              to="/contact"
+              className="amber-btn"
+              style={{
+                padding: "14px 28px",
+                borderRadius: "6px",
+                fontSize: "15px",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                textDecoration: "none",
+              }}
+            >
+              Start a Project <ArrowRight size={16} />
             </Link>
-          </Button>
+            <Link
+              to="/services"
+              className="outline-ink-btn"
+              style={{
+                padding: "14px 28px",
+                borderRadius: "6px",
+                fontSize: "15px",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                textDecoration: "none",
+              }}
+            >
+              Explore Services
+            </Link>
+          </div>
+
+          {/* Trust line */}
+          <p
+            style={{
+              fontFamily: "'Geist Mono', monospace",
+              fontSize: "11px",
+              letterSpacing: "0.06em",
+              color: "var(--muted-ui)",
+              marginTop: "28px",
+              textTransform: "uppercase",
+            }}
+          >
+            Trusted by forward-thinking teams globally
+          </p>
+        </div>
+
+        {/* Scroll cue */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "36px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "6px",
+            animation: "bounce 2s infinite",
+            opacity: 0.4,
+          }}
+        >
+          <div
+            style={{
+              width: "20px",
+              height: "32px",
+              border: "1.5px solid var(--muted-ui)",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "3px",
+                height: "6px",
+                background: "var(--muted-ui)",
+                borderRadius: "2px",
+                animation: "pulse 1.5s ease-in-out infinite",
+              }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── TOOLS STRIP ──────────────────────────────────────── */}
+      <section
+        className="cream-section"
+        style={{
+          padding: "40px 24px",
+          borderTop: "1px solid var(--rule)",
+          borderBottom: "1px solid var(--rule)",
+        }}
+      >
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <p className="amber-label" style={{ textAlign: "center", marginBottom: "24px" }}>
+            Powered by industry-leading tools
+          </p>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "32px 48px",
+              opacity: 0.55,
+            }}
+          >
+            {tools.map((tool) => (
+              <span
+                key={tool}
+                style={{
+                  fontFamily: "'Geist', sans-serif",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  letterSpacing: "-0.01em",
+                  transition: "opacity 0.15s",
+                  cursor: "default",
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLSpanElement).style.opacity = "1")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLSpanElement).style.opacity = "0.55")}
+              >
+                {tool}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SERVICES ─────────────────────────────────────────── */}
+      <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          {/* Section header */}
+          <div style={{ marginBottom: "64px" }}>
+            <span className="section-rule" />
+            <span className="amber-label" style={{ display: "block", marginBottom: "12px" }}>
+              What We Do
+            </span>
+            <h2
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontWeight: 400,
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                marginBottom: "12px",
+              }}
+            >
+              Comprehensive AI &amp; design solutions
+            </h2>
+            <p
+              style={{
+                fontFamily: "'Geist', sans-serif",
+                fontSize: "16px",
+                color: "var(--muted-ui)",
+                maxWidth: "480px",
+              }}
+            >
+              Tailored to your business needs — from strategy to execution.
+            </p>
+          </div>
+
+          {/* Row 1 — 3 cards */}
+          <div
+            className="svc-grid-top"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "24px",
+            }}
+          >
+            {services.slice(0, 3).map((s) => (
+              <ServiceCard key={s.title} {...s} />
+            ))}
+          </div>
+
+          {/* Row 2 — 2 cards centered */}
+          <div
+            className="svc-grid-bot"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, calc((100% - 24px) / 3)))",
+              gap: "24px",
+              justifyContent: "center",
+              marginTop: "24px",
+            }}
+          >
+            {services.slice(3).map((s) => (
+              <ServiceCard key={s.title} {...s} />
+            ))}
+          </div>
+
+          {/* CTA link */}
+          <div style={{ marginTop: "48px" }}>
+            <Link
+              to="/services"
+              style={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "12px",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--amber)",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                borderBottom: "1px solid var(--amber)",
+                paddingBottom: "2px",
+              }}
+            >
+              View All Services <ArrowRight size={13} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── QUAN BENCH CTA BAND ───────────────────────────────── */}
+      <section
+        className="cream-section"
+        style={{
+          padding: "64px 24px",
+          borderTop: "1px solid var(--rule)",
+          borderBottom: "1px solid var(--rule)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1280px",
+            margin: "0 auto",
+            borderLeft: "3px solid var(--amber)",
+            paddingLeft: "32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "24px",
+          }}
+        >
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+              <span className="amber-label">Quan Bench</span>
+              <span className="qb-live-pill" style={{ marginLeft: 0 }}>LIVE</span>
+            </div>
+            <h2
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontWeight: 400,
+                fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                marginBottom: "10px",
+              }}
+            >
+              Quan Bench is Live
+            </h2>
+            <p
+              style={{
+                fontFamily: "'Geist', sans-serif",
+                fontSize: "15px",
+                color: "var(--muted-ui)",
+                maxWidth: "480px",
+                lineHeight: "1.65",
+              }}
+            >
+              Our open AI model intelligence index — benchmarking frontier, capable and efficient
+              models across reasoning, accuracy, creativity and more.
+            </p>
+          </div>
+          <Link
+            to="/quan-bench"
+            className="amber-btn"
+            style={{
+              padding: "13px 26px",
+              borderRadius: "6px",
+              fontSize: "14px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            View Benchmarks <ArrowRight size={15} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ── FINAL CTA ────────────────────────────────────────── */}
+      <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
+        <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
+          <h2
+            style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontWeight: 400,
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              letterSpacing: "-0.02em",
+              color: "var(--ink)",
+              marginBottom: "16px",
+            }}
+          >
+            Ready to transform your business?
+          </h2>
+          <p
+            style={{
+              fontFamily: "'Geist', sans-serif",
+              fontSize: "16px",
+              color: "var(--muted-ui)",
+              marginBottom: "36px",
+              lineHeight: "1.7",
+            }}
+          >
+            Let's build the future together with cutting-edge AI and design solutions.
+          </p>
+          <Link
+            to="/contact"
+            className="amber-btn"
+            style={{
+              padding: "14px 32px",
+              borderRadius: "6px",
+              fontSize: "15px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              textDecoration: "none",
+            }}
+          >
+            Get Started Today <ArrowRight size={16} />
+          </Link>
         </div>
       </section>
 

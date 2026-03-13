@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -47,18 +52,29 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // ── Quan Bench Design Foundation Brand Tokens ──
+        amber: {
+          DEFAULT: "#c8882a",
+          dark: "#d79a3d",
+        },
+        ink: "#0e0e0b",
+        paper: "#f5f0e8",
+        cream: "#ede7d9",
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ["Geist", "system-ui", "sans-serif"],
+        serif: ["Instrument Serif", "serif"],
+        mono: ["Geist Mono", "ui-monospace", "monospace"],
       },
       backgroundImage: {
-        'gradient-ai': 'var(--gradient-ai)',
-        'gradient-cyber': 'var(--gradient-cyber)',
-        'gradient-glow': 'var(--gradient-glow)',
+        "gradient-ai": "var(--gradient-ai)",
+        "gradient-cyber": "var(--gradient-cyber)",
+        "gradient-glow": "var(--gradient-glow)",
       },
       boxShadow: {
-        'ai': 'var(--shadow-ai)',
-        'card-hover': '0 20px 60px -10px hsl(190 100% 50% / 0.4)',
+        ai: "var(--shadow-ai)",
+        "card-hover": "0 20px 60px -20px rgba(14, 14, 11, 0.32)",
+        "amber-glow": "0 4px 20px -4px rgba(200, 136, 42, 0.45)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,25 +83,22 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(8px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.4s ease-out",
       },
     },
   },

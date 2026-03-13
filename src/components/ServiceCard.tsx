@@ -1,34 +1,134 @@
-import { LucideIcon } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+﻿import { type LucideIcon } from "lucide-react";
 
 interface ServiceCardProps {
   icon: LucideIcon;
   title: string;
   description: string;
   features: string[];
+  category?: string;
 }
 
-const ServiceCard = ({ icon: Icon, title, description, features }: ServiceCardProps) => {
+const ServiceCard = ({ icon: Icon, title, description, features, category }: ServiceCardProps) => {
   return (
-    <Card className="group hover-scale glass-card glow-effect hover:shadow-card-hover transition-all duration-300 h-full">
-      <CardHeader>
-        <div className="mb-4 inline-flex p-3 rounded-xl bg-gradient-ai">
-          <Icon className="h-8 w-8 text-white dark:text-white" />
-        </div>
-        <CardTitle className="text-2xl mb-2">{title}</CardTitle>
-        <CardDescription className="text-base">{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-2">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-start space-x-2">
-              <span className="text-accent mt-1">✦</span>
-              <span className="text-sm text-muted-foreground">{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+    <div
+      style={{
+        background: "var(--card-bg)",
+        border: "1px solid var(--rule)",
+        borderRadius: "8px",
+        padding: "32px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+        height: "100%",
+        transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLDivElement;
+        el.style.borderColor = "rgba(200,136,42,0.35)";
+        el.style.boxShadow = "0 4px 24px -8px rgba(200,136,42,0.18)";
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLDivElement;
+        el.style.borderColor = "var(--rule)";
+        el.style.boxShadow = "none";
+      }}
+    >
+      {/* Category Tag */}
+      {category && (
+        <span
+          style={{
+            fontFamily: "'Geist Mono', monospace",
+            fontSize: "10px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "var(--amber)",
+            fontWeight: 500,
+          }}
+        >
+          {category}
+        </span>
+      )}
+
+      {/* Icon */}
+      <div
+        style={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "6px",
+          background: "var(--amber)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
+        <Icon size={20} color="#fff" />
+      </div>
+
+      {/* Text */}
+      <div>
+        <h3
+          style={{
+            fontFamily: "'Geist', system-ui, sans-serif",
+            fontWeight: 600,
+            fontSize: "18px",
+            letterSpacing: "-0.01em",
+            color: "var(--ink)",
+            marginBottom: "8px",
+          }}
+        >
+          {title}
+        </h3>
+        <p
+          style={{
+            fontFamily: "'Geist', system-ui, sans-serif",
+            fontSize: "14px",
+            color: "var(--muted-ui)",
+            lineHeight: "1.65",
+          }}
+        >
+          {description}
+        </p>
+      </div>
+
+      {/* Features */}
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "7px", flex: 1 }}>
+        {features.map((feature, i) => (
+          <li
+            key={i}
+            style={{
+              fontFamily: "'Geist', system-ui, sans-serif",
+              fontSize: "13px",
+              color: "var(--muted-ui)",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "8px",
+              lineHeight: "1.5",
+            }}
+          >
+            <span style={{ color: "var(--amber)", fontWeight: 600, flexShrink: 0 }}>—</span>
+            {feature}
+          </li>
+        ))}
+      </ul>
+
+      {/* Footer link */}
+      <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "16px" }}>
+        <span
+          style={{
+            fontFamily: "'Geist Mono', monospace",
+            fontSize: "11px",
+            letterSpacing: "0.08em",
+            color: "var(--amber)",
+            cursor: "pointer",
+            textTransform: "uppercase",
+            fontWeight: 500,
+          }}
+        >
+          Explore →
+        </span>
+      </div>
+    </div>
   );
 };
 
