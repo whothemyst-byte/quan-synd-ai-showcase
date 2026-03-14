@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles, Zap, Brain, Palette, Search } from "lucide-react"
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
+import { Seo } from "@/seo/Seo";
 
 const services = [
   {
@@ -72,6 +73,12 @@ const tools = ["Figma", "Adobe XD", "TensorFlow", "PyTorch", "OpenAI", "React", 
 const Index = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
+      <Seo
+        title="QuanSynd - AI Design & Consulting | Pioneering the Future"
+        description="QuanSynd pioneers cutting-edge AI solutions and design excellence. Expert services in UI Design, UX Research, Graphic Design, AI Consulting, and Agentic AI."
+        canonicalPath="/"
+        ogType="website"
+      />
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────── */}
