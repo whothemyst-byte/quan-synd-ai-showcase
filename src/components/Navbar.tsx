@@ -49,6 +49,7 @@ const Navbar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const paperBg = theme === "dark" ? "rgba(18,17,15,0.92)" : "rgba(245,240,232,0.92)";
+  const isNavSolid = isScrolled || isMobileMenuOpen;
 
   return (
     <>
@@ -71,10 +72,10 @@ const Navbar = () => {
           right: 0,
           zIndex: 50,
           transition: "all 0.3s ease",
-          borderTop: isScrolled ? "2px solid var(--amber)" : "2px solid transparent",
-          borderBottom: isScrolled ? "1px solid var(--rule)" : "1px solid transparent",
-          backgroundColor: isScrolled ? paperBg : "transparent",
-          backdropFilter: isScrolled ? "blur(16px)" : "none",
+          borderTop: isNavSolid ? "2px solid var(--amber)" : "2px solid transparent",
+          borderBottom: isNavSolid ? "1px solid var(--rule)" : "1px solid transparent",
+          backgroundColor: isNavSolid ? paperBg : "transparent",
+          backdropFilter: isNavSolid ? "blur(16px)" : "none",
         }}
       >
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
