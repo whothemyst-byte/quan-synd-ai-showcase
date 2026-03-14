@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles, Zap, Brain, Palette, Search } from "lucide-react"
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
+import { Seo } from "@/seo/Seo";
 
 const services = [
   {
@@ -89,6 +90,12 @@ const processSteps = [
 const Services = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
+      <Seo
+        title="Services | QuanSynd — AI Consulting, UI/UX & Agentic AI"
+        description="Explore QuanSynd services: UI Design, UX Research, Graphic Design, AI Consulting, and Agentic AI—end-to-end delivery for business transformation."
+        canonicalPath="/services"
+        ogType="website"
+      />
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────── */}
@@ -318,6 +325,41 @@ const Services = () => {
               }}
             >
               About Us
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* €€ INSIGHTS CTA €€ */}
+      <section style={{ padding: "72px 24px", background: "var(--paper)", borderTop: "1px solid var(--rule)" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto", textAlign: "center" }}>
+          <span className="amber-label" style={{ display: "block", marginBottom: "16px" }}>
+            Insights
+          </span>
+          <h2
+            style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontWeight: 400,
+              fontSize: "clamp(1.9rem, 3.2vw, 2.6rem)",
+              letterSpacing: "-0.02em",
+              color: "var(--ink)",
+              marginBottom: "12px",
+            }}
+          >
+            Learn what we’re building and why it works.
+          </h2>
+          <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "16px", color: "var(--muted-ui)", lineHeight: "1.7", marginBottom: "28px" }}>
+            Explore our writing on agentic AI, ethical implementation, UX research, and scalable design systems.
+          </p>
+          <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link to="/blog" className="outline-ink-btn" style={{ padding: "12px 22px", borderRadius: "6px", textDecoration: "none" }}>
+              Read the Blog
+            </Link>
+            <Link to="/blog/rise-of-agentic-ai" className="outline-ink-btn" style={{ padding: "12px 22px", borderRadius: "6px", textDecoration: "none" }}>
+              Agentic AI
+            </Link>
+            <Link to="/blog/ux-research-ai-products" className="outline-ink-btn" style={{ padding: "12px 22px", borderRadius: "6px", textDecoration: "none" }}>
+              UX Research for AI
             </Link>
           </div>
         </div>

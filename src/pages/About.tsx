@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Target, Eye, Heart, Rocket } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Seo } from "@/seo/Seo";
 
 const About = () => {
   const stats = [
@@ -20,6 +21,12 @@ const About = () => {
 
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
+      <Seo
+        title="About QuanSynd | AI Design & Consulting"
+        description="Learn about QuanSynd, a Scube Company bridging AI innovation and design excellence—our story, mission, values, and what drives our work."
+        canonicalPath="/about"
+        ogType="website"
+      />
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────── */}

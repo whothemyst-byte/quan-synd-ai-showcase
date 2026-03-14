@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Seo } from "@/seo/Seo";
 import featuredImage from "@/assets/blog-agentic-ai.jpg";
 import designSystemsImage from "@/assets/blog-design-systems.jpg";
 import ethicalAiImage from "@/assets/blog-ethical-ai.jpg";
@@ -43,6 +44,12 @@ const Blog = () => {
 
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
+      <Seo
+        title="Blog | QuanSynd — Insights on AI, Design & Technology"
+        description="Read QuanSynd perspectives on agentic AI, design systems, ethical AI, UX research, and emerging technology—ideas worth exploring."
+        canonicalPath="/blog"
+        ogType="website"
+      />
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────── */}
@@ -160,6 +167,7 @@ const Blog = () => {
                 <img
                   src={featuredPost.image}
                   alt={featuredPost.title}
+                  decoding="async"
                   style={{
                     position: "absolute",
                     inset: 0,
@@ -308,6 +316,8 @@ const Blog = () => {
                     <img
                       src={post.image}
                       alt={post.title}
+                      loading="lazy"
+                      decoding="async"
                       style={{
                         width: "100%",
                         height: "100%",

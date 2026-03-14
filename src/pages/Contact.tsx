@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, Linkedin, Twitter, Github, Send, ChevronDown, Chev
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
+import { Seo } from "@/seo/Seo";
 
 const faqs = [
   {
@@ -71,6 +72,12 @@ const Contact = () => {
 
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
+      <Seo
+        title="Contact | QuanSynd — Let’s Work Together"
+        description="Get in touch with QuanSynd to discuss AI consulting, agentic AI, UI/UX design, or research. Share your goals and we’ll respond within 24 hours."
+        canonicalPath="/contact"
+        ogType="website"
+      />
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────── */}

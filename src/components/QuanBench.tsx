@@ -72,44 +72,6 @@ const QuanBench = () => {
   const scatterRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
-    const title = "Quan Bench — Intelligence Observatory | Quansynd";
-    document.title = title;
-
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.setAttribute("name", "description");
-      document.head.appendChild(meta);
-    }
-
-    meta.setAttribute(
-      "content",
-      "Quansynd's proprietary AI model intelligence index. We benchmark leading models across reasoning, accuracy, creativity and more.",
-    );
-
-    const fontHref =
-      "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap";
-
-    if (!document.head.querySelector(`link[href='${fontHref}']`)) {
-      const preconnectA = document.createElement("link");
-      preconnectA.rel = "preconnect";
-      preconnectA.href = "https://fonts.googleapis.com";
-      document.head.appendChild(preconnectA);
-
-      const preconnectB = document.createElement("link");
-      preconnectB.rel = "preconnect";
-      preconnectB.href = "https://fonts.gstatic.com";
-      preconnectB.crossOrigin = "";
-      document.head.appendChild(preconnectB);
-
-      const font = document.createElement("link");
-      font.rel = "stylesheet";
-      font.href = fontHref;
-      document.head.appendChild(font);
-    }
-  }, []);
-
-  useEffect(() => {
     document.body.classList.add("qb-body");
     return () => {
       document.body.classList.remove("qb-body");

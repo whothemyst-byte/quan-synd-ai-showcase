@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, Tag, User } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Seo } from "@/seo/Seo";
+import { blogPostingJsonLd } from "@/seo/schema";
 import featuredImage from "@/assets/blog-agentic-ai.jpg";
 import designSystemsImage from "@/assets/blog-design-systems.jpg";
 import ethicalAiImage from "@/assets/blog-ethical-ai.jpg";
@@ -269,9 +271,31 @@ const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = allBlogPosts.find((p) => p.slug === slug);
 
+  const canonicalPath = (slug ? (`/blog/${slug}` as const) : "/blog") as `/${string}`;
+  const title = post ? `${post.title} | QuanSynd` : "Post Not Found | QuanSynd";
+  const description = post
+    ? post.excerpt
+    : "The blog post you’re looking for doesn’t exist. Browse the latest posts from QuanSynd.";
+  const jsonLd = post
+    ? blogPostingJsonLd({
+        slug: post.slug,
+        title: post.title,
+        description: post.excerpt,
+        datePublished: post.date,
+        authorName: post.author,
+      })
+    : undefined;
+
   if (!post) {
     return (
       <div className="min-h-screen">
+        <Seo
+          title={title}
+          description={description}
+          canonicalPath={canonicalPath}
+          ogType="website"
+          noIndex
+        />
         <Navbar />
         <div className="pt-32 pb-20 container mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4">Post Not Found</h1>
@@ -290,6 +314,13 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title={title}
+        description={description}
+        canonicalPath={canonicalPath}
+        ogType="article"
+        jsonLd={jsonLd}
+      />
       <Navbar />
 
       {/* Hero with Featured Image */}
@@ -342,6 +373,7 @@ const BlogPost = () => {
               <img
                 src={post.image}
                 alt={post.title}
+                decoding="async"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-ai opacity-10" />
@@ -369,6 +401,9 @@ const BlogPost = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild variant="gradient" className="text-white dark:text-white">
               <Link to="/contact">Get in Touch</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/services">View Services</Link>
             </Button>
             <Button asChild variant="outline">
               <Link to="/blog">Read More Articles</Link>
