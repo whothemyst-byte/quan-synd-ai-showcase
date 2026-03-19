@@ -13,7 +13,7 @@ export default function Checkout() {
   const planId = 'forge_monthly';
 
   // Mock processing the payment simulation
-  const handlePayment = (e: React.FormEvent) => {
+  const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
