@@ -210,7 +210,7 @@ const VibeADE = () => {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             <a
-              href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.6/Vibe-ADE-0.3.6-setup-x64.exe"
+              href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.7/Vibe-ADE-0.3.7-setup-x64.exe"
               target="_blank"
               rel="noopener noreferrer"
               className="amber-btn"
@@ -657,7 +657,7 @@ const VibeADE = () => {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             <a
-              href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.6/Vibe-ADE-0.3.6-setup-x64.exe"
+              href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.7/Vibe-ADE-0.3.7-setup-x64.exe"
               target="_blank"
               rel="noopener noreferrer"
               className="amber-btn"
@@ -740,7 +740,7 @@ const VibeADE = () => {
               </div>
               <div className="release-notes-header-actions">
                 <a
-                  href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.6/Vibe-ADE-0.3.6-setup-x64.exe"
+                  href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.7/Vibe-ADE-0.3.7-setup-x64.exe"
                   className="amber-btn release-notes-download"
                   style={{ textDecoration: "none" }}
                 >
