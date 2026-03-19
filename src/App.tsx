@@ -13,6 +13,14 @@ import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 import QuanBenchPage from "./pages/quan-bench";
 import NotFound from "./pages/NotFound";
+import VibeADE from "./pages/VibeADE";
+import VibePricing from "./pages/VibePricing";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
+import Checkout from "./pages/Checkout";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Helmet } from "react-helmet-async";
 import { organizationJsonLd, websiteJsonLd } from "@/seo/schema";
 
@@ -25,7 +33,8 @@ const ScrollToTopWrapper = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(organizationJsonLd())}</script>
         <script type="application/ld+json">{JSON.stringify(websiteJsonLd())}</script>
@@ -41,10 +50,41 @@ const App = () => (
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/quan-bench" element={<QuanBenchPage />} />
+        <Route path="/products/vibe-ade" element={<VibeADE />} />
+        <Route path="/products/vibe-ade/pricing" element={<VibePricing />} />
+        
+        {/* Auth & Protected Routes */}
+        <Route path="/auth" element={<Auth />} />
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/checkout" 
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/payment-success" 
+          element={
+            <ProtectedRoute>
+              <PaymentSuccess />
+            </ProtectedRoute>
+          } 
+        />
+
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
