@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Twitter, Github } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 
@@ -25,7 +25,7 @@ const Footer = () => {
           className="footer-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr",
+            gridTemplateColumns: "1.4fr 1fr 1fr 1fr 1.2fr",
             gap: "48px",
           }}
         >
@@ -114,6 +114,47 @@ const Footer = () => {
                 { label: "Services", path: "/services" },
                 { label: "Blog", path: "/blog" },
                 { label: "Contact", path: "/contact" },
+              ].map(({ label, path }) => (
+                <li key={path}>
+                  <Link
+                    to={path}
+                    style={{
+                      fontFamily: "'Geist', sans-serif",
+                      fontSize: "13px",
+                      color: FOOTER_MUTED,
+                      textDecoration: "none",
+                      transition: "color 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = FOOTER_TEXT)}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = FOOTER_MUTED)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Products */}
+          <div>
+            <h4
+              style={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "11px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: AMBER,
+                fontWeight: 500,
+                marginBottom: "20px",
+              }}
+            >
+              Products
+            </h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
+              {[
+                { label: "Vibe ADE", path: "/products/vibe-ade" },
+                { label: "Vibe ADE Pricing", path: "/products/vibe-ade/pricing" },
+                { label: "Quan Bench", path: "/quan-bench" },
               ].map(({ label, path }) => (
                 <li key={path}>
                   <Link

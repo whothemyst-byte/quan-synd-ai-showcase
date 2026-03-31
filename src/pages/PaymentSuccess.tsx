@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Copy, PartyPopper } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function PaymentSuccess() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const plan = searchParams.get('plan') || 'forge';
+  const amount = searchParams.get('amount') || '24.00';
   const orderId = "ORD-" + Math.random().toString(36).substring(2, 10).toUpperCase();
 
   const handleCopy = () => {
@@ -30,14 +33,14 @@ export default function PaymentSuccess() {
             <PartyPopper className="w-5 h-5 text-amber-500" />
           </div>
           <p className="text-zinc-400 text-sm">
-            Thank you for subscribing to Vibe ADE Forge. Your workspace is being upgraded now.
+            Thank you for subscribing to {plan === 'spark' ? 'Vibe ADE Spark' : plan === 'flux' ? 'Vibe ADE Flux' : 'Vibe ADE Forge'}. Your workspace is being upgraded now.
           </p>
         </div>
 
         <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 mb-8">
           <div className="flex justify-between items-center mb-4">
             <span className="text-zinc-400 text-sm">Amount Paid</span>
-            <span className="text-white font-medium">$24.00</span>
+            <span className="text-white font-medium">${amount}</span>
           </div>
           <div className="flex justify-between items-center mb-4">
             <span className="text-zinc-400 text-sm">Payment Method</span>
@@ -56,10 +59,10 @@ export default function PaymentSuccess() {
 
         <div className="space-y-3">
           <Button 
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/dashboard/billing')}
             className="w-full bg-amber-500 hover:bg-amber-600 text-zinc-950 font-medium"
           >
-            Go to Dashboard
+            Go to Billing
           </Button>
           <Link to="/">
             <Button variant="ghost" className="w-full text-zinc-400 hover:text-white hover:bg-zinc-900 mt-2">

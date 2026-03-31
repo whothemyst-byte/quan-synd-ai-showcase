@@ -5,6 +5,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Seo } from "@/seo/Seo";
 
+const DOWNLOAD_VERSION = "0.3.8";
+const DOWNLOAD_URL = `https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v${DOWNLOAD_VERSION}/Vibe-ADE-${DOWNLOAD_VERSION}-setup-x64.exe`;
+
 /* ─── DATA ─────────────────────────────────────────────────── */
 
 const plans = [
@@ -15,7 +18,7 @@ const plans = [
     monthlyPrice: 0,
     annualPrice: 0,
     cta: "Get Started Free",
-    ctaHref: "https://github.com/whothemyst-byte/Vibe_ADE/releases",
+    ctaHref: DOWNLOAD_URL,
     ctaExternal: true,
     highlight: false,
     dark: false,
@@ -34,7 +37,7 @@ const plans = [
     monthlyPrice: 12,
     annualPrice: 10,
     cta: "Start Flux",
-    ctaHref: "#",
+    ctaHref: "/checkout?plan=flux&interval=monthly",
     ctaExternal: false,
     highlight: true,
     dark: false,
@@ -58,7 +61,7 @@ const plans = [
     monthlyPrice: 25,
     annualPrice: 20,
     cta: "Start Forge",
-    ctaHref: "#",
+    ctaHref: "/checkout?plan=forge&interval=monthly",
     ctaExternal: false,
     highlight: false,
     dark: true,
@@ -749,7 +752,7 @@ const VibePricing = () => {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             <a
-              href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.7/Vibe-ADE-0.3.7-setup-x64.exe"
+              href={DOWNLOAD_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="amber-btn"

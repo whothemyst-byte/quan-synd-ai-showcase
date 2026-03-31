@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Check, Lock, ShieldCheck, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
+import { completeBillingCheckout } from '@/components/dashboard/dashboardSupabase';
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
-  const planId = 'forge_monthly';
+  const planId = searchParams.get('plan') || 'forge';
+  const interval = searchParams.get('interval') || 'monthly';
+  const planName = useMemo(() => {
+    if (planId === 'spark') return 'Vibe ADE Spark';
+    if (planId === 'flux') return 'Vibe ADE Flux';
+    return 'Vibe ADE Forge';
+  }, [planId]);
+  const amount = useMemo(() => {
+    if (planId === 'spark') return 0;
+    if (planId === 'flux') return interval === 'annual' ? 10 : 12;
+    return interval === 'annual' ? 20 : 25;
+  }, [interval, planId]);
 
   // Mock processing the payment simulation
   const handlePayment = async (e: React.FormEvent) => {
@@ -21,11 +34,34 @@ export default function Checkout() {
       // Simulate API call to Cashfree/payment provider
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const { error } = await supabase.rpc('start_subscription', { plan_id: planId });
-      if (error) throw error;
+      if (planId === 'spark') {
+        setLoading(false);
+        navigate(`/payment-success?plan=${planId}&interval=${interval}&amount=${amount}`);
+        return;
+      }
+
+      const billingInvoice =
+        planId === 'spark'
+          ? null
+          : await (async () => {
+              const authUser = (await supabase.auth.getUser()).data.user;
+              if (!authUser?.id) throw new Error('You must be signed in to complete checkout.');
+
+              const providerRef =
+                typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+                  ? `INV-${crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()}`
+                  : `INV-${Date.now().toString(36).toUpperCase()}`;
+
+              return completeBillingCheckout({
+                planTier: planId === 'flux' ? 'flux' : 'forge',
+                billingInterval: interval === 'annual' ? 'annual' : 'monthly',
+                providerRef,
+                paymentMethod: 'Cashfree',
+              });
+            })();
 
       setLoading(false);
-      navigate('/payment-success');
+      navigate(`/payment-success?plan=${planId}&interval=${interval}&amount=${(billingInvoice?.amount ?? amount).toFixed(2)}`);
     } catch (err) {
       const error = err as Error;
       setLoading(false);
@@ -42,18 +78,38 @@ export default function Checkout() {
         <div className="max-w-md w-full mx-auto lg:mx-0 lg:ml-auto relative z-10">
           <div className="mb-8">
             <span className="text-amber-500 font-semibold tracking-wider text-xs uppercase">Checkout</span>
-            <h1 className="text-3xl font-medium tracking-tight mt-2 text-white">Vibe ADE Forge</h1>
-            <p className="text-zinc-400 text-sm mt-2">Unlimited power for elite quantitative engineering.</p>
+            <h1 className="text-3xl font-medium tracking-tight mt-2 text-white">{planName}</h1>
+            <p className="text-zinc-400 text-sm mt-2">
+              {planId === 'spark'
+                ? 'A free plan for getting started.'
+                : 'Unlimited power for elite quantitative engineering.'}
+            </p>
           </div>
 
           <div className="space-y-4 mb-8">
             {[
-              "Unlimited workspaces",
-              "Unlimited terminal panes",
-              "Cloud sync (Unlimited)",
-              "All 12 curated themes",
-              "@mention AI assist (Codex)",
-              "Priority 24/7 support"
+              ...(planId === 'spark'
+                ? [
+                    '2 workspaces',
+                    'Community support',
+                    'Core sync access',
+                  ]
+                : planId === 'flux'
+                  ? [
+                      'Unlimited workspaces',
+                      'Unlimited terminal panes',
+                      'Cloud sync (Unlimited)',
+                      'Task board limits',
+                      '20 QuanSwarm runs / month',
+                    ]
+                  : [
+                      'Unlimited workspaces',
+                      'Unlimited terminal panes',
+                      'Cloud sync (Unlimited)',
+                      'All 12 curated themes',
+                      '@mention AI assist (Codex)',
+                      'Priority 24/7 support',
+                    ])
             ].map((f, i) => (
               <div key={i} className="flex gap-3 text-sm text-zinc-300">
                 <Check className="w-5 h-5 text-amber-500 shrink-0" />
@@ -65,7 +121,7 @@ export default function Checkout() {
           <div className="border-t border-zinc-800/50 pt-6 space-y-3">
             <div className="flex justify-between text-zinc-300">
               <span>Subtotal</span>
-              <span>$24.00</span>
+              <span>${amount.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-zinc-400 text-sm">
               <span>Tax (estimated)</span>
@@ -73,7 +129,7 @@ export default function Checkout() {
             </div>
             <div className="flex justify-between text-xl font-medium text-white pt-4 border-t border-zinc-800/50 mt-2">
               <span>Total due today</span>
-              <span>$24.00</span>
+              <span>${amount.toFixed(2)}</span>
             </div>
             <p className="text-xs text-zinc-500 mt-2 block">
               Billed monthly. By subscribing, you agree to our Terms of Service and Privacy Policy.
@@ -153,7 +209,7 @@ export default function Checkout() {
               ) : (
                 <>
                   <Lock className="w-4 h-4" />
-                  Pay $24.00
+                  {amount === 0 ? 'Continue free' : `Pay $${amount.toFixed(2)}`}
                 </>
               )}
             </Button>

@@ -23,6 +23,12 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Helmet } from "react-helmet-async";
 import { organizationJsonLd, websiteJsonLd } from "@/seo/schema";
+import DashboardOverview from "./pages/dashboard/Overview";
+import DashboardBilling from "./pages/dashboard/Billing";
+import DashboardApiKeys from "./pages/dashboard/ApiKeys";
+import DashboardSettings from "./pages/dashboard/Settings";
+import DashboardWorkspaces from "./pages/dashboard/Workspaces";
+import DashboardActivity from "./pages/dashboard/Activity";
 
 const queryClient = new QueryClient();
 
@@ -55,29 +61,36 @@ const App = () => (
         
         {/* Auth & Protected Routes */}
         <Route path="/auth" element={<Auth />} />
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/checkout" 
+          }
+        >
+          <Route index element={<DashboardOverview />} />
+          <Route path="billing" element={<DashboardBilling />} />
+          <Route path="api-keys" element={<DashboardApiKeys />} />
+          <Route path="settings" element={<DashboardSettings />} />
+          <Route path="workspaces" element={<DashboardWorkspaces />} />
+          <Route path="activity" element={<DashboardActivity />} />
+        </Route>
+        <Route
+          path="/checkout"
           element={
             <ProtectedRoute>
               <Checkout />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/payment-success" 
+        <Route
+          path="/payment-success"
           element={
             <ProtectedRoute>
               <PaymentSuccess />
             </ProtectedRoute>
-          } 
+          }
         />
 
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

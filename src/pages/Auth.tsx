@@ -23,9 +23,14 @@ export default function Auth() {
     setLoading(true);
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        toast.success("Registration successful! Please check your email.");
+        if (data.session) {
+          toast.success("Registration successful.");
+          navigate(from, { replace: true });
+          return;
+        }
+        toast.success("Registration successful! Please check your email, then sign in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;

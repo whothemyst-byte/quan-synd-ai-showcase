@@ -4,7 +4,15 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 
 export function render(url: string) {
-  const helmetContext: Record<string, unknown> = {};
+  const helmetContext: {
+    helmet?: {
+      title?: { toString?: () => string };
+      priority?: { toString?: () => string };
+      meta?: { toString?: () => string };
+      link?: { toString?: () => string };
+      script?: { toString?: () => string };
+    };
+  } = {};
 
   const appHtml = renderToString(
     <HelmetProvider context={helmetContext}>
@@ -14,7 +22,7 @@ export function render(url: string) {
     </HelmetProvider>,
   );
 
-  const helmet = (helmetContext as { helmet?: any }).helmet;
+  const helmet = helmetContext.helmet;
   const head = helmet
     ? [
         helmet.title?.toString?.() ?? "",
@@ -27,4 +35,3 @@ export function render(url: string) {
 
   return { appHtml, head };
 }
-

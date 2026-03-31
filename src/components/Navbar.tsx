@@ -1,8 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X, ChevronDown } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
+import { useAuth } from "@/contexts/AuthContext";
+
+// Products dropdown items
+const productItems = [
+  { name: "Vibe ADE", path: "/products/vibe-ade", desc: "AI-powered Windows IDE", badge: null },
+  { name: "Quan Bench", path: "/quan-bench", desc: "AI model benchmark index", badge: "LIVE" },
+];
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -10,14 +17,18 @@ const navItems = [
   { name: "Services", path: "/services" },
   { name: "Blog", path: "/blog" },
   { name: "Contact", path: "/contact" },
-  { name: "Quan Bench", path: "/quan-bench", live: true },
+  { name: "Pricing", path: "/products/vibe-ade/pricing" },
 ];
 
 const Navbar = () => {
+  const { session } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const location = useLocation();
+  const productsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -36,8 +47,20 @@ const Navbar = () => {
   // Close mobile menu on route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsMobileProductsOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (productsRef.current && !productsRef.current.contains(e.target as Node)) {
+        setIsProductsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -47,13 +70,35 @@ const Navbar = () => {
   };
 
   const isActive = (path: string) => location.pathname === path;
+  const isProductsActive = productItems.some((p) => isActive(p.path));
 
   const paperBg = theme === "dark" ? "rgba(18,17,15,0.92)" : "rgba(245,240,232,0.92)";
+  const dropdownBg = theme === "dark" ? "#1a1815" : "#faf7f2";
   const isNavSolid = isScrolled || isMobileMenuOpen;
+
+  const linkStyle = (active: boolean) => ({
+    fontFamily: "'Geist Mono', monospace",
+    fontSize: "11px",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.09em",
+    padding: "6px 14px",
+    borderRadius: "4px",
+    display: "inline-flex" as const,
+    alignItems: "center" as const,
+    gap: "4px",
+    fontWeight: 500,
+    color: active ? "var(--amber)" : "var(--muted-ui)",
+    borderBottom: active ? "2px solid var(--amber)" : "2px solid transparent",
+    transition: "color 0.18s ease, border-color 0.18s ease",
+    textDecoration: "none" as const,
+    whiteSpace: "nowrap" as const,
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+  });
 
   return (
     <>
-      {/* Inline responsive styles */}
       <style>{`
         .qs-nav-desktop { display: none; }
         .qs-hamburger { display: flex; }
@@ -61,6 +106,41 @@ const Navbar = () => {
           .qs-nav-desktop { display: flex; }
           .qs-hamburger { display: none; }
           .qs-mobile-menu { display: none !important; }
+        }
+
+        /* Products dropdown */
+        .qs-products-dropdown {
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 50%;
+          transform: translateX(-50%);
+          min-width: 240px;
+          border-radius: 8px;
+          border: 1px solid var(--rule);
+          box-shadow: var(--shadow-card);
+          overflow: hidden;
+          z-index: 100;
+          animation: dropdownIn 0.16s ease;
+        }
+
+        @keyframes dropdownIn {
+          from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+          to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .qs-dropdown-item {
+          display: block;
+          padding: 14px 18px;
+          text-decoration: none;
+          border-left: 3px solid transparent;
+          transition: all 0.15s ease;
+        }
+        .qs-dropdown-item:hover {
+          border-left-color: var(--amber);
+          background: rgba(200,136,42,0.06);
+        }
+        .qs-dropdown-item.active {
+          border-left-color: var(--amber);
         }
       `}</style>
 
@@ -90,11 +170,8 @@ const Navbar = () => {
               />
             </Link>
 
-            {/* Desktop Nav — hidden below md via .qs-nav-desktop */}
-            <div
-              className="qs-nav-desktop"
-              style={{ alignItems: "center", gap: "2px" }}
-            >
+            {/* Desktop Nav */}
+            <div className="qs-nav-desktop" style={{ alignItems: "center", gap: "2px" }}>
               {navItems.map((item) => (
                 <Link
                   key={item.path}
@@ -128,13 +205,88 @@ const Navbar = () => {
                   }}
                 >
                   {item.name}
-                  {item.live && <span className="qb-live-pill">LIVE</span>}
                 </Link>
               ))}
+
+              {/* Products dropdown trigger */}
+              <div ref={productsRef} style={{ position: "relative" }}>
+                <button
+                  onClick={() => setIsProductsDropdownOpen((o) => !o)}
+                  style={{
+                    ...linkStyle(isProductsActive),
+                    borderBottom: isProductsActive
+                      ? "2px solid var(--amber)"
+                      : isProductsDropdownOpen
+                      ? "2px solid var(--ink)"
+                      : "2px solid transparent",
+                    color: isProductsActive
+                      ? "var(--amber)"
+                      : isProductsDropdownOpen
+                      ? "var(--ink)"
+                      : "var(--muted-ui)",
+                  }}
+                  aria-haspopup="true"
+                  aria-expanded={isProductsDropdownOpen}
+                >
+                  Products
+                  <ChevronDown
+                    size={12}
+                    style={{
+                      transition: "transform 0.2s ease",
+                      transform: isProductsDropdownOpen ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                  />
+                </button>
+
+                {isProductsDropdownOpen && (
+                  <div
+                    className="qs-products-dropdown"
+                    style={{ background: dropdownBg }}
+                  >
+                    {productItems.map((p) => (
+                      <Link
+                        key={p.path}
+                        to={p.path}
+                        className={`qs-dropdown-item${isActive(p.path) ? " active" : ""}`}
+                        onClick={() => setIsProductsDropdownOpen(false)}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
+                          <span
+                            style={{
+                              fontFamily: "'Geist', sans-serif",
+                              fontSize: "13px",
+                              fontWeight: 600,
+                              color: "var(--ink)",
+                              letterSpacing: "-0.01em",
+                            }}
+                          >
+                            {p.name}
+                          </span>
+                          {p.badge && (
+                            <span className="qb-live-pill" style={{ marginLeft: 0 }}>
+                              {p.badge}
+                            </span>
+                          )}
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "10px",
+                            color: "var(--muted-ui)",
+                            letterSpacing: "0.04em",
+                          }}
+                        >
+                          {p.desc}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Controls */}
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <button
                 onClick={toggleTheme}
                 style={{
@@ -155,7 +307,57 @@ const Navbar = () => {
                 {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
               </button>
 
-              {/* Mobile hamburger — hidden above md via .qs-hamburger */}
+              <div className="hidden md:block">
+                {session ? (
+                  <Link
+                    to="/dashboard"
+                    style={{
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.09em",
+                      padding: "8px 16px",
+                      borderRadius: "6px",
+                      background: "var(--amber)",
+                      color: "#000",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      transition: "all 0.2s ease"
+                    }}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    to="/auth"
+                    style={{
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.09em",
+                      padding: "8px 16px",
+                      borderRadius: "6px",
+                      border: "1px solid var(--rule)",
+                      color: "var(--ink)",
+                      fontWeight: 500,
+                      textDecoration: "none",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.target as HTMLAnchorElement).style.borderColor = "var(--amber)";
+                      (e.target as HTMLAnchorElement).style.color = "var(--amber)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.target as HTMLAnchorElement).style.borderColor = "var(--rule)";
+                      (e.target as HTMLAnchorElement).style.color = "var(--ink)";
+                    }}
+                  >
+                    Login
+                  </Link>
+                )}
+              </div>
+
+              {/* Mobile hamburger */}
               <button
                 className="qs-hamburger"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -210,9 +412,132 @@ const Navbar = () => {
                   }}
                 >
                   {item.name}
-                  {item.live && <span className="qb-live-pill">LIVE</span>}
                 </Link>
               ))}
+
+              {/* Mobile Products accordion */}
+              <div>
+                <button
+                  onClick={() => setIsMobileProductsOpen((o) => !o)}
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: "11px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.09em",
+                    padding: "10px 12px",
+                    color: isProductsActive ? "var(--amber)" : "var(--muted-ui)",
+                    borderLeft: isProductsActive ? "2px solid var(--amber)" : "2px solid transparent",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  Products
+                  <ChevronDown
+                    size={12}
+                    style={{
+                      transition: "transform 0.2s ease",
+                      transform: isMobileProductsOpen ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                  />
+                </button>
+
+                {isMobileProductsOpen && (
+                  <div
+                    style={{
+                      borderLeft: "2px solid var(--amber)",
+                      marginLeft: "12px",
+                      paddingLeft: "12px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                      background: "rgba(200,136,42,0.04)",
+                      paddingTop: "4px",
+                      paddingBottom: "4px",
+                    }}
+                  >
+                    {productItems.map((p) => (
+                      <Link
+                        key={p.path}
+                        to={p.path}
+                        style={{
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "11px",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.09em",
+                          padding: "8px 12px",
+                          color: isActive(p.path) ? "var(--amber)" : "var(--muted-ui)",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          textDecoration: "none",
+                          transition: "all 0.15s ease",
+                        }}
+                      >
+                        {p.name}
+                        {p.badge && (
+                          <span className="qb-live-pill" style={{ marginLeft: 0 }}>
+                            {p.badge}
+                          </span>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Auth Button */}
+              <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid var(--rule)" }}>
+                {session ? (
+                  <Link
+                    to="/dashboard"
+                    style={{
+                      display: "block",
+                      textAlign: "center",
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.09em",
+                      padding: "12px",
+                      borderRadius: "6px",
+                      background: "var(--amber)",
+                      color: "#000",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                   <Link
+                    to="/auth"
+                    style={{
+                      display: "block",
+                      textAlign: "center",
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.09em",
+                      padding: "12px",
+                      borderRadius: "6px",
+                      border: "1px solid var(--rule)",
+                      color: "var(--ink)",
+                      fontWeight: 500,
+                      textDecoration: "none",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                )}
+              </div>
             </div>
           )}
         </div>

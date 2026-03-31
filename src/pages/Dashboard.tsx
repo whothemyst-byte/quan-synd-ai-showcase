@@ -1,279 +1,512 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
-  BarChart,
-  CreditCard,
-  Key,
+  ArrowRight,
+  BarChart3,
+  ChevronLeft,
+  ChevronRight,
+  CircleUserRound,
+  FolderKanban,
+  KeyRound,
   LayoutDashboard,
+  LifeBuoy,
   LogOut,
+  Menu,
+  Moon,
   Settings,
-  Sparkles,
-  TerminalSquare
-} from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+  Sun,
+  X,
+} from "lucide-react";
+import logoDark from "@/assets/logo-dark.png";
+import logoLight from "@/assets/logo-light.png";
+import { useAuth } from "@/contexts/AuthContext";
+import { DashboardThemeProvider } from "@/components/dashboard/dashboardTheme";
+import {
+  applyTheme,
+  getStoredTheme,
+  setThemeClass,
+  subscribeThemeChange,
+  type DashboardTheme,
+} from "@/lib/theme";
 
-type PlanRecord = {
-  id: string;
-  name: string;
-  tier: string;
-  interval: string;
-  price_cents: number;
-  currency: string;
-  limits?: Record<string, any>;
+const navItems = [
+  { label: "Overview", to: "/dashboard", icon: LayoutDashboard, end: true },
+  { label: "Workspaces", to: "/dashboard/workspaces", icon: FolderKanban },
+  { label: "Billing", to: "/dashboard/billing", icon: BarChart3 },
+  { label: "API Keys", to: "/dashboard/api-keys", icon: KeyRound },
+  { label: "Activity", to: "/dashboard/activity", icon: CircleUserRound },
+  { label: "Settings", to: "/dashboard/settings", icon: Settings },
+] as const;
+
+// ─── Styles by theme ──────────────────────────────────────────────────────────
+const lightStyles = {
+  shell: { background: "var(--paper)", color: "var(--ink)" },
+  sidebar: { background: "#ede7d9", borderRight: "1px solid var(--rule)" },
+  header: {
+    background: "rgba(245,240,232,0.95)",
+    borderBottom: "1px solid var(--rule)",
+    borderTop: "2px solid var(--amber)",
+  },
+  divider: { borderColor: "var(--rule)" },
+  userCard: { background: "var(--card-bg)", border: "1px solid var(--rule)" },
+  navActive: {
+    background: "rgba(200,136,42,0.08)",
+    borderLeft: "3px solid var(--amber)",
+    color: "var(--amber)",
+  },
+  navIdle: {
+    borderLeft: "3px solid transparent",
+    color: "var(--muted-ui)",
+  },
+  btn: {
+    background: "transparent",
+    border: "1px solid var(--rule)",
+    color: "var(--ink)",
+  },
+  upgradeBtn: {
+    background: "transparent",
+    border: "1px solid var(--rule)",
+    color: "var(--ink)",
+  },
+  collapseBtn: {
+    background: "var(--card-bg)",
+    border: "1px solid var(--rule)",
+    color: "var(--muted-ui)",
+  },
+  logo: logoLight,
+  inkText: { color: "var(--ink)" },
+  mutedText: { color: "var(--muted-ui)" },
+  amberText: { color: "var(--amber)" },
 };
 
-type SubscriptionRecord = {
-  id: string;
-  status: string;
-  current_period_end: string | null;
-  plan?: PlanRecord;
+const darkStyles = {
+  shell: { background: "#12110f", color: "#f3eee5" },
+  sidebar: { background: "#1a1815", borderRight: "1px solid rgba(243,238,229,0.08)" },
+  header: {
+    background: "rgba(18,17,15,0.96)",
+    borderBottom: "1px solid rgba(243,238,229,0.08)",
+    borderTop: "2px solid #d79a3d",
+  },
+  divider: { borderColor: "rgba(243,238,229,0.08)" },
+  userCard: { background: "#161411", border: "1px solid rgba(243,238,229,0.08)" },
+  navActive: {
+    background: "rgba(215,154,61,0.1)",
+    borderLeft: "3px solid #d79a3d",
+    color: "#d79a3d",
+  },
+  navIdle: {
+    borderLeft: "3px solid transparent",
+    color: "#b1a692",
+  },
+  btn: {
+    background: "transparent",
+    border: "1px solid rgba(243,238,229,0.12)",
+    color: "#f3eee5",
+  },
+  upgradeBtn: {
+    background: "transparent",
+    border: "1px solid rgba(243,238,229,0.12)",
+    color: "#f3eee5",
+  },
+  collapseBtn: {
+    background: "#161411",
+    border: "1px solid rgba(243,238,229,0.12)",
+    color: "#b1a692",
+  },
+  logo: logoDark,
+  inkText: { color: "#f3eee5" },
+  mutedText: { color: "#b1a692" },
+  amberText: { color: "#d79a3d" },
 };
 
-type UsageRecord = {
-  period_start: string;
-  period_end: string;
-  tasks_created: number;
-  swarms_started: number;
-};
-
-export default function Dashboard() {
+export default function DashboardLayout() {
   const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-  const [profileName, setProfileName] = useState<string | null>(null);
-  const [subscription, setSubscription] = useState<SubscriptionRecord | null>(null);
-  const [usage, setUsage] = useState<UsageRecord | null>(null);
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarContentVisible, setSidebarContentVisible] = useState(true);
+  const [theme, setTheme] = useState<DashboardTheme>(() => getStoredTheme());
+  const sidebarToggleTimer = useRef<number | null>(null);
 
-  const fallbackPlan = useMemo<PlanRecord>(
-    () => ({
-      id: 'spark_monthly',
-      name: 'Vibe ADE Spark',
-      tier: 'spark',
-      interval: 'monthly',
-      price_cents: 0,
-      currency: 'USD',
-      limits: { cloud_synced_workspaces: 2 }
-    }),
-    []
-  );
-
+  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+  useEffect(() => { setThemeClass(theme); }, [theme]);
+  useEffect(() => subscribeThemeChange(setTheme), []);
   useEffect(() => {
-    if (!user?.id) {
+    return () => {
+      if (sidebarToggleTimer.current !== null) {
+        window.clearTimeout(sidebarToggleTimer.current);
+      }
+    };
+  }, []);
+
+  const S = theme === "dark" ? darkStyles : lightStyles;
+  const amber = theme === "dark" ? "#d79a3d" : "#c8882a";
+
+  const sidebarMotionStyle = {
+    transitionDuration: "640ms",
+    transitionTimingFunction: "ease-in-out",
+  } as const;
+
+  const toggleSidebar = () => {
+    if (sidebarToggleTimer.current !== null) window.clearTimeout(sidebarToggleTimer.current);
+    if (sidebarCollapsed) {
+      setSidebarCollapsed(false);
+      sidebarToggleTimer.current = window.setTimeout(() => {
+        setSidebarContentVisible(true);
+        sidebarToggleTimer.current = null;
+      }, 220);
       return;
     }
-    let active = true;
-    const load = async () => {
-      setLoading(true);
-      const [{ data: profileData }, { data: subscriptionData }, { data: usageData }, { data: invoiceData }] =
-        await Promise.all([
-          supabase.from('profiles').select('display_name,email').eq('id', user.id).maybeSingle(),
-          supabase
-            .from('subscriptions')
-            .select('id,status,current_period_end,plan:plans(id,name,tier,interval,price_cents,currency,limits)')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .maybeSingle(),
-          supabase
-            .from('usage_counters')
-            .select('period_start,period_end,tasks_created,swarms_started')
-            .eq('user_id', user.id)
-            .order('period_start', { ascending: false })
-            .limit(1)
-            .maybeSingle(),
-          supabase
-            .from('invoices')
-            .select('id,amount_cents,currency,created_at')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(5)
-        ]);
+    setSidebarContentVisible(false);
+    sidebarToggleTimer.current = window.setTimeout(() => {
+      setSidebarCollapsed(true);
+      sidebarToggleTimer.current = null;
+    }, 220);
+  };
 
-      if (!active) return;
-      setProfileName(profileData?.display_name ?? null);
-      setSubscription(subscriptionData ?? null);
-      setUsage(usageData ?? null);
-      setInvoices(invoiceData ?? []);
-      setLoading(false);
-    };
-
-    void load();
-    return () => {
-      active = false;
-    };
-  }, [user?.id]);
-
-  const plan = subscription?.plan ?? fallbackPlan;
-  const workspacesLimit = plan?.limits?.cloud_synced_workspaces ?? null;
-  const workspacesUsed = 0;
-  const renewsOn = subscription?.current_period_end
-    ? new Date(subscription.current_period_end).toLocaleDateString()
-    : '—';
-
-  const sidebarLinks = [
-    { icon: <LayoutDashboard size={18} />, label: 'Overview', active: true },
-    { icon: <CreditCard size={18} />, label: 'Billing & Subscriptions' },
-    { icon: <Key size={18} />, label: 'API Keys' },
-    { icon: <Settings size={18} />, label: 'Settings' }
-  ];
+  const userInitial = (user?.email?.[0] ?? "U").toUpperCase();
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col md:flex-row text-zinc-50 selection:bg-amber-500/30 font-sans">
-      <aside className="w-full md:w-64 border-r border-zinc-800/50 bg-[#0c0c0e] flex flex-col pt-6 pb-4 px-4 sticky top-0 md:h-screen">
-        <Link to="/" className="flex items-center gap-2 px-2 mb-10 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
-          <span className="font-semibold tracking-tight text-xl">QuanSynd</span>
-        </Link>
+    <DashboardThemeProvider theme={theme}>
+      <div className="dashboard-shell" style={{ ...S.shell, minHeight: "100vh" }}>
+        <div style={{ maxWidth: "1800px", margin: "0 auto", display: "flex", minHeight: "100vh" }}>
 
-        <nav className="flex-1 space-y-1">
-          {sidebarLinks.map((link, idx) => (
-            <button
-              key={idx}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors ${
-                link.active ? 'bg-amber-500/10 text-amber-500 font-medium' : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
-              }`}
-            >
-              {link.icon}
-              {link.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="mt-8 pt-4 border-t border-zinc-800/50">
-          <div className="px-3 py-2 mb-2 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs font-medium text-zinc-400">
-              {(profileName?.[0] || user?.email?.[0] || 'U').toUpperCase()}
-            </div>
-            <div className="overflow-hidden flex-1">
-              <p className="text-sm font-medium text-zinc-200 truncate">{profileName || user?.email || 'user@example.com'}</p>
-            </div>
-          </div>
-          <button
-            onClick={async () => {
-              await signOut();
-              navigate('/');
+          {/* ── Sidebar ───────────────────────────────────────────────────── */}
+          <aside
+            style={{
+              ...S.sidebar,
+              ...sidebarMotionStyle,
+              width: sidebarCollapsed ? "80px" : "280px",
+              flexShrink: 0,
+              display: "flex",
+              flexDirection: "column",
+              position: "sticky",
+              top: 0,
+              height: "100vh",
             }}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-zinc-500 hover:bg-zinc-900 hover:text-red-400 transition-colors"
+            className="hidden lg:flex"
           >
-            <LogOut size={18} />
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      <main className="flex-1 overflow-y-auto p-6 md:p-10 bg-zinc-950/50">
-        <header className="mb-10">
-          <h1 className="text-3xl font-semibold tracking-tight text-white mb-2">Welcome back.</h1>
-          <p className="text-zinc-400">Manage your workspaces, subscriptions, and AI settings here.</p>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="col-span-1 lg:col-span-2 bg-[#0F0F11] border border-zinc-800/50 rounded-xl p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 opacity-5">
-              <Sparkles className="w-32 h-32" />
-            </div>
-
-            <span className="text-xs font-semibold tracking-wider text-amber-500 uppercase mb-2 block">Active Subscription</span>
-            <div className="flex items-end justify-between mb-8 relative z-10">
-              <div>
-                <h2 className="text-2xl font-medium text-white">{plan?.name ?? 'Vibe ADE Spark'}</h2>
-                <p className="text-zinc-400 text-sm mt-1">
-                  {plan?.interval === 'annual' ? 'Billed annually' : 'Billed monthly'} • Renews on {renewsOn}
-                </p>
-              </div>
-              <Link to="/products/vibe-ade/pricing">
-                <Button variant="outline" className="border-zinc-700 bg-zinc-900/50 text-white hover:bg-zinc-800 hover:text-white">
-                  Upgrade Plan
-                </Button>
-              </Link>
-            </div>
-
-            <div className="border-t border-zinc-800/50 pt-6">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-zinc-300">Workspaces Limit</span>
-                <span className="text-zinc-400 font-medium">
-                  {workspacesLimit === null ? 'Unlimited' : `${workspacesUsed} / ${workspacesLimit} active`}
-                </span>
-              </div>
-              <div className="w-full bg-zinc-900 rounded-full h-2 mt-2 overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-amber-500 to-orange-400 h-2 rounded-full"
-                  style={{ width: workspacesLimit ? `${(workspacesUsed / workspacesLimit) * 100}%` : '100%' }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-[#0F0F11] border border-zinc-800/50 rounded-xl p-6 flex flex-col">
-            <h3 className="text-sm font-medium text-white mb-4">Quick Actions</h3>
-            <div className="space-y-3 flex-1">
-              <button className="w-full flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800/50 transition-colors group">
-                <div className="flex items-center gap-3">
-                  <TerminalSquare className="w-5 h-5 text-zinc-400 group-hover:text-amber-500 transition-colors" />
-                  <span className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors">Launch Vibe ADE</span>
-                </div>
-              </button>
-              <button className="w-full flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800/50 transition-colors group">
-                <div className="flex items-center gap-3">
-                  <BarChart className="w-5 h-5 text-zinc-400 group-hover:text-amber-500 transition-colors" />
-                  <span className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors">
-                    Usage: {usage ? `${usage.tasks_created} tasks, ${usage.swarms_started} swarms` : '—'}
-                  </span>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <h3 className="text-lg font-medium text-white mb-4">Recent Invoices</h3>
-        <div className="bg-[#0F0F11] border border-zinc-800/50 rounded-xl overflow-hidden">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-zinc-800/50 bg-zinc-900/20">
-                <th className="py-3 px-5 text-xs font-medium text-zinc-500 uppercase tracking-wider">Date</th>
-                <th className="py-3 px-5 text-xs font-medium text-zinc-500 uppercase tracking-wider">Amount</th>
-                <th className="py-3 px-5 text-xs font-medium text-zinc-500 uppercase tracking-wider">Plan</th>
-                <th className="py-3 px-5 text-xs font-medium text-zinc-500 uppercase tracking-wider text-right">Invoice</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-800/50">
-              {loading ? (
-                <tr>
-                  <td className="py-4 px-5 text-sm text-zinc-400" colSpan={4}>
-                    Loading…
-                  </td>
-                </tr>
-              ) : invoices.length === 0 ? (
-                <tr>
-                  <td className="py-4 px-5 text-sm text-zinc-400" colSpan={4}>
-                    No invoices yet.
-                  </td>
-                </tr>
-              ) : (
-                invoices.map((invoice) => (
-                  <tr key={invoice.id}>
-                    <td className="py-4 px-5 text-sm text-zinc-300">
-                      {new Date(invoice.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="py-4 px-5 text-sm text-white font-medium">
-                      ${(invoice.amount_cents / 100).toFixed(2)}
-                    </td>
-                    <td className="py-4 px-5 text-sm text-zinc-400">{plan?.name ?? 'Vibe ADE Spark'}</td>
-                    <td className="py-4 px-5 text-sm text-right">
-                      <button className="text-amber-500 hover:text-amber-400 font-medium">Download</button>
-                    </td>
-                  </tr>
-                ))
+            {/* Logo row */}
+            <div
+              style={{
+                height: "72px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: sidebarCollapsed ? "center" : "space-between",
+                padding: sidebarCollapsed ? "0 12px" : "0 20px",
+                borderBottom: `1px solid ${theme === "dark" ? "rgba(243,238,229,0.08)" : "var(--rule)"}`,
+              }}
+            >
+              {!sidebarCollapsed && (
+                <Link to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+                  <img src={S.logo} alt="QuanSynd" style={{ height: "28px", width: "auto" }} />
+                </Link>
               )}
-            </tbody>
-          </table>
+              <button
+                onClick={toggleSidebar}
+                style={{
+                  ...S.collapseBtn,
+                  ...sidebarMotionStyle,
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+                aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {sidebarCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
+              </button>
+            </div>
+
+            {/* Nav items */}
+            <nav style={{ flex: 1, padding: "16px 12px", display: "flex", flexDirection: "column", gap: sidebarCollapsed ? "8px" : "4px" }}>
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.end}
+                    title={sidebarCollapsed ? item.label : undefined}
+                    style={({ isActive }) => ({
+                      ...sidebarMotionStyle,
+                      ...(isActive ? S.navActive : S.navIdle),
+                      display: "flex",
+                      alignItems: "center",
+                      height: "44px",
+                      borderRadius: "6px",
+                      textDecoration: "none",
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.09em",
+                      fontWeight: 500,
+                      overflow: "hidden",
+                      paddingRight: sidebarCollapsed ? 0 : "12px",
+                    })}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "44px", flexShrink: 0 }}>
+                      <Icon size={16} style={{ color: amber }} />
+                    </span>
+                    <span
+                      style={{
+                        transitionProperty: "opacity, max-width, margin-left",
+                        transitionDuration: sidebarCollapsed ? "160ms" : "280ms",
+                        transitionDelay: sidebarCollapsed ? "0ms" : sidebarContentVisible ? "90ms" : "0ms",
+                        transitionTimingFunction: "ease-in-out",
+                        maxWidth: sidebarCollapsed || !sidebarContentVisible ? "0px" : "200px",
+                        opacity: sidebarCollapsed || !sidebarContentVisible ? 0 : 1,
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {item.label}
+                    </span>
+                  </NavLink>
+                );
+              })}
+            </nav>
+
+            {/* Bottom: user info + actions */}
+            <div style={{ padding: "16px", borderTop: `1px solid ${theme === "dark" ? "rgba(243,238,229,0.08)" : "var(--rule)"}` }}>
+              {!sidebarCollapsed && sidebarContentVisible ? (
+                <>
+                  <div style={{ ...S.userCard, borderRadius: "8px", padding: "16px", marginBottom: "12px" }}>
+                    <p style={{ fontFamily: "'Geist Mono', monospace", fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", ...S.mutedText, marginBottom: "8px" }}>
+                      Signed in as
+                    </p>
+                    <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "13px", fontWeight: 500, ...S.inkText, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {user?.email ?? "user@example.com"}
+                    </p>
+                    <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "12px", ...S.mutedText, marginTop: "4px", lineHeight: 1.5 }}>
+                      Manage your account surface.
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <Link
+                      to="/contact"
+                      style={{
+                        ...S.btn,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px",
+                        padding: "9px 14px",
+                        borderRadius: "6px",
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "11px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        textDecoration: "none",
+                        transition: "all 0.18s ease",
+                      }}
+                    >
+                      Support <ArrowRight size={13} />
+                    </Link>
+                    <button
+                      onClick={async () => { await signOut(); window.location.href = "/"; }}
+                      style={{
+                        ...S.btn,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px",
+                        padding: "9px 14px",
+                        borderRadius: "6px",
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "11px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        cursor: "pointer",
+                        transition: "all 0.18s ease",
+                        width: "100%",
+                      }}
+                    >
+                      <LogOut size={13} /> Sign out
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                  <button
+                    title="Support"
+                    aria-label="Support"
+                    onClick={() => { window.location.href = "/contact"; }}
+                    style={{ ...S.collapseBtn, width: "40px", height: "40px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", ...sidebarMotionStyle }}
+                  >
+                    <LifeBuoy size={15} style={{ color: amber }} />
+                  </button>
+                  <button
+                    title="Sign out"
+                    aria-label="Sign out"
+                    onClick={async () => { await signOut(); window.location.href = "/"; }}
+                    style={{ ...S.collapseBtn, width: "40px", height: "40px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", ...sidebarMotionStyle }}
+                  >
+                    <LogOut size={15} style={{ color: amber }} />
+                  </button>
+                </div>
+              )}
+            </div>
+          </aside>
+
+          {/* ── Main area ─────────────────────────────────────────────────── */}
+          <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+
+            {/* Header */}
+            <header
+              style={{
+                ...S.header,
+                position: "sticky",
+                top: 0,
+                zIndex: 30,
+                backdropFilter: "blur(16px)",
+              }}
+            >
+              <div style={{ height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "0 24px" }}>
+                {/* Left */}
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <button
+                    onClick={() => setMobileOpen((c) => !c)}
+                    className="lg:hidden"
+                    style={{ ...S.btn, width: "40px", height: "40px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+                    aria-label="Toggle navigation"
+                  >
+                    {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+                  </button>
+                  <div>
+                    <p style={{ fontFamily: "'Geist Mono', monospace", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", ...S.amberText, marginBottom: "1px" }}>
+                      Dashboard
+                    </p>
+                    <p style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: "18px", letterSpacing: "-0.01em", ...S.inkText }}>
+                      Manage everything in one place
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right */}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <Link
+                    to="/products/vibe-ade/pricing"
+                    className="hidden lg:inline-flex"
+                    style={{
+                      ...S.upgradeBtn,
+                      padding: "8px 16px",
+                      borderRadius: "6px",
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      textDecoration: "none",
+                      transition: "all 0.18s ease",
+                    }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = amber; (e.currentTarget as HTMLAnchorElement).style.color = amber; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = S.upgradeBtn.border.replace("1px solid ", ""); (e.currentTarget as HTMLAnchorElement).style.color = S.upgradeBtn.color; }}
+                  >
+                    Upgrade plan
+                  </Link>
+                  <button
+                    onClick={() => applyTheme(theme === "dark" ? "light" : "dark")}
+                    style={{ ...S.btn, width: "38px", height: "38px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.18s ease" }}
+                    aria-label="Toggle theme"
+                  >
+                    {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+                  </button>
+                  <div
+                    style={{
+                      width: "38px",
+                      height: "38px",
+                      borderRadius: "50%",
+                      border: `1px solid ${amber}`,
+                      background: `rgba(200,136,42,0.1)`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      color: amber,
+                    }}
+                  >
+                    {userInitial}
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile nav */}
+              {mobileOpen && (
+                <nav
+                  style={{
+                    borderTop: `1px solid ${theme === "dark" ? "rgba(243,238,229,0.08)" : "var(--rule)"}`,
+                    padding: "12px 16px 16px",
+                    background: theme === "dark" ? "#1a1815" : "#ede7d9",
+                  }}
+                  className="lg:hidden"
+                >
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    {navItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <NavLink
+                          key={item.to}
+                          to={item.to}
+                          end={item.end}
+                          style={({ isActive }) => ({
+                            ...(isActive ? S.navActive : S.navIdle),
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            padding: "10px 14px",
+                            borderRadius: "6px",
+                            textDecoration: "none",
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "11px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.09em",
+                            fontWeight: 500,
+                          })}
+                        >
+                          <Icon size={15} style={{ color: amber }} />
+                          {item.label}
+                        </NavLink>
+                      );
+                    })}
+                    <button
+                      onClick={async () => { await signOut(); window.location.href = "/"; }}
+                      style={{
+                        ...S.navIdle,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        padding: "10px 14px",
+                        borderRadius: "6px",
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "11px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.09em",
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        width: "100%",
+                        marginTop: "8px",
+                      }}
+                    >
+                      <LogOut size={15} style={{ color: amber }} /> Sign out
+                    </button>
+                  </div>
+                </nav>
+              )}
+            </header>
+
+            {/* Page content */}
+            <main style={{ flex: 1, padding: "32px 24px 48px", maxWidth: "1400px", width: "100%", margin: "0 auto" }}>
+              <Outlet />
+            </main>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardThemeProvider>
   );
 }

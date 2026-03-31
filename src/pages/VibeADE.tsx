@@ -18,6 +18,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Seo } from "@/seo/Seo";
 
+const DOWNLOAD_VERSION = "0.3.8";
+const DOWNLOAD_URL = `https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v${DOWNLOAD_VERSION}/Vibe-ADE-${DOWNLOAD_VERSION}-setup-x64.exe`;
+
 const features = [
   {
     icon: Cpu,
@@ -99,8 +102,8 @@ const VibeADE = () => {
   }, [releaseOpen]);
   const releaseNotes = useMemo(
     () => ({
-      version: "v0.3.6",
-      date: "March 18, 2026",
+      version: `v${DOWNLOAD_VERSION}`,
+      date: "March 20, 2026",
       intro: "First official release of Vibe ADE",
       highlights: [
         "Windows-native AI development environment with multi-agent swarms, PTY terminals, and intelligent workspaces.",
@@ -210,7 +213,7 @@ const VibeADE = () => {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             <a
-              href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.7/Vibe-ADE-0.3.7-setup-x64.exe"
+              href={DOWNLOAD_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="amber-btn"
@@ -258,7 +261,7 @@ const VibeADE = () => {
               textTransform: "uppercase",
             }}
           >
-            Windows · Subscription · v0.3.6
+            Windows · Subscription · v{DOWNLOAD_VERSION}
           </p>
         </div>
 
@@ -657,7 +660,7 @@ const VibeADE = () => {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             <a
-              href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.7/Vibe-ADE-0.3.7-setup-x64.exe"
+              href={DOWNLOAD_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="amber-btn"
@@ -740,11 +743,11 @@ const VibeADE = () => {
               </div>
               <div className="release-notes-header-actions">
                 <a
-                  href="https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v0.3.7/Vibe-ADE-0.3.7-setup-x64.exe"
+                  href={DOWNLOAD_URL}
                   className="amber-btn release-notes-download"
                   style={{ textDecoration: "none" }}
                 >
-                  <Download size={16} /> Download v0.3.6
+                  <Download size={16} /> Download v{DOWNLOAD_VERSION}
                 </a>
               </div>
             </header>
