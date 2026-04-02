@@ -4,9 +4,9 @@ import { Check, Minus, ArrowRight, Download, Zap, ChevronDown, ChevronUp } from 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Seo } from "@/seo/Seo";
+import { VIBE_ADE_DOWNLOAD_URL } from "@/lib/vibeAdePricing";
 
-const DOWNLOAD_VERSION = "0.3.8";
-const DOWNLOAD_URL = `https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v${DOWNLOAD_VERSION}/Vibe-ADE-${DOWNLOAD_VERSION}-setup-x64.exe`;
+const DOWNLOAD_URL = VIBE_ADE_DOWNLOAD_URL;
 
 /* ─── DATA ─────────────────────────────────────────────────── */
 
@@ -18,7 +18,7 @@ const plans = [
     monthlyPrice: 0,
     annualPrice: 0,
     cta: "Get Started Free",
-    ctaHref: DOWNLOAD_URL,
+    ctaHref: VIBE_ADE_DOWNLOAD_URL,
     ctaExternal: true,
     highlight: false,
     dark: false,

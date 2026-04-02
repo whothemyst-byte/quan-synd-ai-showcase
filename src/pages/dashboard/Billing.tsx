@@ -6,31 +6,7 @@ import { formatCurrency, formatDateTime, type BillingInvoice } from "@/component
 import { loadBillingInvoices } from "@/components/dashboard/dashboardSupabase";
 import { useCloudDashboard } from "@/components/dashboard/cloudDashboard";
 import { useDashboardTheme } from "@/components/dashboard/dashboardTheme";
-
-const plans = [
-  {
-    key: "spark",
-    name: "Spark",
-    price: "Free",
-    desc: "For individuals getting started",
-    features: ["1 cloud workspace", "5 panes per workspace", "Basic task board", "Community support"],
-  },
-  {
-    key: "core",
-    name: "Core",
-    price: "₹999/mo",
-    desc: "For professionals and small teams",
-    features: ["5 cloud workspaces", "20 panes per workspace", "Task board + swarms", "Priority support", "API access"],
-    recommended: true,
-  },
-  {
-    key: "pro",
-    name: "Pro",
-    price: "₹2,499/mo",
-    desc: "For power users and enterprises",
-    features: ["Unlimited workspaces", "Unlimited panes", "Full swarm access", "Dedicated support", "Custom integrations", "SLA guarantee"],
-  },
-];
+import { VIBE_ADE_PRICING_PLANS } from "@/lib/vibeAdePricing";
 
 export default function DashboardBilling() {
   const { user } = useAuth();
@@ -130,10 +106,10 @@ export default function DashboardBilling() {
               {currentTier === "spark" ? " Upgrade to unlock more workspaces, swarms, and priority support." : " All features are active for this billing cycle."}
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-              {plan.features && Object.entries(plan.features).map(([key, enabled]) => enabled && (
-                <li key={key} style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
+              {plan.features.map((feature) => (
+                <li key={feature} style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
                   <Check size={13} style={{ color: amber, flexShrink: 0 }} />
-                  {key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}
+                  {feature}
                 </li>
               ))}
             </ul>
@@ -254,18 +230,39 @@ export default function DashboardBilling() {
           Compare & Upgrade
         </h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
-          {plans.map((p) => {
-            const isCurrent = p.key === currentTier;
+          {VIBE_ADE_PRICING_PLANS.map((p) => {
+            const isCurrent = p.id === currentTier;
+            const price = p.monthlyPrice === 0 ? "Free" : `$${p.monthlyPrice} / mo`;
             return (
               <div
-                key={p.key}
+                key={p.id}
                 style={{
                   ...card,
                   border: isCurrent ? `2px solid ${amber}` : `1px solid ${rule}`,
                   position: "relative",
                   padding: "24px",
+                  background: p.dark ? (theme === "dark" ? "#11100d" : "#f3ede2") : cardBg,
                 }}
               >
+                {p.badge && !isCurrent && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "16px",
+                      right: "16px",
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "9px",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      padding: "3px 10px",
+                      borderRadius: "20px",
+                      background: amber,
+                      color: "#fff",
+                    }}
+                  >
+                    {p.badge}
+                  </span>
+                )}
                 {isCurrent && (
                   <span
                     style={{
@@ -286,59 +283,44 @@ export default function DashboardBilling() {
                     Current
                   </span>
                 )}
-                {p.recommended && !isCurrent && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "16px",
-                      right: "16px",
-                      fontFamily: "'Geist Mono', monospace",
-                      fontSize: "9px",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      padding: "3px 10px",
-                      borderRadius: "20px",
-                      background: amber,
-                      color: "#fff",
-                    }}
-                  >
-                    Recommended
-                  </span>
-                )}
-                <p style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: "22px", color: ink, marginBottom: "4px" }}>{p.name}</p>
-                <p style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "28px", color: amber, margin: "8px 0 4px" }}>{p.price}</p>
-                <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "13px", color: muted, marginBottom: "16px" }}>{p.desc}</p>
+                <p style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: "22px", color: ink, marginBottom: "4px" }}>
+                  {p.label}
+                </p>
+                <p style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "28px", color: amber, margin: "8px 0 4px" }}>
+                  {price}
+                </p>
+                <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "13px", color: muted, marginBottom: "16px" }}>
+                  {p.tagline}
+                </p>
                 <ul style={{ listStyle: "none", padding: 0, margin: "0 0 20px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                  {p.features.map((f) => (
-                    <li key={f} style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
-                      <Check size={12} style={{ color: amber, flexShrink: 0 }} /> {f}
+                  {p.features.map((feature) => (
+                    <li key={feature} style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
+                      <Check size={12} style={{ color: amber, flexShrink: 0 }} /> {feature}
                     </li>
                   ))}
                 </ul>
-                {!isCurrent && (
-                  <Link
-                    to="/products/vibe-ade/pricing"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: "6px",
-                      padding: "10px 16px",
-                      borderRadius: "6px",
-                      fontSize: "12px",
-                      textDecoration: "none",
-                      fontFamily: "'Geist Mono', monospace",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      background: p.recommended ? amber : "transparent",
-                      color: p.recommended ? "#fff" : ink,
-                      border: p.recommended ? "none" : `1px solid ${rule}`,
-                      transition: "all 0.18s ease",
-                    }}
-                  >
-                    Select {p.name} <ArrowRight size={12} />
-                  </Link>
-                )}
+                <Link
+                  to="/products/vibe-ade/pricing"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "10px 16px",
+                    borderRadius: "6px",
+                    fontSize: "12px",
+                    textDecoration: "none",
+                    fontFamily: "'Geist Mono', monospace",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    background: isCurrent ? "transparent" : p.highlight ? amber : "transparent",
+                    color: isCurrent ? amber : p.highlight ? "#fff" : ink,
+                    border: isCurrent ? `1px solid ${rule}` : p.highlight ? "none" : `1px solid ${rule}`,
+                    transition: "all 0.18s ease",
+                  }}
+                >
+                  {isCurrent ? "Current plan" : p.cta} <ArrowRight size={12} />
+                </Link>
               </div>
             );
           })}

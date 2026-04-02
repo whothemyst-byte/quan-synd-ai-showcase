@@ -5,12 +5,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCloudDashboard, type CloudWorkspace } from "@/components/dashboard/cloudDashboard";
 import { useDashboardTheme } from "@/components/dashboard/dashboardTheme";
 import { formatDateTime } from "@/components/dashboard/dashboardData";
+import { deleteDashboardWorkspace } from "@/components/dashboard/dashboardSupabase";
 
 export default function DashboardWorkspaces() {
   const { user } = useAuth();
   const theme = useDashboardTheme();
   const { snapshot, plan, loading } = useCloudDashboard(user?.id);
-  const [removed, setRemoved] = useState<string[]>([]);
+  const [deletingWorkspaceId, setDeletingWorkspaceId] = useState<string | null>(null);
 
   const amber = theme === "dark" ? "#d79a3d" : "#c8882a";
   const ink = theme === "dark" ? "#f3eee5" : "var(--ink)";
@@ -22,17 +23,39 @@ export default function DashboardWorkspaces() {
   const eyebrow: React.CSSProperties = { fontFamily: "'Geist Mono', monospace", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: amber, display: "block", marginBottom: "6px" };
   const sectionRule: React.CSSProperties = { display: "block", width: "32px", height: "2px", background: amber, marginBottom: "12px" };
 
-  const allWorkspaces = (snapshot?.workspaces ?? []).filter((workspace) => !removed.includes(workspace.id));
+  const allWorkspaces = snapshot?.workspaces ?? [];
   const workspaceLimit = plan.limits.maxCloudSyncedWorkspaces ?? 3;
   const displayWorkspaces = allWorkspaces;
   const usagePercent = Math.min((displayWorkspaces.length / workspaceLimit) * 100, 100);
+
+  const handleDeleteWorkspace = async (workspace: CloudWorkspace): Promise<void> => {
+    if (!user?.id) {
+      toast.error("You must be signed in to delete a workspace.");
+      return;
+    }
+    const confirmed = window.confirm(`Permanently delete "${workspace.name}" and all of its synced data?`);
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingWorkspaceId(workspace.id);
+    try {
+      await deleteDashboardWorkspace(workspace.id, user.id);
+      toast.success(`"${workspace.name}" deleted.`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to delete workspace.";
+      toast.error(message);
+    } finally {
+      setDeletingWorkspaceId(null);
+    }
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       <div>
         <span style={eyebrow}>Workspaces</span>
         <h1 style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: "32px", letterSpacing: "-0.02em", color: ink, margin: 0 }}>Cloud Workspaces</h1>
-        <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "15px", color: muted, marginTop: "8px" }}>All workspaces synced from the Vibe ADE desktop application.</p>
+        <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "15px", color: muted, marginTop: "8px" }}>All workspaces synced from the Vibe ADE desktop application, including terminal and browser pane state.</p>
       </div>
 
       {/* Usage bar */}
@@ -90,11 +113,12 @@ export default function DashboardWorkspaces() {
                     <ExternalLink size={11} /> Open in Vibe ADE
                   </button>
                   <button
-                    onClick={() => { setRemoved((r) => [...r, ws.id]); toast.success(`"${ws.name}" removed.`); }}
+                    onClick={() => { void handleDeleteWorkspace(ws); }}
+                    disabled={deletingWorkspaceId === ws.id}
                     onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#ba1a1a"; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = muted; }}
                     style={{ display: "flex", alignItems: "center", gap: "5px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, background: "none", border: "none", cursor: "pointer", transition: "color 0.15s" }}>
-                    <Trash2 size={11} /> Remove
+                    <Trash2 size={11} /> {deletingWorkspaceId === ws.id ? "Deleting..." : "Delete"}
                   </button>
                 </div>
               </div>

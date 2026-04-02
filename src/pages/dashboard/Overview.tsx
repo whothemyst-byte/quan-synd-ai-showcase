@@ -126,7 +126,7 @@ export default function DashboardOverview() {
                   Welcome back, {profileName}.
                 </h1>
                 <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "14px", color: S.muted, marginTop: "8px", lineHeight: 1.6, maxWidth: "520px" }}>
-                  Your web dashboard and Vibe ADE desktop app share the same Supabase identity, usage counters, and tier limits.
+                  Your web dashboard and Vibe ADE desktop app share the same Supabase identity, usage counters, tier limits, and synced browser panes.
                 </p>
               </div>
               <Link

@@ -6,6 +6,7 @@ import {
   Github,
   X,
   Cpu,
+  Globe,
   Terminal,
   FolderOpen,
   Cloud,
@@ -18,7 +19,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Seo } from "@/seo/Seo";
 
-const DOWNLOAD_VERSION = "0.3.8";
+const DOWNLOAD_VERSION = "0.3.9";
 const DOWNLOAD_URL = `https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v${DOWNLOAD_VERSION}/Vibe-ADE-${DOWNLOAD_VERSION}-setup-x64.exe`;
 
 const features = [
@@ -43,6 +44,13 @@ const features = [
     body:
       "Create, save, clone and restore development environments in seconds. Cloud sync keeps every workspace in perfect state across sessions.",
   },
+  {
+    icon: Globe,
+    label: "Browser",
+    heading: "Browser Integration",
+    body:
+      "Open browser panes directly inside Vibe ADE to inspect web apps, test flows, and keep browser state alongside your terminals and workspaces.",
+  },
 ];
 
 const keyFeatures = [
@@ -60,6 +68,11 @@ const keyFeatures = [
     icon: Columns,
     title: "Task Board",
     desc: "A built-in Kanban board tied to each workspace. Create, move, archive and filter tasks without ever leaving your IDE.",
+  },
+  {
+    icon: Globe,
+    title: "Browser Integration",
+    desc: "Run browser panes inside the workspace so you can inspect live apps, validate flows, and keep browser context next to your terminal sessions.",
   },
   {
     icon: ShieldCheck,
@@ -104,15 +117,16 @@ const VibeADE = () => {
     () => ({
       version: `v${DOWNLOAD_VERSION}`,
       date: "March 20, 2026",
-      intro: "First official release of Vibe ADE",
+      intro: "Vibe ADE 0.3.9 adds browser integration to the workspace.",
       highlights: [
         "Windows-native AI development environment with multi-agent swarms, PTY terminals, and intelligent workspaces.",
         "Subscription-ready experience with Spark, Flux, and Forge tiers, usage tracking, and upgrade paths.",
-        "Production-grade onboarding, environment management, and cloud sync foundation."
+        "Production-grade onboarding, environment management, cloud sync foundation, and browser panes."
       ],
       whatsNew: [
         "Multi-agent QuanSwarm orchestration with coordinated roles and live state.",
         "Per-pane working directory awareness and terminal session persistence.",
+        "Browser integration with live web app inspection alongside terminal panes.",
         "Task Board with filtering, archiving, and export for workflow continuity.",
         "Plan-aware UX controls, locking, and in-app upgrade prompts."
       ],
@@ -364,7 +378,10 @@ const VibeADE = () => {
             }}
           >
             {features.map((f) => (
-              <div key={f.label}>
+              <div
+                key={f.label}
+                style={f.label === "Browser" ? { gridColumn: "2 / 3" } : undefined}
+              >
                 <span className="section-rule" />
                 <span className="amber-label" style={{ display: "block", marginBottom: "12px" }}>
                   {f.label}
@@ -488,6 +505,7 @@ const VibeADE = () => {
               ["Agent Swarms", "Multiple AI roles coordinating on a single goal"],
               ["PTY Terminals", "Full shell access with persistent session snapshots"],
               ["Workspace Tabs", "Multiple dev environments open simultaneously"],
+              ["Browser Integration", "Inspect live web apps in integrated browser panes"],
               ["Cloud Sync", "State preserved and synced via Supabase"],
               ["Task Board", "Built-in Kanban per workspace — no external tools"],
               ["Blocker Detection", "Automatic detection of stalled agents and recovery"],
@@ -585,7 +603,10 @@ const VibeADE = () => {
               <div
                 key={feat.title}
                 className="editorial-card"
-                style={{ padding: "32px 28px" }}
+                style={{
+                  padding: "32px 28px",
+                  ...(feat.title === "Auto-Updates" ? { gridColumn: "2 / 3" } : null),
+                }}
               >
                 <feat.icon
                   size={20}

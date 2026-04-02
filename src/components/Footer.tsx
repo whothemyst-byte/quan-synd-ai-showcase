@@ -114,6 +114,7 @@ const Footer = () => {
                 { label: "Services", path: "/services" },
                 { label: "Blog", path: "/blog" },
                 { label: "Contact", path: "/contact" },
+                { label: "Pricing", path: "/products/vibe-ade/pricing" },
               ].map(({ label, path }) => (
                 <li key={path}>
                   <Link
@@ -153,7 +154,6 @@ const Footer = () => {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
                 { label: "Vibe ADE", path: "/products/vibe-ade" },
-                { label: "Vibe ADE Pricing", path: "/products/vibe-ade/pricing" },
                 { label: "Quan Bench", path: "/quan-bench" },
               ].map(({ label, path }) => (
                 <li key={path}>
