@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Moon, Sun, Menu, X, ChevronDown } from "lucide-react";
+import { ArrowRight, Clock3, Moon, Sun, Menu, X, ChevronDown } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import { useAuth } from "@/contexts/AuthContext";
+import { VIBE_ADE_LAUNCH_LABEL, formatVibeAdeCountdown, getVibeAdeCountdown } from "@/lib/vibeAdeRelease";
 
 // Products dropdown items
 const productItems = [
@@ -27,6 +28,8 @@ const Navbar = () => {
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [now, setNow] = useState<number | null>(null);
+  const [isCountdownMounted, setIsCountdownMounted] = useState(false);
   const location = useLocation();
   const productsRef = useRef<HTMLDivElement>(null);
 
@@ -34,6 +37,17 @@ const Navbar = () => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const tick = () => setNow(Date.now());
+    tick();
+    const timer = window.setInterval(tick, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    setIsCountdownMounted(true);
   }, []);
 
   useEffect(() => {
@@ -71,6 +85,12 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
   const isProductsActive = productItems.some((p) => isActive(p.path));
+  const launchCountdown = useMemo(
+    () => (isCountdownMounted && now !== null ? getVibeAdeCountdown(now) : null),
+    [isCountdownMounted, now]
+  );
+  const launchLabel = launchCountdown ? (launchCountdown.isLive ? "Live now" : formatVibeAdeCountdown(launchCountdown)) : "--d --h --m --s";
+  const topBarHeight = "40px";
 
   const paperBg = theme === "dark" ? "rgba(18,17,15,0.92)" : "rgba(245,240,232,0.92)";
   const dropdownBg = theme === "dark" ? "#1a1815" : "#faf7f2";
@@ -93,7 +113,9 @@ const Navbar = () => {
     textDecoration: "none" as const,
     whiteSpace: "nowrap" as const,
     background: "transparent",
-    border: "none",
+    borderStyle: "solid",
+    borderWidth: 0,
+    borderColor: "transparent",
     cursor: "pointer",
   });
 
@@ -102,10 +124,14 @@ const Navbar = () => {
       <style>{`
         .qs-nav-desktop { display: none; }
         .qs-hamburger { display: flex; }
+        .qs-launch-strip { display: flex; }
         @media (min-width: 768px) {
           .qs-nav-desktop { display: flex; }
           .qs-hamburger { display: none; }
           .qs-mobile-menu { display: none !important; }
+        }
+        @media (max-width: 767px) {
+          .qs-launch-strip-text { font-size: 9px !important; line-height: 1.1 !important; }
         }
 
         /* Products dropdown */
@@ -144,10 +170,100 @@ const Navbar = () => {
         }
       `}</style>
 
+      <div
+        className="qs-launch-strip"
+          style={{
+            position: "fixed",
+            top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 60,
+          height: topBarHeight,
+          alignItems: "center",
+          justifyContent: "center",
+          borderBottom: "1px solid rgba(200,136,42,0.22)",
+          background:
+            theme === "dark"
+              ? "linear-gradient(180deg, rgba(32,28,24,0.98), rgba(20,18,16,0.96))"
+              : "linear-gradient(180deg, rgba(252,248,242,0.98), rgba(245,240,232,0.96))",
+          backdropFilter: "blur(14px)",
+          boxShadow: "0 10px 30px -24px rgba(0,0,0,0.4)",
+          padding: "4px 16px",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "1280px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "10px",
+            flexWrap: "wrap",
+            textAlign: "center",
+          }}
+        >
+          <span
+            className="qs-launch-strip-text"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontFamily: "'Geist Mono', monospace",
+              fontSize: "9px",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--ink)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <Clock3 size={12} style={{ color: "var(--amber)" }} />
+            Coming soon
+          </span>
+          <span
+            className="qs-launch-strip-text"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontFamily: "'Geist Mono', monospace",
+              fontSize: "9px",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--muted-ui)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <span style={{ color: "var(--amber)" }}>{launchLabel}</span>
+            <span aria-hidden="true">•</span>
+            <span>{VIBE_ADE_LAUNCH_LABEL}</span>
+          </span>
+          <Link
+            to="/products/vibe-ade"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "5px",
+              fontFamily: "'Geist Mono', monospace",
+              fontSize: "9px",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--amber)",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+            }}
+            aria-label="Go to the Vibe ADE product page"
+          >
+            Vibe ADE
+            <ArrowRight size={12} />
+          </Link>
+        </div>
+      </div>
+
       <nav
         style={{
           position: "fixed",
-          top: 0,
+          top: topBarHeight,
           left: 0,
           right: 0,
           zIndex: 50,

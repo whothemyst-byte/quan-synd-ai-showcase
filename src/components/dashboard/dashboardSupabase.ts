@@ -222,6 +222,28 @@ export async function completeBillingCheckout(input: {
   return mapBillingInvoice(data as BillingInvoiceRow);
 }
 
+export async function deleteDashboardWorkspace(workspaceId: string, userId: string): Promise<void> {
+  const { error: layoutError } = await supabase
+    .from("terminal_layouts")
+    .delete()
+    .eq("workspace_id", workspaceId)
+    .eq("user_id", userId);
+
+  if (layoutError) {
+    throw layoutError;
+  }
+
+  const { error: workspaceError } = await supabase
+    .from("workspaces")
+    .delete()
+    .eq("id", workspaceId)
+    .eq("user_id", userId);
+
+  if (workspaceError) {
+    throw workspaceError;
+  }
+}
+
 export async function loadDashboardActivity(userId: string): Promise<DashboardActivity[]> {
   const [profileResult, workspacesResult, keysResult, billingInvoicesResult] = await Promise.allSettled([
     supabase

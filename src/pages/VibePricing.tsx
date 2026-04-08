@@ -4,9 +4,8 @@ import { Check, Minus, ArrowRight, Download, Zap, ChevronDown, ChevronUp } from 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Seo } from "@/seo/Seo";
+import { NewsletterSignupModal } from "@/components/NewsletterSignupModal";
 import { VIBE_ADE_DOWNLOAD_URL } from "@/lib/vibeAdePricing";
-
-const DOWNLOAD_URL = VIBE_ADE_DOWNLOAD_URL;
 
 /* ─── DATA ─────────────────────────────────────────────────── */
 
@@ -141,6 +140,7 @@ function CheckCell({ value }: { value: string | boolean }) {
 const VibePricing = () => {
   const [annual, setAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [newsletterOpen, setNewsletterOpen] = useState(false);
 
   const price = (plan: typeof plans[0]) => {
     if (plan.monthlyPrice === 0) return "Free";
@@ -438,9 +438,11 @@ const VibePricing = () => {
                 {/* CTA */}
                 {plan.ctaExternal ? (
                   <a
-                    href={plan.ctaHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#newsletter"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setNewsletterOpen(true);
+                    }}
                     className="amber-btn"
                     style={{
                       display: "flex",
@@ -752,9 +754,11 @@ const VibePricing = () => {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             <a
-              href={DOWNLOAD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#newsletter"
+              onClick={(event) => {
+                event.preventDefault();
+                setNewsletterOpen(true);
+              }}
               className="amber-btn"
               style={{
                 padding: "14px 28px",
@@ -796,6 +800,7 @@ const VibePricing = () => {
         </div>
       </section>
 
+      <NewsletterSignupModal open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
       <Footer />
     </div>
   );

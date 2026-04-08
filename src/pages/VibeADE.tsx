@@ -17,10 +17,10 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { NewsletterSignupModal } from "@/components/NewsletterSignupModal";
 import { Seo } from "@/seo/Seo";
 
 const DOWNLOAD_VERSION = "0.3.9";
-const DOWNLOAD_URL = `https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v${DOWNLOAD_VERSION}/Vibe-ADE-${DOWNLOAD_VERSION}-setup-x64.exe`;
 
 const features = [
   {
@@ -102,6 +102,7 @@ const techStack = [
 
 const VibeADE = () => {
   const [releaseOpen, setReleaseOpen] = useState(false);
+  const [newsletterOpen, setNewsletterOpen] = useState(false);
   useEffect(() => {
     if (releaseOpen) {
       const previous = document.body.style.overflow;
@@ -154,6 +155,8 @@ const VibeADE = () => {
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────── */}
+      <NewsletterSignupModal open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
+
       <section
         className="dot-grid-bg hero-section"
         style={{
@@ -226,10 +229,9 @@ const VibeADE = () => {
             className="cta-buttons-row"
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
-            <a
-              href={DOWNLOAD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => setNewsletterOpen(true)}
               className="amber-btn"
               style={{
                 padding: "14px 28px",
@@ -239,10 +241,12 @@ const VibeADE = () => {
                 alignItems: "center",
                 gap: "8px",
                 textDecoration: "none",
+                border: "none",
+                cursor: "pointer",
               }}
             >
               <Download size={16} /> Download Free
-            </a>
+            </button>
             <a
               href="#release-notes"
               onClick={(event) => {
@@ -680,10 +684,9 @@ const VibeADE = () => {
             className="cta-buttons-row"
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
-            <a
-              href={DOWNLOAD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => setNewsletterOpen(true)}
               className="amber-btn"
               style={{
                 padding: "14px 32px",
@@ -693,10 +696,12 @@ const VibeADE = () => {
                 alignItems: "center",
                 gap: "8px",
                 textDecoration: "none",
+                border: "none",
+                cursor: "pointer",
               }}
             >
               <Download size={16} /> Download Vibe ADE
-            </a>
+            </button>
             <a
               href="#release-notes"
               onClick={(event) => {
@@ -763,13 +768,14 @@ const VibeADE = () => {
                 <p>{releaseNotes.date}</p>
               </div>
               <div className="release-notes-header-actions">
-                <a
-                  href={DOWNLOAD_URL}
+                <button
+                  type="button"
+                  onClick={() => setNewsletterOpen(true)}
                   className="amber-btn release-notes-download"
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: "none", border: "none", cursor: "pointer" }}
                 >
                   <Download size={16} /> Download v{DOWNLOAD_VERSION}
-                </a>
+                </button>
               </div>
             </header>
 

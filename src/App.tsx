@@ -21,6 +21,7 @@ import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AgentationBridge } from "./components/AgentationBridge";
 import { Helmet } from "react-helmet-async";
 import { organizationJsonLd, websiteJsonLd } from "@/seo/schema";
 import DashboardOverview from "./pages/dashboard/Overview";
@@ -47,6 +48,7 @@ const App = () => (
       </Helmet>
       <Toaster />
       <Sonner />
+      <AgentationBridge />
       <ScrollToTopWrapper />
       <Routes>
         <Route path="/" element={<Index />} />

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -445,6 +445,141 @@
     color: var(--ink);
   }
 
+  .newsletter-modal {
+    width: min(820px, 96vw);
+  }
+
+  .newsletter-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+    gap: 22px;
+    align-items: start;
+  }
+
+  .newsletter-feature-list {
+    display: grid;
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .newsletter-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .newsletter-feature-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    margin-top: 6px;
+    background: var(--amber);
+    box-shadow: 0 0 0 4px rgba(200, 136, 42, 0.08);
+    flex-shrink: 0;
+  }
+
+  .newsletter-feature strong {
+    display: block;
+    font-family: "Geist", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .newsletter-feature span {
+    display: block;
+    font-family: "Geist", sans-serif;
+    font-size: 13px;
+    color: var(--muted-ui);
+    line-height: 1.6;
+  }
+
+  .newsletter-panel {
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 22px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 94%, transparent), color-mix(in srgb, var(--paper) 88%, transparent));
+    box-shadow: var(--shadow-card);
+  }
+
+  .newsletter-form {
+    display: grid;
+    gap: 12px;
+  }
+
+  .newsletter-label {
+    font-family: "Geist Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-ui);
+  }
+
+  .newsletter-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+  }
+
+  .newsletter-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--ink);
+    font-family: "Geist", sans-serif;
+    font-size: 15px;
+  }
+
+  .newsletter-input::placeholder {
+    color: color-mix(in srgb, var(--muted-ui) 70%, transparent);
+  }
+
+  .newsletter-submit {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .newsletter-submit span {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .newsletter-submit svg {
+    flex-shrink: 0;
+    display: block;
+    width: 14px;
+    height: 14px;
+    transform: translateY(0.5px);
+  }
+
+  .newsletter-note {
+    margin: 0;
+    font-family: "Geist", sans-serif;
+    font-size: 13px;
+    color: var(--muted-ui);
+    line-height: 1.6;
+    text-align: center;
+  }
+
   .qb-live-pill {
     font-family: "Geist Mono", ui-monospace, monospace;
     font-size: 9px;
@@ -514,6 +649,10 @@
     width: 100%;
     max-height: calc(100vh - 48px);
     border-radius: 12px;
+  }
+
+  .newsletter-layout {
+    grid-template-columns: 1fr;
   }
 
   .release-notes-grid {
