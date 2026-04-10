@@ -387,6 +387,11 @@
   box-shadow: 0 0 0 2px rgba(200, 136, 42, 0.15);
 }
 
+.qb-model-card-top3 {
+  border-color: color-mix(in srgb, var(--amber) 45%, var(--rule));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--amber) 18%, transparent);
+}
+
 .qb-pick-badge {
   display: inline-block;
   background: var(--ink);
@@ -406,6 +411,7 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 14px;
+  gap: 10px;
 }
 
 .qb-card-head-left {
@@ -441,6 +447,21 @@
   color: var(--muted);
 }
 
+.qb-latest-pill {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--amber) 50%, var(--rule));
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-family: "Geist Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--amber-dim);
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+}
+
 .qb-tier-badge {
   border: 1px solid;
   border-radius: 20px;
@@ -451,6 +472,22 @@
   white-space: nowrap;
   flex-shrink: 0;
   align-self: flex-start;
+}
+
+.qb-card-head-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.qb-rank-chip {
+  font-family: "Geist Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .qb-waveform {
@@ -678,19 +715,20 @@
 .qb-matrix {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: 12px;
 }
 
 .qb-matrix thead th {
   font-family: "Geist Mono", monospace;
-  font-size: 10px;
+  font-size: 9px;
   text-transform: uppercase;
   color: var(--muted);
   letter-spacing: 0.06em;
   border-bottom: 1px solid var(--rule);
   background: var(--cream);
-  padding: 10px 14px;
-  white-space: nowrap;
+  padding: 9px 10px;
+  white-space: normal;
   text-align: left;
 }
 
@@ -707,16 +745,18 @@
 }
 
 .qb-matrix tbody td {
-  padding: 10px 14px;
-  white-space: nowrap;
+  padding: 9px 10px;
+  white-space: normal;
+  overflow-wrap: anywhere;
   font-family: "Geist Mono", monospace;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .qb-matrix-name {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .qb-matrix-name>span:first-child {
@@ -734,20 +774,45 @@
   letter-spacing: 0.08em;
 }
 
+.qb-inline-latest {
+  border: 1px solid color-mix(in srgb, var(--amber) 50%, var(--rule));
+  color: var(--amber-dim);
+  font-family: "Geist Mono", monospace;
+  font-size: 9px;
+  padding: 3px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+}
+
 .qb-matrix-quan {
   font-family: "Instrument Serif", serif;
-  font-size: 18px;
+  font-size: 17px;
   letter-spacing: -0.02em;
 }
 
 .qb-matrix-cost {
   font-family: "Geist Mono", monospace;
-  font-size: 12px;
+  font-size: 10px;
   color: var(--amber-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .qb-matrix-trend {
   font-size: 14px;
+}
+
+.qb-rank-cell {
+  font-weight: 600;
+}
+
+.qb-top-three td {
+  background: color-mix(in srgb, var(--amber) 9%, transparent);
+}
+
+.qb-top-three .qb-rank-cell {
+  color: var(--amber-dim);
 }
 
 .qb-method {

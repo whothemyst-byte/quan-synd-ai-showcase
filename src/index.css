@@ -737,3 +737,29 @@
     padding-right: 16px !important;
   }
 }
+
+/* Route transitions */
+.qs-route-shell {
+  animation: qs-route-in 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+@keyframes qs-route-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: saturate(92%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: saturate(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qs-route-shell {
+    animation: none;
+  }
+}

@@ -22,10 +22,23 @@ export type Model = {
   tier: Tier;
   pick: boolean;
   verdict: string;
+  latestCohort?: boolean;
+  externalScore?: number | null;
+  externalAlgorithms?: number | null;
+  externalDebugging?: number | null;
+  externalRefactoring?: number | null;
+  externalGeneration?: number | null;
+  externalUi?: number | null;
+  externalSecurity?: number | null;
+  externalThroughputTps?: number | null;
+  externalTtftMs?: number | null;
+  externalCostUsd?: number | null;
 };
 
 type QuanBenchCardProps = {
   model: Model;
+  displayRank: number;
+  isTopThree: boolean;
   isExpanded: boolean;
   index: number;
   tierColor: string;
@@ -45,7 +58,13 @@ const tierLabel: Record<Tier, string> = {
   Efficient: "III · Efficient",
 };
 
-const QuanBenchCard = ({ model, isExpanded, index, tierColor, waveformSvg, onClick }: QuanBenchCardProps) => {
+const costLabel: Record<Model["cost"], string> = {
+  $: "Lean",
+  $$: "Standard",
+  $$$: "Premium",
+};
+
+const QuanBenchCard = ({ model, displayRank, isTopThree, isExpanded, index, tierColor, waveformSvg, onClick }: QuanBenchCardProps) => {
   const dims = [
     { key: "reasoning", short: "RES", value: model.reasoning },
     { key: "context", short: "CON", value: model.context },
@@ -57,7 +76,7 @@ const QuanBenchCard = ({ model, isExpanded, index, tierColor, waveformSvg, onCli
 
   return (
     <div
-      className={`qb-model-card ${isExpanded ? "expanded" : ""}`}
+      className={`qb-model-card ${isExpanded ? "expanded" : ""} ${isTopThree ? "qb-model-card-top3" : ""}`}
       style={{
         ["--tier-color" as string]: tierColor,
         animationDelay: `${index * 0.04}s`,
@@ -79,10 +98,14 @@ const QuanBenchCard = ({ model, isExpanded, index, tierColor, waveformSvg, onCli
           <div>
             <h3>{model.name}</h3>
             <p>{model.provider}</p>
+            {model.latestCohort && <span className="qb-latest-pill">Latest Cohort</span>}
           </div>
         </div>
-        <div className="qb-tier-badge" style={{ color: tierColor, borderColor: tierColor }}>
-          {tierLabel[model.tier]}
+        <div className="qb-card-head-right">
+          <div className="qb-rank-chip">Rank #{displayRank}</div>
+          <div className="qb-tier-badge" style={{ color: tierColor, borderColor: tierColor }}>
+            {tierLabel[model.tier]}
+          </div>
         </div>
       </div>
 
@@ -103,7 +126,7 @@ const QuanBenchCard = ({ model, isExpanded, index, tierColor, waveformSvg, onCli
           <div className="qb-quan-num">{model.quan.toFixed(1)}</div>
         </div>
         <div className="qb-score-meta">
-          <span className="qb-cost-tag">{model.cost}</span>
+          <span className="qb-cost-tag">{costLabel[model.cost]}</span>
           <span className="qb-speed-tag">{model.speed}</span>
           <span className="qb-trend-tag">{trendSymbol[model.trend]}</span>
         </div>

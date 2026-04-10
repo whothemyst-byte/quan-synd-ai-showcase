@@ -20,6 +20,12 @@ const trendSymbol: Record<Model["trend"], string> = {
   stable: "—",
 };
 
+const costLabel: Record<Model["cost"], string> = {
+  $: "Lean",
+  $$: "Standard",
+  $$$: "Premium",
+};
+
 const methodology = [
   {
     num: "01 · 20%",
@@ -70,6 +76,8 @@ const QuanBench = () => {
   const [activeTier, setActiveTierState] = useState<TierFilter>("All");
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const scatterRef = useRef<SVGSVGElement | null>(null);
+  const cardGridRef = useRef<HTMLDivElement | null>(null);
+  const [cardColumns, setCardColumns] = useState(1);
 
   useEffect(() => {
     document.body.classList.add("qb-body");
@@ -104,13 +112,15 @@ const QuanBench = () => {
 
   const getFiltered = () => {
     const query = searchText.trim().toLowerCase();
-    return models.filter((model) => {
+    const filtered = models.filter((model) => {
       const bySearch = !query || model.name.toLowerCase().includes(query) || model.provider.toLowerCase().includes(query);
       const byProvider = providerFilter === "All providers" || model.provider === providerFilter;
       const byCost = costFilter === "Any cost" || model.cost === costFilter;
       const byTier = activeTier === "All" || model.tier === activeTier;
       return bySearch && byProvider && byCost && byTier;
     });
+
+    return [...filtered].sort((a, b) => a.rank - b.rank);
   };
 
   const renderCards = (modelsToRender: Model[]) => {
@@ -292,10 +302,38 @@ const QuanBench = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [models]);
 
-  const providers = useMemo(
-    () => ["All providers", "Anthropic", "OpenAI", "Google", "xAI", "Mistral", "Meta", "DeepSeek", "Alibaba"],
-    [],
-  );
+  useEffect(() => {
+    const gridEl = cardGridRef.current;
+    if (!gridEl) {
+      return;
+    }
+
+    const updateColumns = () => {
+      const styles = window.getComputedStyle(gridEl);
+      const template = styles.gridTemplateColumns;
+      const cols = template
+        .split(" ")
+        .map((part) => part.trim())
+        .filter(Boolean).length;
+      setCardColumns(Math.max(1, cols));
+    };
+
+    updateColumns();
+    const observer = new ResizeObserver(() => updateColumns());
+    observer.observe(gridEl);
+
+    return () => observer.disconnect();
+  }, [cardModels.length, currentView]);
+
+  const providers = useMemo(() => {
+    const providerSet = new Set(models.map((model) => model.provider));
+    return ["All providers", ...Array.from(providerSet).sort((a, b) => a.localeCompare(b))];
+  }, [models]);
+
+  const expandedIndex = expandedCard === null ? -1 : cardModels.findIndex((item) => item.rank === expandedCard);
+  const expandedModel = expandedIndex >= 0 ? cardModels[expandedIndex] : null;
+  const expandedRowEndIndex =
+    expandedIndex >= 0 ? Math.min(cardModels.length - 1, Math.floor(expandedIndex / cardColumns) * cardColumns + cardColumns - 1) : -1;
 
   return (
     <div className="qb-page">
@@ -326,7 +364,7 @@ const QuanBench = () => {
               <span className="qb-pulse-dot" />
               Continuously updated
             </div>
-            <div>10 models profiled</div>
+            <div>{models.length} models profiled</div>
             <div>200+ prompts / dimension</div>
           </div>
         </div>
@@ -414,9 +452,9 @@ const QuanBench = () => {
           >
             {[
               { label: "Any cost", value: "Any cost" },
-              { label: "$", value: "$" },
-              { label: "$$", value: "$$" },
-              { label: "$$$", value: "$$$" },
+              { label: "Lean", value: "$" },
+              { label: "Standard", value: "$$" },
+              { label: "Premium", value: "$$$" },
             ].map((cost) => (
               <option key={cost.value} value={cost.value}>
                 {cost.label}
@@ -463,13 +501,17 @@ const QuanBench = () => {
 
       {currentView === "cards" ? (
         <section className="qb-grid-wrap">
-          <div className="qb-card-grid">
+          <div className="qb-card-grid" ref={cardGridRef}>
             {cardModels.length === 0 && <div className="qb-empty">No models match</div>}
 
-            {cardModels.map((model, idx) => (
+            {cardModels.map((model, idx) => {
+              const shouldRenderExpandPanel = expandedModel !== null && idx === expandedRowEndIndex;
+              return (
               <div key={model.rank} className="qb-card-slot">
                 <QuanBenchCard
                   model={model}
+                  displayRank={model.rank}
+                  isTopThree={model.rank <= 3}
                   isExpanded={expandedCard === model.rank}
                   index={idx}
                   tierColor={tierColor[model.tier]}
@@ -477,11 +519,11 @@ const QuanBench = () => {
                   onClick={() => toggleExpand(model, null)}
                 />
 
-                {expandedCard === model.rank && (
+                {shouldRenderExpandPanel && (
                   <div className="qb-expand-panel">
                     <div className="qb-expand-col qb-verdict-col">
-                      <div className="qb-expand-label">Quan Verdict - {model.name}</div>
-                      <p>{model.verdict}</p>
+                      <div className="qb-expand-label">Quan Verdict - {expandedModel!.name}</div>
+                      <p>{expandedModel!.verdict}</p>
                       <div className="qb-expand-links">
                         <a href="#">Official model page ↗</a>
                         <a href="#">Raw scores ↗</a>
@@ -489,24 +531,24 @@ const QuanBench = () => {
                     </div>
 
                     <div className="qb-expand-col qb-radar-col">
-                      <div dangerouslySetInnerHTML={{ __html: makeRadar(model, 140) }} />
+                      <div dangerouslySetInnerHTML={{ __html: makeRadar(expandedModel!, 140) }} />
                     </div>
 
                     <div className="qb-expand-col qb-breakdown-col">
                       <div className="qb-expand-label">Dimension Breakdown</div>
                       <div className="qb-breakdown-list">
                         {[
-                          ["Reasoning", model.reasoning],
-                          ["Context", model.context],
-                          ["Accuracy", model.accuracy],
-                          ["Efficiency", model.efficiency],
-                          ["Creativity", model.creativity],
-                          ["Reliability", model.reliability],
+                          ["Reasoning", expandedModel!.reasoning],
+                          ["Context", expandedModel!.context],
+                          ["Accuracy", expandedModel!.accuracy],
+                          ["Efficiency", expandedModel!.efficiency],
+                          ["Creativity", expandedModel!.creativity],
+                          ["Reliability", expandedModel!.reliability],
                         ].map(([name, score]) => (
-                          <div key={`${model.rank}-${name}`} className="qb-break-row">
+                          <div key={`${expandedModel!.rank}-${name}`} className="qb-break-row">
                             <span>{name}</span>
                             <div className="qb-break-bar">
-                              <div style={{ width: `${score}%`, background: tierColor[model.tier] }} />
+                              <div style={{ width: `${score}%`, background: tierColor[expandedModel!.tier] }} />
                             </div>
                             <strong>{score}</strong>
                           </div>
@@ -516,22 +558,23 @@ const QuanBench = () => {
                       <div className="qb-summary-row">
                         <div>
                           <span>COST</span>
-                          <strong style={{ color: tierColor[model.tier] }}>{model.cost}</strong>
+                          <strong style={{ color: tierColor[expandedModel!.tier] }}>{costLabel[expandedModel!.cost]}</strong>
                         </div>
                         <div>
                           <span>SPEED</span>
-                          <strong className="qb-summary-speed">{model.speed}</strong>
+                          <strong className="qb-summary-speed">{expandedModel!.speed}</strong>
                         </div>
                         <div>
                           <span>RANK</span>
-                          <strong className="qb-summary-rank">#{model.rank}</strong>
+                          <strong className="qb-summary-rank">#{expandedModel!.rank}</strong>
                         </div>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
-            ))}
+            );
+            })}
           </div>
         </section>
       ) : (
@@ -540,7 +583,7 @@ const QuanBench = () => {
             <table className="qb-matrix">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>Ranking</th>
                   <th>Model</th>
                   <th>Provider</th>
                   <th>Quan Score</th>
@@ -557,12 +600,13 @@ const QuanBench = () => {
               </thead>
               <tbody>
                 {matrixModels.map((model, idx) => (
-                  <tr key={model.rank} className={idx % 2 === 0 ? "even" : "odd"}>
-                    <td>{model.rank}</td>
+                  <tr key={model.rank} className={`${idx % 2 === 0 ? "even" : "odd"} ${model.rank <= 3 ? "qb-top-three" : ""}`}>
+                    <td className="qb-rank-cell">{model.rank}</td>
                     <td>
                       <div className="qb-matrix-name">
                         <span>{model.name}</span>
                         {model.pick && <span className="qb-inline-pick">PICK</span>}
+                        {model.latestCohort && <span className="qb-inline-latest">LATEST</span>}
                       </div>
                     </td>
                     <td>{model.provider}</td>
@@ -573,7 +617,7 @@ const QuanBench = () => {
                     <td>{model.efficiency}</td>
                     <td>{model.creativity}</td>
                     <td>{model.reliability}</td>
-                    <td className="qb-matrix-cost">{model.cost}</td>
+                    <td className="qb-matrix-cost">{costLabel[model.cost]}</td>
                     <td>{model.speed}</td>
                     <td className="qb-matrix-trend">{trendSymbol[model.trend]}</td>
                   </tr>

@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+﻿import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, Tag, User } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -8,7 +8,6 @@ import { blogPostingJsonLd } from "@/seo/schema";
 import featuredImage from "@/assets/blog-agentic-ai.jpg";
 import designSystemsImage from "@/assets/blog-design-systems.jpg";
 import ethicalAiImage from "@/assets/blog-ethical-ai.jpg";
-import uxResearchImage from "@/assets/blog-ux-research.jpg";
 import generativeAiImage from "@/assets/blog-generative-ai.jpg";
 import multiAgentImage from "@/assets/blog-multi-agent.jpg";
 import companyExpansionImage from "@/assets/blog-company-expansion.jpg";
@@ -95,7 +94,7 @@ const allBlogPosts = [
     author: "QuanSynd Ethics Board",
     image: ethicalAiImage,
     content: `
-      <p>As AI becomes increasingly integrated into critical business processes and everyday life, the importance of ethical AI development cannot be overstated. Building responsible AI systems is not just a moral imperative—it's essential for long-term business success.</p>
+      <p>As AI becomes increasingly integrated into critical business processes and everyday life, the importance of ethical AI development cannot be overstated. Building responsible AI systems is not just a moral imperativeâ€”it's essential for long-term business success.</p>
       
       <h2>The Pillars of Ethical AI</h2>
       <p>Responsible AI development rests on several foundational principles:</p>
@@ -119,44 +118,7 @@ const allBlogPosts = [
       <p>Organizations must establish clear guidelines and governance structures for AI development. This includes ethics review boards, impact assessments, and regular training for development teams.</p>
       
       <h2>The Business Case for Ethics</h2>
-      <p>Ethical AI isn't just about avoiding harm—it's about building trust. Companies that prioritize responsible AI development enjoy stronger customer relationships, reduced regulatory risk, and more sustainable growth.</p>
-    `,
-  },
-  {
-    slug: "ux-research-ai-products",
-    title: "UX Research Methods for AI Products",
-    excerpt: "Adapting traditional UX research methodologies for AI-powered applications.",
-    category: "UX Research",
-    date: "September 25, 2025",
-    readTime: "7 min read",
-    author: "QuanSynd Research Team",
-    image: uxResearchImage,
-    content: `
-      <p>User experience research for AI products presents unique challenges that require adapted methodologies. Traditional UX research methods need evolution to capture the nuances of human-AI interaction.</p>
-      
-      <h2>Understanding AI-Specific UX Challenges</h2>
-      <p>AI products introduce complexities that traditional software doesn't have:</p>
-      <ul>
-        <li>Unpredictable outputs that may vary between sessions</li>
-        <li>The need to set and manage user expectations</li>
-        <li>Trust and transparency considerations</li>
-        <li>Learning curves unique to AI interactions</li>
-      </ul>
-      
-      <h2>Adapted Research Methods</h2>
-      <p>Effective AI UX research incorporates several specialized approaches:</p>
-      <ul>
-        <li><strong>Longitudinal studies:</strong> Understanding how user perception evolves over time</li>
-        <li><strong>Trust measurement:</strong> Assessing user confidence in AI decisions</li>
-        <li><strong>Error tolerance testing:</strong> How users respond when AI makes mistakes</li>
-        <li><strong>Explanation testing:</strong> Evaluating the effectiveness of AI explanations</li>
-      </ul>
-      
-      <h2>Metrics That Matter</h2>
-      <p>Beyond traditional UX metrics, AI products require measurement of trust scores, comprehension levels, and correction frequency. These metrics help teams understand the true quality of the user experience.</p>
-      
-      <h2>Building Better AI Experiences</h2>
-      <p>At QuanSynd, we've developed specialized frameworks for AI UX research that help our clients create products users trust and love.</p>
+      <p>Ethical AI isn't just about avoiding harmâ€”it's about building trust. Companies that prioritize responsible AI development enjoy stronger customer relationships, reduced regulatory risk, and more sustainable growth.</p>
     `,
   },
   {
@@ -193,7 +155,7 @@ const allBlogPosts = [
       </ul>
       
       <h2>Preparing for the Future</h2>
-      <p>Designers who embrace generative AI as a tool—not a threat—will find themselves more productive and creative than ever before. The future belongs to those who can effectively collaborate with AI.</p>
+      <p>Designers who embrace generative AI as a toolâ€”not a threatâ€”will find themselves more productive and creative than ever before. The future belongs to those who can effectively collaborate with AI.</p>
     `,
   },
   {
@@ -250,7 +212,7 @@ const allBlogPosts = [
       <ul>
         <li><strong>London, UK:</strong> Serving European clients with local expertise</li>
         <li><strong>Singapore:</strong> Our hub for Asia-Pacific operations</li>
-        <li><strong>São Paulo, Brazil:</strong> Bringing AI innovation to Latin America</li>
+        <li><strong>SÃ£o Paulo, Brazil:</strong> Bringing AI innovation to Latin America</li>
       </ul>
       
       <h2>Strategic Partnerships</h2>
@@ -275,7 +237,7 @@ const BlogPost = () => {
   const title = post ? `${post.title} | QuanSynd` : "Post Not Found | QuanSynd";
   const description = post
     ? post.excerpt
-    : "The blog post you’re looking for doesn’t exist. Browse the latest posts from QuanSynd.";
+    : "The blog post youâ€™re looking for doesnâ€™t exist. Browse the latest posts from QuanSynd.";
   const jsonLd = post
     ? blogPostingJsonLd({
         slug: post.slug,
@@ -418,3 +380,6 @@ const BlogPost = () => {
 };
 
 export default BlogPost;
+
+
+

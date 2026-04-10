@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Twitter, Github } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 
@@ -192,7 +192,7 @@ const Footer = () => {
               Services
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {["UI Design", "UX Research", "Graphic Design", "AI Consulting", "Agentic AI"].map((s) => (
+              {["Graphic Design", "AI Consulting", "Agentic AI"].map((s) => (
                 <li
                   key={s}
                   style={{
@@ -258,7 +258,7 @@ const Footer = () => {
                   marginTop: "2px",
                 }}
               >
-                Mon–Fri · 9am–6pm IST
+                Monâ€“Fri Â· 9amâ€“6pm IST
               </p>
             </div>
           </div>
@@ -283,7 +283,7 @@ const Footer = () => {
               letterSpacing: "0.04em",
             }}
           >
-            © {currentYear} QuanSynd — A Scube Company. All rights reserved.
+            Â© {currentYear} QuanSynd â€” A Scube Company. All rights reserved.
           </p>
           <p
             style={{
@@ -302,3 +302,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
