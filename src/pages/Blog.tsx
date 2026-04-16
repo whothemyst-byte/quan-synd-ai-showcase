@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -42,14 +42,14 @@ const Blog = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="Blog | QuanSynd â€” Insights on AI, Design & Technology"
-        description="Read QuanSynd perspectives on agentic AI, design systems, ethical AI, and emerging technologyâ€”ideas worth exploring."
+        title="Blog | QuanSynd - Insights on AI, Design & Technology"
+        description="Read QuanSynd perspectives on agentic AI, design systems, ethical AI, and emerging technology-ideas worth exploring."
         canonicalPath="/blog"
         ogType="website"
       />
       <Navbar />
 
-      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- HERO ----------------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -89,7 +89,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* â”€â”€ CATEGORY FILTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- CATEGORY FILTER ------------------------------------ */}
       <section
         style={{
           padding: "28px 24px",
@@ -135,7 +135,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* â”€â”€ FEATURED ARTICLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- FEATURED ARTICLE ----------------------------------- */}
       <section style={{ padding: "64px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <Link
@@ -276,7 +276,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* â”€â”€ ARTICLES GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- ARTICLES GRID -------------------------------------- */}
       <section style={{ padding: "0 24px 96px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <div
@@ -411,7 +411,7 @@ const Blog = () => {
                           letterSpacing: "0.05em",
                         }}
                       >
-                        Read â†’
+                          Read {"->"}
                       </span>
                     </div>
                   </div>
@@ -436,7 +436,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* â”€â”€ NEWSLETTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- NEWSLETTER ----------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -496,7 +496,7 @@ const Blog = () => {
                 whiteSpace: "nowrap",
               }}
             >
-              Subscribe â†’
+              Subscribe {"->"}
             </button>
           </div>
           <p

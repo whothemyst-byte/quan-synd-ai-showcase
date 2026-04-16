@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Mail, Phone, MapPin, Linkedin, Twitter, Github, Send, ChevronDown, ChevronUp } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -73,14 +73,14 @@ const Contact = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="Contact | QuanSynd â€” Letâ€™s Work Together"
-        description="Get in touch with QuanSynd to discuss AI consulting, agentic AI, and graphic design services. Share your goals and weâ€™ll respond within 24 hours."
+        title="Contact | QuanSynd - Let's Work Together"
+        description="Get in touch with QuanSynd to discuss AI consulting, agentic AI, and graphic design services. Share your goals and we'll respond within 24 hours."
         canonicalPath="/contact"
         ogType="website"
       />
       <Navbar />
 
-      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- HERO ----------------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -120,7 +120,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- MAIN CONTENT --------------------------------------- */}
       <section style={{ padding: "80px 24px", background: "var(--paper)" }}>
         <div
           className="contact-split"
@@ -133,7 +133,7 @@ const Contact = () => {
             alignItems: "start",
           }}
         >
-          {/* Left â€” Form */}
+          {/* Left - Form */}
           <div>
             <span className="amber-label" style={{ display: "block", marginBottom: "28px" }}>
               Send a Message
@@ -192,7 +192,7 @@ const Contact = () => {
                     onFocus={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--amber)")}
                     onBlur={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--rule)")}
                   >
-                    <option value="">Select a serviceâ€¦</option><option value="graphic-design">Graphic Design</option>
+                    <option value="">Select a service...</option><option value="graphic-design">Graphic Design</option>
                     <option value="ai-consulting">AI Consulting</option>
                     <option value="agentic-ai">Agentic AI</option>
                     <option value="quan-bench">Quan Bench</option>
@@ -208,11 +208,11 @@ const Contact = () => {
                     onFocus={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--amber)")}
                     onBlur={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--rule)")}
                   >
-                    <option value="">Select budget rangeâ€¦</option>
-                    <option value="under-5l">Under â‚¹5L</option>
-                    <option value="5l-20l">â‚¹5L â€“ â‚¹20L</option>
-                    <option value="20l-50l">â‚¹20L â€“ â‚¹50L</option>
-                    <option value="50l-plus">â‚¹50L+</option>
+                    <option value="">Select budget range...</option>
+                    <option value="under-5l">Under ₹5L</option>
+                    <option value="5l-20l">₹5L - ₹20L</option>
+                    <option value="20l-50l">₹20L - ₹50L</option>
+                    <option value="50l-plus">₹50L+</option>
                     <option value="discuss">Let's discuss</option>
                   </select>
                 </div>
@@ -222,7 +222,7 @@ const Contact = () => {
                 <label style={labelStyle}>Tell us about your project *</label>
                 <textarea
                   required
-                  placeholder="Describe your project, goals, timeline, and any specific requirementsâ€¦"
+                  placeholder="Describe your project, goals, timeline, and any specific requirements..."
                   value={formData.message}
                   onChange={(e) => handleChange("message", e.target.value)}
                   style={{
@@ -270,7 +270,7 @@ const Contact = () => {
             </form>
           </div>
 
-          {/* Right â€” Info Card */}
+          {/* Right - Info Card */}
           <div>
             <div
               style={{
@@ -306,7 +306,7 @@ const Contact = () => {
                   {
                     Icon: MapPin,
                     href: "#",
-                    text: "Coimbatore, Tamil Nadu â€” Global Operations",
+                    text: "Coimbatore, Tamil Nadu - Global Operations",
                   },
                 ].map(({ Icon, href, text }) => (
                   <a
@@ -376,8 +376,8 @@ const Contact = () => {
                   Office Hours
                 </p>
                 <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "13px", color: "var(--muted-ui)", lineHeight: "1.6" }}>
-                  Monâ€“Fri Â· 9amâ€“6pm IST<br />
-                  Sat Â· 10amâ€“4pm IST<br />
+                  Mon-Fri · 9am-6pm IST<br />
+                  Sat · 10am-4pm IST<br />
                   <span style={{ fontSize: "12px", opacity: 0.7 }}>* We operate across multiple time zones.</span>
                 </p>
                 <div style={{ marginTop: "16px" }}>
@@ -402,7 +402,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* â”€â”€ FAQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- FAQ ------------------------------------------------ */}
       <section
         className="cream-section"
         style={{ padding: "80px 24px", borderTop: "1px solid var(--rule)" }}
@@ -483,7 +483,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* â”€â”€ DISCOVERY CALL CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- DISCOVERY CALL CTA --------------------------------- */}
       <section
         className="paper-section"
         style={{
@@ -517,7 +517,7 @@ const Contact = () => {
             textDecoration: "none",
           }}
         >
-          Book a Discovery Call â†’
+          Book a Discovery Call {"->"}
         </a>
       </section>
 

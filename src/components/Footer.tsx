@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Twitter, Github } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 
@@ -258,7 +258,7 @@ const Footer = () => {
                   marginTop: "2px",
                 }}
               >
-                Monâ€“Fri Â· 9amâ€“6pm IST
+                Mon-Fri · 9am-6pm IST
               </p>
             </div>
           </div>
@@ -283,7 +283,7 @@ const Footer = () => {
               letterSpacing: "0.04em",
             }}
           >
-            Â© {currentYear} QuanSynd â€” A Scube Company. All rights reserved.
+            © {currentYear} QuanSynd - A Scube Company. All rights reserved.
           </p>
           <p
             style={{

@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Minus, ArrowRight, Download, Zap, ChevronDown, ChevronUp } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -7,7 +7,7 @@ import { Seo } from "@/seo/Seo";
 import { NewsletterSignupModal } from "@/components/NewsletterSignupModal";
 import { VIBE_ADE_DOWNLOAD_URL } from "@/lib/vibeAdePricing";
 
-/* â”€â”€â”€ DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* --- DATA --------------------------------------------------- */
 
 const plans = [
   {
@@ -45,11 +45,11 @@ const plans = [
       "Everything in Spark",
       "Unlimited workspaces",
       "Unlimited terminal panes",
-      "Cloud sync â€” unlimited",
-      "Task board â€” 300 tasks/month",
+      "Cloud sync - unlimited",
+      "Task board - 300 tasks/month",
       "20 QuanSwarm runs / month",
       "5 concurrent agents per swarm",
-      "Email support â€” 48 hr response",
+      "Email support - 48 hr response",
       "Live usage counter in dashboard",
     ],
   },
@@ -70,7 +70,7 @@ const plans = [
       "Unlimited task board",
       "Unlimited QuanSwarm runs",
       "Unlimited concurrent agents",
-      "Priority email â€” 12 hr response",
+      "Priority email - 12 hr response",
       "Beta / early access builds",
       "Advanced analytics & agent logs",
       "All future Pro+ features auto-unlock",
@@ -80,7 +80,7 @@ const plans = [
 
 const comparisonRows: { label: string; spark: string | boolean; flux: string | boolean; forge: string | boolean }[] = [
   { label: "Price", spark: "Free", flux: "$12 / mo", forge: "$25 / mo" },
-  { label: "Annual price", spark: "â€”", flux: "$10 / mo", forge: "$20 / mo" },
+  { label: "Annual price", spark: "-", flux: "$10 / mo", forge: "$20 / mo" },
   { label: "Workspaces", spark: "2", flux: "Unlimited", forge: "Unlimited" },
   { label: "Terminal panes", spark: "4 per workspace", flux: "Unlimited", forge: "Unlimited" },
   { label: "Cloud sync", spark: "2 workspaces", flux: "Unlimited", forge: "Unlimited" },
@@ -100,7 +100,7 @@ const faqs = [
   },
   {
     q: "What happens if I hit a monthly limit?",
-    a: "Limits reset on the 1st of each calendar month. When you reach your limit, the feature simply pauses â€” you're never charged extra.",
+    a: "Limits reset on the 1st of each calendar month. When you reach your limit, the feature simply pauses - you're never charged extra.",
   },
   {
     q: "Is annual billing cancellable?",
@@ -108,20 +108,20 @@ const faqs = [
   },
 ];
 
-/* â”€â”€â”€ AMBER / PALETTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* --- AMBER / PALETTE --------------------------------------- */
 const AMBER = "var(--amber)";
 const INK = "var(--ink)";
 const PAPER = "var(--paper)";
 const MUTED = "var(--muted-ui)";
 const RULE = "var(--rule)";
 
-/* â”€â”€â”€ SUB-COMPONENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* --- SUB-COMPONENTS --------------------------------------- */
 
 function CheckCell({ value }: { value: string | boolean }) {
   if (value === false) {
     return (
       <span style={{ color: "rgba(138,128,112,0.5)", fontFamily: "'Geist Mono', monospace", fontSize: "14px" }}>
-        â€”
+        -
       </span>
     );
   }
@@ -135,7 +135,7 @@ function CheckCell({ value }: { value: string | boolean }) {
   );
 }
 
-/* â”€â”€â”€ PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* --- PAGE -------------------------------------------------- */
 
 const VibePricing = () => {
   const [annual, setAnnual] = useState(false);
@@ -152,14 +152,14 @@ const VibePricing = () => {
   return (
     <div style={{ background: PAPER, minHeight: "100vh" }}>
       <Seo
-        title="Pricing â€” Vibe ADE | QuanSynd"
+        title="Pricing - Vibe ADE | QuanSynd"
         description="Choose your Vibe ADE plan. Spark is free forever, with paid USD plans for Flux and Forge."
         canonicalPath="/products/vibe-ade/pricing"
         ogType="website"
       />
       <Navbar />
 
-      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- HERO ------------------------------------------------ */}
       <section
         className="dot-grid-bg hero-section"
         style={{
@@ -182,7 +182,7 @@ const VibePricing = () => {
               marginBottom: "24px",
             }}
           >
-            <span className="amber-label">Products â€” Vibe ADE â€” Pricing</span>
+            <span className="amber-label">Products - Vibe ADE - Pricing</span>
           </div>
 
           {/* Headline */}
@@ -285,7 +285,7 @@ const VibePricing = () => {
                     fontWeight: 600,
                   }}
                 >
-                  SAVE 17â€“20%
+                  SAVE 17-20%
                 </span>
               )}
             </span>
@@ -293,7 +293,7 @@ const VibePricing = () => {
         </div>
       </section>
 
-      {/* â”€â”€ PRICING CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- PRICING CARDS --------------------------------------- */}
       <section style={{ padding: "0 24px 96px", background: PAPER }}>
         <div
           className="vibe-pricing-cards"
@@ -520,7 +520,7 @@ const VibePricing = () => {
 
       </section>
 
-      {/* â”€â”€ FULL COMPARISON TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- FULL COMPARISON TABLE ------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -636,7 +636,7 @@ const VibePricing = () => {
 
 
 
-      {/* â”€â”€ FAQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- FAQ ------------------------------------------------- */}
       <section
         className="cream-section"
         style={{ padding: "80px 24px", borderBottom: `1px solid ${RULE}` }}
@@ -717,7 +717,7 @@ const VibePricing = () => {
         </div>
       </section>
 
-      {/* â”€â”€ CLOSING CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- CLOSING CTA ----------------------------------------- */}
       <section
         className="ink-section"
         style={{ padding: "96px 24px", textAlign: "center" }}
@@ -749,7 +749,7 @@ const VibePricing = () => {
               lineHeight: "1.7",
             }}
           >
-            Spark is free â€” forever. Upgrade when you need more.
+            Spark is free - forever. Upgrade when you need more.
           </p>
           <div
             className="cta-buttons-row"
@@ -772,7 +772,7 @@ const VibePricing = () => {
                 textDecoration: "none",
               }}
             >
-              <Download size={15} /> Download Spark â€” Free
+              <Download size={15} /> Download Spark - Free
             </a>
             <Link
               to="/products/vibe-ade"

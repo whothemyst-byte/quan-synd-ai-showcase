@@ -1,4 +1,4 @@
-﻿import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, Tag, User } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -94,7 +94,7 @@ const allBlogPosts = [
     author: "QuanSynd Ethics Board",
     image: ethicalAiImage,
     content: `
-      <p>As AI becomes increasingly integrated into critical business processes and everyday life, the importance of ethical AI development cannot be overstated. Building responsible AI systems is not just a moral imperativeâ€”it's essential for long-term business success.</p>
+      <p>As AI becomes increasingly integrated into critical business processes and everyday life, the importance of ethical AI development cannot be overstated. Building responsible AI systems is not just a moral imperative-it's essential for long-term business success.</p>
       
       <h2>The Pillars of Ethical AI</h2>
       <p>Responsible AI development rests on several foundational principles:</p>
@@ -118,7 +118,7 @@ const allBlogPosts = [
       <p>Organizations must establish clear guidelines and governance structures for AI development. This includes ethics review boards, impact assessments, and regular training for development teams.</p>
       
       <h2>The Business Case for Ethics</h2>
-      <p>Ethical AI isn't just about avoiding harmâ€”it's about building trust. Companies that prioritize responsible AI development enjoy stronger customer relationships, reduced regulatory risk, and more sustainable growth.</p>
+      <p>Ethical AI isn't just about avoiding harm-it's about building trust. Companies that prioritize responsible AI development enjoy stronger customer relationships, reduced regulatory risk, and more sustainable growth.</p>
     `,
   },
   {
@@ -155,7 +155,7 @@ const allBlogPosts = [
       </ul>
       
       <h2>Preparing for the Future</h2>
-      <p>Designers who embrace generative AI as a toolâ€”not a threatâ€”will find themselves more productive and creative than ever before. The future belongs to those who can effectively collaborate with AI.</p>
+      <p>Designers who embrace generative AI as a tool-not a threat-will find themselves more productive and creative than ever before. The future belongs to those who can effectively collaborate with AI.</p>
     `,
   },
   {
@@ -237,7 +237,7 @@ const BlogPost = () => {
   const title = post ? `${post.title} | QuanSynd` : "Post Not Found | QuanSynd";
   const description = post
     ? post.excerpt
-    : "The blog post youâ€™re looking for doesnâ€™t exist. Browse the latest posts from QuanSynd.";
+    : "The blog post you're looking for doesn't exist. Browse the latest posts from QuanSynd.";
   const jsonLd = post
     ? blogPostingJsonLd({
         slug: post.slug,

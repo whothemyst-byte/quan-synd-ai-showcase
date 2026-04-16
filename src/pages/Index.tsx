@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles, Zap, Brain } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -57,7 +57,7 @@ const Index = () => {
       />
       <Navbar />
 
-      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- HERO ----------------------------------------------- */}
       <section
         className="dot-grid-bg"
         style={{
@@ -203,7 +203,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* â”€â”€ TOOLS STRIP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- TOOLS STRIP ---------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -247,7 +247,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* â”€â”€ SERVICES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- SERVICES ------------------------------------------- */}
       <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           {/* Section header */}
@@ -276,11 +276,11 @@ const Index = () => {
                 maxWidth: "480px",
               }}
             >
-              Tailored to your business needs â€” from strategy to execution.
+              Tailored to your business needs - from strategy to execution.
             </p>
           </div>
 
-          {/* Row 1 â€” 3 cards */}
+          {/* Row 1 - 3 cards */}
           <div
             className="svc-grid-top"
             style={{
@@ -318,7 +318,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* â”€â”€ QUAN BENCH CTA BAND â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- QUAN BENCH CTA BAND --------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -366,7 +366,7 @@ const Index = () => {
                 lineHeight: "1.65",
               }}
             >
-              Our open AI model intelligence index â€” benchmarking frontier, capable and efficient
+              Our open AI model intelligence index - benchmarking frontier, capable and efficient
               models across reasoning, accuracy, creativity and more.
             </p>
           </div>
@@ -389,7 +389,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* â”€â”€ FINAL CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* -- FINAL CTA ------------------------------------------ */}
       <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
           <h2
