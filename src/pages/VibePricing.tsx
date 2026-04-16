@@ -143,6 +143,14 @@ const VibePricing = () => {
   const [newsletterOpen, setNewsletterOpen] = useState(false);
   const usd = (value: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+  const annualDiscountPct = Math.round(
+    plans
+      .filter((plan) => plan.monthlyPrice > 0 && plan.annualPrice > 0 && plan.monthlyPrice >= plan.annualPrice)
+      .reduce((acc, plan, _, arr) => {
+        const discount = ((plan.monthlyPrice - plan.annualPrice) / plan.monthlyPrice) * 100;
+        return acc + discount / Math.max(arr.length, 1);
+      }, 0),
+  );
 
   const price = (plan: typeof plans[0]) => {
     if (plan.monthlyPrice === 0) return "Free";
@@ -286,7 +294,7 @@ const VibePricing = () => {
                   transition: "all 0.18s ease",
                 }}
               >
-                SAVE 17-20%
+                SAVE {annualDiscountPct}%
               </span>
             </span>
           </div>
