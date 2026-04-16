@@ -133,7 +133,7 @@ Deno.serve(async (req) => {
           billing_interval: billingInterval,
           plan_id: planId,
           amount_cents: typeof payment.amount === "number" ? payment.amount : 0,
-          currency: typeof payment.currency === "string" ? payment.currency : "INR",
+          currency: typeof payment.currency === "string" ? payment.currency : "USD",
           provider: "razorpay",
           provider_order_id: orderId,
           provider_payment_id: paymentId,

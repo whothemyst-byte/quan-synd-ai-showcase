@@ -191,7 +191,7 @@ Deno.serve(async (req) => {
         billing_interval: billingInterval,
         plan_id: `${planTier}_${billingInterval}`,
         amount_cents: Number(paymentJson.amount),
-        currency: String(paymentJson.currency || "INR").toUpperCase(),
+        currency: String(paymentJson.currency || "USD").toUpperCase(),
         provider: "razorpay",
         provider_order_id: razorpayOrderId,
         provider_payment_id: razorpayPaymentId,
@@ -212,7 +212,7 @@ Deno.serve(async (req) => {
       orderId: razorpayOrderId,
       invoiceId,
       amount: Number(paymentJson.amount) / 100,
-      currency: String(paymentJson.currency || "INR").toUpperCase(),
+      currency: String(paymentJson.currency || "USD").toUpperCase(),
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unexpected error";

@@ -33,8 +33,8 @@ const plans = [
     id: "flux",
     label: "FLUX",
     tagline: "Stay in the flow",
-    monthlyPrice: 1,
-    annualPrice: 1,
+    monthlyPrice: 12,
+    annualPrice: 10,
     cta: "Start Flux",
     ctaHref: "/checkout?plan=flux&interval=monthly",
     ctaExternal: false,
@@ -57,8 +57,8 @@ const plans = [
     id: "forge",
     label: "FORGE",
     tagline: "Build without limits",
-    monthlyPrice: 1,
-    annualPrice: 1,
+    monthlyPrice: 25,
+    annualPrice: 20,
     cta: "Start Forge",
     ctaHref: "/checkout?plan=forge&interval=monthly",
     ctaExternal: false,
@@ -79,8 +79,8 @@ const plans = [
 ];
 
 const comparisonRows: { label: string; spark: string | boolean; flux: string | boolean; forge: string | boolean }[] = [
-  { label: "Price", spark: "Free", flux: "â‚¹1 / mo", forge: "â‚¹1 / mo" },
-  { label: "Annual price", spark: "â€”", flux: "â‚¹1 / mo", forge: "â‚¹1 / mo" },
+  { label: "Price", spark: "Free", flux: "$12 / mo", forge: "$25 / mo" },
+  { label: "Annual price", spark: "â€”", flux: "$10 / mo", forge: "$20 / mo" },
   { label: "Workspaces", spark: "2", flux: "Unlimited", forge: "Unlimited" },
   { label: "Terminal panes", spark: "4 per workspace", flux: "Unlimited", forge: "Unlimited" },
   { label: "Cloud sync", spark: "2 workspaces", flux: "Unlimited", forge: "Unlimited" },
@@ -141,19 +141,19 @@ const VibePricing = () => {
   const [annual, setAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [newsletterOpen, setNewsletterOpen] = useState(false);
-  const inr = (value: number) =>
-    new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value);
+  const usd = (value: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 
   const price = (plan: typeof plans[0]) => {
     if (plan.monthlyPrice === 0) return "Free";
-    return inr(annual ? plan.annualPrice : plan.monthlyPrice);
+    return usd(annual ? plan.annualPrice : plan.monthlyPrice);
   };
 
   return (
     <div style={{ background: PAPER, minHeight: "100vh" }}>
       <Seo
         title="Pricing â€” Vibe ADE | QuanSynd"
-        description="Choose your Vibe ADE plan. Spark is free forever. Flux and Forge are set to ₹1 for live payment testing."
+        description="Choose your Vibe ADE plan. Spark is free forever, with paid USD plans for Flux and Forge."
         canonicalPath="/products/vibe-ade/pricing"
         ogType="website"
       />
@@ -419,7 +419,7 @@ const VibePricing = () => {
                       letterSpacing: "0.03em",
                     }}
                   >
-                    or {inr(plan.annualPrice)}/mo billed annually
+                    or {usd(plan.annualPrice)}/mo billed annually
                   </p>
                 )}
                 {plan.monthlyPrice > 0 && annual && (
@@ -432,7 +432,7 @@ const VibePricing = () => {
                       letterSpacing: "0.03em",
                     }}
                   >
-                    billed {inr(plan.annualPrice * 12)} annually
+                    billed {usd(plan.annualPrice * 12)} annually
                   </p>
                 )}
                 {plan.monthlyPrice === 0 && <div style={{ height: "24px", marginBottom: "20px" }} />}

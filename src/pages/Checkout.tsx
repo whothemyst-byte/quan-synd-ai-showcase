@@ -66,10 +66,11 @@ export default function Checkout() {
   }, [planId]);
   const amount = useMemo(() => {
     if (planId === "spark") return 0;
-    return 1;
-  }, [planId]);
-  const formatInr = (value: number) =>
-    new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value);
+    if (planId === "flux") return interval === "annual" ? 10 : 12;
+    return interval === "annual" ? 20 : 25;
+  }, [planId, interval]);
+  const formatUsd = (value: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 
   useEffect(() => {
     void loadRazorpayScript().catch(() => {
@@ -256,15 +257,15 @@ export default function Checkout() {
           <div className="border-t border-zinc-800/50 pt-6 space-y-3">
             <div className="flex justify-between text-zinc-300">
               <span>Subtotal</span>
-              <span>{formatInr(amount)}</span>
+              <span>{formatUsd(amount)}</span>
             </div>
             <div className="flex justify-between text-zinc-400 text-sm">
               <span>Tax (estimated)</span>
-              <span>{formatInr(0)}</span>
+              <span>{formatUsd(0)}</span>
             </div>
             <div className="flex justify-between text-xl font-medium text-white pt-4 border-t border-zinc-800/50 mt-2">
               <span>Total due today</span>
-              <span>{formatInr(amount)}</span>
+              <span>{formatUsd(amount)}</span>
             </div>
             <p className="text-xs text-zinc-500 mt-2 block">
               Billed {interval === "annual" ? "annually" : "monthly"}. By subscribing, you agree to our Terms of Service and Privacy Policy.
@@ -303,7 +304,7 @@ export default function Checkout() {
               ) : (
                 <>
                   <Lock className="w-4 h-4" />
-                  {amount === 0 ? "Continue free" : `Pay ${formatInr(amount)}`}
+                  {amount === 0 ? "Continue free" : `Pay ${formatUsd(amount)}`}
                 </>
               )}
             </Button>
