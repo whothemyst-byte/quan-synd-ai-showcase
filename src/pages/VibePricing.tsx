@@ -272,22 +272,22 @@ const VibePricing = () => {
               }}
             >
               Annual
-              {annual && (
-                <span
-                  style={{
-                    background: AMBER,
-                    color: "#fff",
-                    fontFamily: "'Geist Mono', monospace",
-                    fontSize: "9px",
-                    letterSpacing: "0.06em",
-                    padding: "2px 6px",
-                    borderRadius: "3px",
-                    fontWeight: 600,
-                  }}
-                >
-                  SAVE 17-20%
-                </span>
-              )}
+              <span
+                style={{
+                  background: annual ? AMBER : "transparent",
+                  color: annual ? "#fff" : MUTED,
+                  border: annual ? "1px solid transparent" : `1px solid ${RULE}`,
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "9px",
+                  letterSpacing: "0.06em",
+                  padding: "2px 6px",
+                  borderRadius: "3px",
+                  fontWeight: 600,
+                  transition: "all 0.18s ease",
+                }}
+              >
+                SAVE 17-20%
+              </span>
             </span>
           </div>
         </div>
