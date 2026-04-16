@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Minus, ArrowRight, Download, Zap, ChevronDown, ChevronUp } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -7,7 +7,7 @@ import { Seo } from "@/seo/Seo";
 import { NewsletterSignupModal } from "@/components/NewsletterSignupModal";
 import { VIBE_ADE_DOWNLOAD_URL } from "@/lib/vibeAdePricing";
 
-/* ─── DATA ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const plans = [
   {
@@ -33,8 +33,8 @@ const plans = [
     id: "flux",
     label: "FLUX",
     tagline: "Stay in the flow",
-    monthlyPrice: 12,
-    annualPrice: 10,
+    monthlyPrice: 1,
+    annualPrice: 1,
     cta: "Start Flux",
     ctaHref: "/checkout?plan=flux&interval=monthly",
     ctaExternal: false,
@@ -45,11 +45,11 @@ const plans = [
       "Everything in Spark",
       "Unlimited workspaces",
       "Unlimited terminal panes",
-      "Cloud sync — unlimited",
-      "Task board — 300 tasks/month",
+      "Cloud sync â€” unlimited",
+      "Task board â€” 300 tasks/month",
       "20 QuanSwarm runs / month",
       "5 concurrent agents per swarm",
-      "Email support — 48 hr response",
+      "Email support â€” 48 hr response",
       "Live usage counter in dashboard",
     ],
   },
@@ -57,8 +57,8 @@ const plans = [
     id: "forge",
     label: "FORGE",
     tagline: "Build without limits",
-    monthlyPrice: 25,
-    annualPrice: 20,
+    monthlyPrice: 1,
+    annualPrice: 1,
     cta: "Start Forge",
     ctaHref: "/checkout?plan=forge&interval=monthly",
     ctaExternal: false,
@@ -70,7 +70,7 @@ const plans = [
       "Unlimited task board",
       "Unlimited QuanSwarm runs",
       "Unlimited concurrent agents",
-      "Priority email — 12 hr response",
+      "Priority email â€” 12 hr response",
       "Beta / early access builds",
       "Advanced analytics & agent logs",
       "All future Pro+ features auto-unlock",
@@ -79,8 +79,8 @@ const plans = [
 ];
 
 const comparisonRows: { label: string; spark: string | boolean; flux: string | boolean; forge: string | boolean }[] = [
-  { label: "Price", spark: "Free", flux: "$12 / mo", forge: "$25 / mo" },
-  { label: "Annual price", spark: "—", flux: "$10 / mo", forge: "$20 / mo" },
+  { label: "Price", spark: "Free", flux: "â‚¹1 / mo", forge: "â‚¹1 / mo" },
+  { label: "Annual price", spark: "â€”", flux: "â‚¹1 / mo", forge: "â‚¹1 / mo" },
   { label: "Workspaces", spark: "2", flux: "Unlimited", forge: "Unlimited" },
   { label: "Terminal panes", spark: "4 per workspace", flux: "Unlimited", forge: "Unlimited" },
   { label: "Cloud sync", spark: "2 workspaces", flux: "Unlimited", forge: "Unlimited" },
@@ -100,7 +100,7 @@ const faqs = [
   },
   {
     q: "What happens if I hit a monthly limit?",
-    a: "Limits reset on the 1st of each calendar month. When you reach your limit, the feature simply pauses — you're never charged extra.",
+    a: "Limits reset on the 1st of each calendar month. When you reach your limit, the feature simply pauses â€” you're never charged extra.",
   },
   {
     q: "Is annual billing cancellable?",
@@ -108,20 +108,20 @@ const faqs = [
   },
 ];
 
-/* ─── AMBER / PALETTE ─────────────────────────────────────── */
+/* â”€â”€â”€ AMBER / PALETTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const AMBER = "var(--amber)";
 const INK = "var(--ink)";
 const PAPER = "var(--paper)";
 const MUTED = "var(--muted-ui)";
 const RULE = "var(--rule)";
 
-/* ─── SUB-COMPONENTS ─────────────────────────────────────── */
+/* â”€â”€â”€ SUB-COMPONENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 function CheckCell({ value }: { value: string | boolean }) {
   if (value === false) {
     return (
       <span style={{ color: "rgba(138,128,112,0.5)", fontFamily: "'Geist Mono', monospace", fontSize: "14px" }}>
-        —
+        â€”
       </span>
     );
   }
@@ -135,29 +135,31 @@ function CheckCell({ value }: { value: string | boolean }) {
   );
 }
 
-/* ─── PAGE ────────────────────────────────────────────────── */
+/* â”€â”€â”€ PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const VibePricing = () => {
   const [annual, setAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [newsletterOpen, setNewsletterOpen] = useState(false);
+  const inr = (value: number) =>
+    new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value);
 
   const price = (plan: typeof plans[0]) => {
     if (plan.monthlyPrice === 0) return "Free";
-    return `$${annual ? plan.annualPrice : plan.monthlyPrice}`;
+    return inr(annual ? plan.annualPrice : plan.monthlyPrice);
   };
 
   return (
     <div style={{ background: PAPER, minHeight: "100vh" }}>
       <Seo
-        title="Pricing — Vibe ADE | QuanSynd"
-        description="Choose your Vibe ADE plan. Spark is free forever. Flux at $12/mo covers 90% of developers. Forge at $25/mo is unlimited — built for power builders."
+        title="Pricing â€” Vibe ADE | QuanSynd"
+        description="Choose your Vibe ADE plan. Spark is free forever. Flux and Forge are set to ₹1 for live payment testing."
         canonicalPath="/products/vibe-ade/pricing"
         ogType="website"
       />
       <Navbar />
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
+      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section
         className="dot-grid-bg hero-section"
         style={{
@@ -180,7 +182,7 @@ const VibePricing = () => {
               marginBottom: "24px",
             }}
           >
-            <span className="amber-label">Products — Vibe ADE — Pricing</span>
+            <span className="amber-label">Products â€” Vibe ADE â€” Pricing</span>
           </div>
 
           {/* Headline */}
@@ -283,7 +285,7 @@ const VibePricing = () => {
                     fontWeight: 600,
                   }}
                 >
-                  SAVE 17–20%
+                  SAVE 17â€“20%
                 </span>
               )}
             </span>
@@ -291,7 +293,7 @@ const VibePricing = () => {
         </div>
       </section>
 
-      {/* ── PRICING CARDS ─────────────────────────────────────── */}
+      {/* â”€â”€ PRICING CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ padding: "0 24px 96px", background: PAPER }}>
         <div
           className="vibe-pricing-cards"
@@ -417,7 +419,7 @@ const VibePricing = () => {
                       letterSpacing: "0.03em",
                     }}
                   >
-                    or ${plan.annualPrice}/mo billed annually
+                    or {inr(plan.annualPrice)}/mo billed annually
                   </p>
                 )}
                 {plan.monthlyPrice > 0 && annual && (
@@ -430,7 +432,7 @@ const VibePricing = () => {
                       letterSpacing: "0.03em",
                     }}
                   >
-                    billed ${(plan.annualPrice * 12)} annually
+                    billed {inr(plan.annualPrice * 12)} annually
                   </p>
                 )}
                 {plan.monthlyPrice === 0 && <div style={{ height: "24px", marginBottom: "20px" }} />}
@@ -460,7 +462,7 @@ const VibePricing = () => {
                   </a>
                 ) : (
                   <a
-                    href={plan.ctaHref}
+                    href={`/checkout?plan=${plan.id}&interval=${annual ? "annual" : "monthly"}`}
                     className="amber-btn"
                     style={{
                       display: "flex",
@@ -518,7 +520,7 @@ const VibePricing = () => {
 
       </section>
 
-      {/* ── FULL COMPARISON TABLE ─────────────────────────────── */}
+      {/* â”€â”€ FULL COMPARISON TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section
         className="cream-section"
         style={{
@@ -634,7 +636,7 @@ const VibePricing = () => {
 
 
 
-      {/* ── FAQ ───────────────────────────────────────────────── */}
+      {/* â”€â”€ FAQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section
         className="cream-section"
         style={{ padding: "80px 24px", borderBottom: `1px solid ${RULE}` }}
@@ -715,7 +717,7 @@ const VibePricing = () => {
         </div>
       </section>
 
-      {/* ── CLOSING CTA ───────────────────────────────────────── */}
+      {/* â”€â”€ CLOSING CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section
         className="ink-section"
         style={{ padding: "96px 24px", textAlign: "center" }}
@@ -747,7 +749,7 @@ const VibePricing = () => {
               lineHeight: "1.7",
             }}
           >
-            Spark is free — forever. Upgrade when you need more.
+            Spark is free â€” forever. Upgrade when you need more.
           </p>
           <div
             className="cta-buttons-row"
@@ -770,7 +772,7 @@ const VibePricing = () => {
                 textDecoration: "none",
               }}
             >
-              <Download size={15} /> Download Spark — Free
+              <Download size={15} /> Download Spark â€” Free
             </a>
             <Link
               to="/products/vibe-ade"
@@ -807,3 +809,5 @@ const VibePricing = () => {
 };
 
 export default VibePricing;
+
+

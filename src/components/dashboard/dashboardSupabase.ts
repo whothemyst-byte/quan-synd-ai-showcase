@@ -205,14 +205,16 @@ export async function completeBillingCheckout(input: {
   providerRef?: string | null;
   paymentMethod?: string | null;
   receiptUrl?: string | null;
+  provider?: string | null;
 }): Promise<BillingInvoice> {
   const { data, error } = await supabase
     .rpc("complete_subscription_checkout", {
       p_plan_id: `${input.planTier}_${input.billingInterval}`,
       p_billing_interval: input.billingInterval,
       p_provider_ref: input.providerRef ?? null,
-      p_payment_method: input.paymentMethod ?? "Cashfree",
+      p_payment_method: input.paymentMethod ?? "Razorpay",
       p_receipt_url: input.receiptUrl ?? null,
+      p_provider: input.provider ?? "razorpay",
     });
 
   if (error) {

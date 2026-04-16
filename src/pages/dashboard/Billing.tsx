@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Download } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,13 +6,14 @@ import { formatCurrency, formatDateTime, type BillingInvoice } from "@/component
 import { loadBillingInvoices } from "@/components/dashboard/dashboardSupabase";
 import { useCloudDashboard } from "@/components/dashboard/cloudDashboard";
 import { useDashboardTheme } from "@/components/dashboard/dashboardTheme";
-import { VIBE_ADE_PRICING_PLANS } from "@/lib/vibeAdePricing";
+import { downloadInvoicePdf } from "@/lib/invoicePdf";
 
 export default function DashboardBilling() {
   const { user } = useAuth();
   const theme = useDashboardTheme();
   const { snapshot, plan, loading } = useCloudDashboard(user?.id);
-  const currentTier = snapshot?.profile?.tier ?? "spark";
+  const currentTier = snapshot?.planTier ?? snapshot?.profile?.tier ?? "spark";
+  const planPerks = Array.isArray(plan.perks) ? plan.perks : [];
   const [billingInvoices, setBillingInvoices] = useState<BillingInvoice[]>([]);
   const [billingInvoiceLoading, setBillingInvoiceLoading] = useState(true);
   const [billingInvoiceError, setBillingInvoiceError] = useState<string | null>(null);
@@ -95,7 +96,7 @@ export default function DashboardBilling() {
                   borderRadius: "20px",
                   background: "rgba(200,136,42,0.12)",
                   color: amber,
-                  border: `1px solid rgba(200,136,42,0.3)`,
+                  border: "1px solid rgba(200,136,42,0.3)",
                 }}
               >
                 {currentTier === "spark" ? "Free" : "Active"}
@@ -106,7 +107,7 @@ export default function DashboardBilling() {
               {currentTier === "spark" ? " Upgrade to unlock more workspaces, swarms, and priority support." : " All features are active for this billing cycle."}
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-              {plan.features.map((feature) => (
+              {planPerks.map((feature) => (
                 <li key={feature} style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
                   <Check size={13} style={{ color: amber, flexShrink: 0 }} />
                   {feature}
@@ -161,170 +162,86 @@ export default function DashboardBilling() {
             </p>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {billingInvoices.map((invoice) => {
-              const statusColor =
-                invoice.status === "paid" ? "#2e7d32" : invoice.status === "pending" ? amber : invoice.status === "refunded" ? "#8b5cf6" : "#ba1a1a";
-              return (
-                <div
-                  key={invoice.id}
-                  style={{
-                    background: innerBg,
-                    border: `1px solid ${rule}`,
-                    borderRadius: "8px",
-                    padding: "14px 16px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: "16px",
-                    alignItems: "center",
-                  }}
-                >
-                  <div style={{ minWidth: 0 }}>
-                    <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "13px", fontWeight: 500, color: ink, margin: 0 }}>
-                      {invoice.planTier.toUpperCase()} {invoice.billingInterval} invoice
-                    </p>
-                    <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "12px", color: muted, marginTop: "2px" }}>
-                      {invoice.invoiceNumber} · {formatCurrency(invoice.amount, invoice.currency)}
-                    </p>
-                    <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "12px", color: muted, marginTop: "2px" }}>
-                      Provider: {invoice.provider}
-                      {invoice.paymentMethod ? ` · ${invoice.paymentMethod}` : ""}
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", flexShrink: 0 }}>
-                    <div style={{ textAlign: "right" }}>
-                      <p style={{ fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", color: statusColor, margin: 0 }}>
-                        {invoice.status}
-                      </p>
-                      <p style={{ fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", color: muted, marginTop: "4px" }}>
+          <div style={{ overflowX: "auto", border: `1px solid ${rule}`, borderRadius: "8px", background: innerBg }}>
+            <table style={{ width: "100%", minWidth: "820px", borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: "left", padding: "12px 14px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, borderBottom: `1px solid ${rule}` }}>Date</th>
+                  <th style={{ textAlign: "left", padding: "12px 14px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, borderBottom: `1px solid ${rule}` }}>Invoice</th>
+                  <th style={{ textAlign: "left", padding: "12px 14px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, borderBottom: `1px solid ${rule}` }}>Plan</th>
+                  <th style={{ textAlign: "left", padding: "12px 14px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, borderBottom: `1px solid ${rule}` }}>Amount</th>
+                  <th style={{ textAlign: "left", padding: "12px 14px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, borderBottom: `1px solid ${rule}` }}>Provider</th>
+                  <th style={{ textAlign: "left", padding: "12px 14px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, borderBottom: `1px solid ${rule}` }}>Status</th>
+                  <th style={{ textAlign: "center", padding: "12px 14px", fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: muted, borderBottom: `1px solid ${rule}` }}>Download</th>
+                </tr>
+              </thead>
+              <tbody>
+                {billingInvoices.map((invoice) => {
+                  const statusColor =
+                    invoice.status === "paid" ? "#2e7d32" : invoice.status === "pending" ? amber : invoice.status === "refunded" ? "#8b5cf6" : "#ba1a1a";
+
+                  return (
+                    <tr key={invoice.id}>
+                      <td style={{ padding: "12px 14px", borderBottom: `1px solid ${rule}`, fontFamily: "'Geist', sans-serif", fontSize: "12px", color: muted }}>
                         {formatDateTime(invoice.createdAt)}
-                      </p>
-                    </div>
-                    {invoice.receiptUrl ? (
-                      <a
-                        href={invoice.receiptUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`Download receipt ${invoice.invoiceNumber}`}
-                        style={{ color: amber, display: "inline-flex" }}
-                      >
-                        <Download size={16} />
-                      </a>
-                    ) : (
-                      <span style={{ color: muted, display: "inline-flex" }}>
-                        <Download size={16} />
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                      </td>
+                      <td style={{ padding: "12px 14px", borderBottom: `1px solid ${rule}`, fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
+                        {invoice.invoiceNumber}
+                      </td>
+                      <td style={{ padding: "12px 14px", borderBottom: `1px solid ${rule}`, fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
+                        {invoice.planTier.toUpperCase()} {invoice.billingInterval}
+                      </td>
+                      <td style={{ padding: "12px 14px", borderBottom: `1px solid ${rule}`, fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
+                        {formatCurrency(invoice.amount, invoice.currency)}
+                      </td>
+                      <td style={{ padding: "12px 14px", borderBottom: `1px solid ${rule}`, fontFamily: "'Geist', sans-serif", fontSize: "12px", color: muted }}>
+                        {invoice.provider}
+                        {invoice.paymentMethod ? ` · ${invoice.paymentMethod}` : ""}
+                      </td>
+                      <td style={{ padding: "12px 14px", borderBottom: `1px solid ${rule}` }}>
+                        <span
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            padding: "3px 8px",
+                            borderRadius: "999px",
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "10px",
+                            textTransform: "uppercase",
+                            color: statusColor,
+                            border: `1px solid ${statusColor}33`,
+                            background: `${statusColor}14`,
+                          }}
+                        >
+                          {invoice.status}
+                        </span>
+                      </td>
+                      <td style={{ padding: "12px 14px", borderBottom: `1px solid ${rule}`, textAlign: "center" }}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            void downloadInvoicePdf(invoice);
+                          }}
+                          aria-label={`Download invoice PDF ${invoice.invoiceNumber}`}
+                          style={{
+                            color: amber,
+                            display: "inline-flex",
+                            background: "none",
+                            border: "none",
+                            padding: 0,
+                            cursor: "pointer",
+                          }}
+                        >
+                          <Download size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
-      </div>
-
-      <div>
-        <span style={sectionRule} />
-        <span style={eyebrow}>Available Plans</span>
-        <h2 style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: "22px", color: ink, marginBottom: "20px" }}>
-          Compare & Upgrade
-        </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
-          {VIBE_ADE_PRICING_PLANS.map((p) => {
-            const isCurrent = p.id === currentTier;
-            const price = p.monthlyPrice === 0 ? "Free" : `$${p.monthlyPrice} / mo`;
-            return (
-              <div
-                key={p.id}
-                style={{
-                  ...card,
-                  border: isCurrent ? `2px solid ${amber}` : `1px solid ${rule}`,
-                  position: "relative",
-                  padding: "24px",
-                  background: p.dark ? (theme === "dark" ? "#11100d" : "#f3ede2") : cardBg,
-                }}
-              >
-                {p.badge && !isCurrent && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "16px",
-                      right: "16px",
-                      fontFamily: "'Geist Mono', monospace",
-                      fontSize: "9px",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      padding: "3px 10px",
-                      borderRadius: "20px",
-                      background: amber,
-                      color: "#fff",
-                    }}
-                  >
-                    {p.badge}
-                  </span>
-                )}
-                {isCurrent && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "16px",
-                      right: "16px",
-                      fontFamily: "'Geist Mono', monospace",
-                      fontSize: "9px",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      padding: "3px 10px",
-                      borderRadius: "20px",
-                      background: "rgba(200,136,42,0.12)",
-                      color: amber,
-                      border: `1px solid rgba(200,136,42,0.3)`,
-                    }}
-                  >
-                    Current
-                  </span>
-                )}
-                <p style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: "22px", color: ink, marginBottom: "4px" }}>
-                  {p.label}
-                </p>
-                <p style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "28px", color: amber, margin: "8px 0 4px" }}>
-                  {price}
-                </p>
-                <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "13px", color: muted, marginBottom: "16px" }}>
-                  {p.tagline}
-                </p>
-                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 20px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                  {p.features.map((feature) => (
-                    <li key={feature} style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "'Geist', sans-serif", fontSize: "13px", color: ink }}>
-                      <Check size={12} style={{ color: amber, flexShrink: 0 }} /> {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to="/products/vibe-ade/pricing"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "6px",
-                    padding: "10px 16px",
-                    borderRadius: "6px",
-                    fontSize: "12px",
-                    textDecoration: "none",
-                    fontFamily: "'Geist Mono', monospace",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    background: isCurrent ? "transparent" : p.highlight ? amber : "transparent",
-                    color: isCurrent ? amber : p.highlight ? "#fff" : ink,
-                    border: isCurrent ? `1px solid ${rule}` : p.highlight ? "none" : `1px solid ${rule}`,
-                    transition: "all 0.18s ease",
-                  }}
-                >
-                  {isCurrent ? "Current plan" : p.cta} <ArrowRight size={12} />
-                </Link>
-              </div>
-            );
-          })}
-        </div>
       </div>
     </div>
   );

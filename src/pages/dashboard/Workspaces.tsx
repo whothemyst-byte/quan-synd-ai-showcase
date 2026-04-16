@@ -26,9 +26,12 @@ export default function DashboardWorkspaces() {
   const sectionRule: React.CSSProperties = { display: "block", width: "32px", height: "2px", background: amber, marginBottom: "12px" };
 
   const allWorkspaces = snapshot?.workspaces ?? [];
-  const workspaceLimit = plan.limits.maxCloudSyncedWorkspaces ?? 3;
+  const workspaceLimit = plan.limits.maxCloudSyncedWorkspaces;
+  const hasUnlimitedSlots = workspaceLimit === null;
   const displayWorkspaces = allWorkspaces;
-  const usagePercent = Math.min((displayWorkspaces.length / workspaceLimit) * 100, 100);
+  const usagePercent = hasUnlimitedSlots
+    ? 100
+    : Math.min((displayWorkspaces.length / Math.max(workspaceLimit, 1)) * 100, 100);
 
   const handleDeleteWorkspace = async (workspace: CloudWorkspace): Promise<void> => {
     if (!user?.id) {
@@ -65,7 +68,11 @@ export default function DashboardWorkspaces() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
           <div>
             <span style={eyebrow}>Sync Usage</span>
-            <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "14px", color: ink }}>{displayWorkspaces.length} of {workspaceLimit} cloud sync slots used</p>
+            <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "14px", color: ink }}>
+              {hasUnlimitedSlots
+                ? `${displayWorkspaces.length} cloud sync slots used (Unlimited plan)`
+                : `${displayWorkspaces.length} of ${workspaceLimit} cloud sync slots used`}
+            </p>
           </div>
           <a href="/products/vibe-ade/pricing" style={{ fontFamily: "'Geist Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.1em", color: amber, textDecoration: "none" }}>Upgrade →</a>
         </div>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import {
   ArrowRight,
   BarChart3,
@@ -11,11 +11,9 @@ import {
   LayoutDashboard,
   LifeBuoy,
   LogOut,
-  Menu,
   Moon,
   Settings,
   Sun,
-  X,
 } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
@@ -121,14 +119,11 @@ const darkStyles = {
 
 export default function DashboardLayout() {
   const { user, signOut } = useAuth();
-  const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarContentVisible, setSidebarContentVisible] = useState(true);
   const [theme, setTheme] = useState<DashboardTheme>(() => getStoredTheme());
   const sidebarToggleTimer = useRef<number | null>(null);
 
-  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
   useEffect(() => { setThemeClass(theme); }, [theme]);
   useEffect(() => subscribeThemeChange(setTheme), []);
   useEffect(() => {
@@ -368,14 +363,6 @@ export default function DashboardLayout() {
               <div style={{ height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "0 24px" }}>
                 {/* Left */}
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <button
-                    onClick={() => setMobileOpen((c) => !c)}
-                    className="lg:hidden"
-                    style={{ ...S.btn, width: "40px", height: "40px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-                    aria-label="Toggle navigation"
-                  >
-                    {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-                  </button>
                   <div>
                     <p style={{ fontFamily: "'Geist Mono', monospace", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", ...S.amberText, marginBottom: "1px" }}>
                       Dashboard
@@ -434,70 +421,6 @@ export default function DashboardLayout() {
                   </div>
                 </div>
               </div>
-
-              {/* Mobile nav */}
-              {mobileOpen && (
-                <nav
-                  style={{
-                    borderTop: `1px solid ${theme === "dark" ? "rgba(243,238,229,0.08)" : "var(--rule)"}`,
-                    padding: "12px 16px 16px",
-                    background: theme === "dark" ? "#1a1815" : "#ede7d9",
-                  }}
-                  className="lg:hidden"
-                >
-                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                    {navItems.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <NavLink
-                          key={item.to}
-                          to={item.to}
-                          end={item.end}
-                          style={({ isActive }) => ({
-                            ...(isActive ? S.navActive : S.navIdle),
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            padding: "10px 14px",
-                            borderRadius: "6px",
-                            textDecoration: "none",
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "11px",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.09em",
-                            fontWeight: 500,
-                          })}
-                        >
-                          <Icon size={15} style={{ color: amber }} />
-                          {item.label}
-                        </NavLink>
-                      );
-                    })}
-                    <button
-                      onClick={async () => { await signOut(); window.location.href = "/"; }}
-                      style={{
-                        ...S.navIdle,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        padding: "10px 14px",
-                        borderRadius: "6px",
-                        fontFamily: "'Geist Mono', monospace",
-                        fontSize: "11px",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.09em",
-                        background: "transparent",
-                        border: "none",
-                        cursor: "pointer",
-                        width: "100%",
-                        marginTop: "8px",
-                      }}
-                    >
-                      <LogOut size={15} style={{ color: amber }} /> Sign out
-                    </button>
-                  </div>
-                </nav>
-              )}
             </header>
 
             {/* Page content */}

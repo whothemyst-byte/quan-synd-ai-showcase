@@ -60,7 +60,7 @@ const useStyles = (theme: string) => ({
 export default function DashboardOverview() {
   const { user } = useAuth();
   const theme = useDashboardTheme();
-  const { snapshot, plan, loading, error, tasksCreated, swarmsStarted } = useCloudDashboard(user?.id);
+  const { snapshot, plan, loading, error, usageMonth, tasksCreated, swarmsStarted } = useCloudDashboard(user?.id);
   const [recentActivity, setRecentActivity] = useState<DashboardActivity[]>([]);
   const [activityLoading, setActivityLoading] = useState(true);
   const [activityError, setActivityError] = useState<string | null>(null);
@@ -146,7 +146,7 @@ export default function DashboardOverview() {
             {/* 3 stat mini-cards */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
               {[
-                { icon: Wallet, label: "Billing", value: plan.label, sub: `${snapshot?.profile?.tier ?? "spark"} plan` },
+                { icon: Wallet, label: "Billing", value: plan.label, sub: `${snapshot?.planTier ?? "spark"} plan` },
                 { icon: Layers3, label: "Workspaces", value: String(workspaceCount), sub: workspaceLimit ? `${workspaceLimit} sync slots` : "Unlimited sync" },
                 { icon: Sparkles, label: "Usage", value: `${tasksCreated} tasks`, sub: `${swarmsStarted} swarms this month` },
               ].map(({ icon: Icon, label, value, sub }) => (
@@ -217,7 +217,7 @@ export default function DashboardOverview() {
             </div>
             <div style={S.innerCard}>
               <p style={{ fontFamily: "'Geist Mono', monospace", fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: S.muted, marginBottom: "8px" }}>Usage period</p>
-              <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "15px", fontWeight: 500, color: S.ink }}>{snapshot?.profile?.usage_month ?? "Live"}</p>
+              <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "15px", fontWeight: 500, color: S.ink }}>{usageMonth}</p>
               <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "12px", color: S.muted, marginTop: "4px" }}>{tasksCreated} tasks · {swarmsStarted} swarms</p>
             </div>
           </div>
