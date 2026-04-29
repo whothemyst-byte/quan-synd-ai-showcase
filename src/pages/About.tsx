@@ -22,7 +22,7 @@ const About = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="About QuanSynd | AI Design & Consulting"
+        title="About QuanSynd | AI Design & Development"
         description="Learn about QuanSynd, a Scube Company bridging AI innovation and design excellence—our story, mission, values, and what drives our work."
         canonicalPath="/about"
         ogType="website"
@@ -370,10 +370,10 @@ const About = () => {
               marginBottom: "40px",
             }}
           >
-            We're not just adapting to the AI revolution — we're actively shaping it. Our work in
-            Agentic AI and autonomous systems is paving the way for the next generation of intelligent
-            technology that augments human capabilities, creates new opportunities, and solves real-world
-            problems with elegance and efficiency.
+            We're not just adapting to the AI revolution - we're actively shaping it. Our work in
+            AI-powered business solutions and modern application development is paving the way for
+            intelligent technology that augments human capabilities, creates new opportunities, and
+            solves real-world problems with elegance and efficiency.
           </p>
           <Link
             to="/contact"

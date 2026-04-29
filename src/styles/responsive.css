@@ -47,6 +47,18 @@
         grid-template-columns: 1fr !important;
     }
 
+    /* Services process */
+    .process-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 28px 0 !important;
+    }
+
+    .process-step-card {
+        border-left: 1px solid var(--rule) !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+
     /* Blog article grid */
     .blog-grid {
         grid-template-columns: repeat(2, 1fr) !important;
@@ -84,8 +96,21 @@
     }
 
     /* Contact name/email row — 1 col */
-    .contact-name-email {
+    .contact-name-email,
+    .contact-service-budget {
         grid-template-columns: 1fr !important;
+    }
+
+    /* Services process - 1 col */
+    .process-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+    }
+
+    .process-step-card {
+        border-left: none !important;
+        border-top: 1px solid var(--rule) !important;
+        padding: 24px 0 0 !important;
     }
 
     /* Section padding tightened */

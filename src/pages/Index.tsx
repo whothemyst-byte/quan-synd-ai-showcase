@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, Zap, Brain } from "lucide-react";
+import { ArrowRight, Bot, Code2, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
@@ -19,27 +19,27 @@ const services = [
     ],
   },
   {
-    icon: Brain,
-    title: "AI Consulting",
-    category: "AI",
-    description: "Strategic guidance for seamless AI integration and business transformation.",
+    icon: Bot,
+    title: "AI-Powered Business Solutions",
+    category: "AI Solutions",
+    description: "Intelligent tools that automate, engage, and grow your business.",
     features: [
-      "AI strategy development",
-      "Technology assessment",
-      "Implementation roadmap",
-      "Risk mitigation",
+      "AI chatbots and customer support",
+      "Mini CRMs with AI insights",
+      "Lead capture and qualification",
+      "Smart email automation",
     ],
   },
   {
-    icon: Zap,
-    title: "Agentic AI",
-    category: "AI",
-    description: "Next-generation autonomous AI systems that learn, adapt, and optimise.",
+    icon: Code2,
+    title: "Web & App Development",
+    category: "Development",
+    description: "Pixel-perfect websites and powerful applications built for scale.",
     features: [
-      "Intelligent automation",
-      "Autonomous decision-making",
-      "Multi-agent systems",
-      "Self-improving algorithms",
+      "Custom website development",
+      "React and Next.js applications",
+      "Landing pages and marketing sites",
+      "APIs and integrations",
     ],
   },
 ];
@@ -50,8 +50,8 @@ const Index = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="QuanSynd - AI Design & Consulting | Pioneering the Future"
-        description="QuanSynd pioneers cutting-edge AI solutions and design excellence. Expert services in Graphic Design, AI Consulting, and Agentic AI."
+        title="QuanSynd - AI, Design & Development | Pioneering the Future"
+        description="QuanSynd pioneers AI-powered business solutions, design excellence, and web and app development for growing teams."
         canonicalPath="/"
         ogType="website"
       />
@@ -111,8 +111,8 @@ const Index = () => {
               margin: "0 auto 40px",
             }}
           >
-            QuanSynd pioneers cutting-edge AI consulting, design systems, and agentic solutions
-            that transform how organisations think, work, and grow.
+            QuanSynd pioneers AI-powered business solutions, design systems, and web and app
+            development that transform how organisations think, work, and grow.
           </p>
 
           {/* CTAs */}
@@ -266,7 +266,7 @@ const Index = () => {
                 marginBottom: "12px",
               }}
             >
-              Comprehensive AI &amp; design solutions
+              Comprehensive AI, design &amp; development solutions
             </h2>
             <p
               style={{

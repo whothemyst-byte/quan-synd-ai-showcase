@@ -8,7 +8,7 @@ import { Seo } from "@/seo/Seo";
 const faqs = [
   {
     q: "How long does a typical project take?",
-    a: "Project timelines vary based on scope and complexity. A focused discovery sprint can take 2–4 weeks, while a full AI consulting engagement typically runs 6–12 weeks. We provide detailed timelines during our discovery call.",
+    a: "Project timelines vary based on scope and complexity. A focused discovery sprint can take 2-4 weeks, while a full AI-powered business solution or web application typically runs 6-12 weeks. We provide detailed timelines during our discovery call.",
   },
   {
     q: "Do you work with international clients?",
@@ -74,7 +74,7 @@ const Contact = () => {
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
         title="Contact | QuanSynd - Let's Work Together"
-        description="Get in touch with QuanSynd to discuss AI consulting, agentic AI, and graphic design services. Share your goals and we'll respond within 24 hours."
+        description="Get in touch with QuanSynd to discuss AI-powered business solutions, web and app development, and graphic design services. Share your goals and we'll respond within 24 hours."
         canonicalPath="/contact"
         ogType="website"
       />
@@ -181,7 +181,7 @@ const Contact = () => {
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div className="contact-service-budget" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                 <div>
                   <label style={labelStyle}>Service of Interest *</label>
                   <select
@@ -192,9 +192,10 @@ const Contact = () => {
                     onFocus={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--amber)")}
                     onBlur={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--rule)")}
                   >
-                    <option value="">Select a service...</option><option value="graphic-design">Graphic Design</option>
-                    <option value="ai-consulting">AI Consulting</option>
-                    <option value="agentic-ai">Agentic AI</option>
+                    <option value="">Select a service...</option>
+                    <option value="graphic-design">Graphic Design</option>
+                    <option value="ai-powered-business-solutions">AI-Powered Business Solutions</option>
+                    <option value="web-app-development">Web & App Development</option>
                     <option value="quan-bench">Quan Bench</option>
                     <option value="multiple">Multiple Services</option>
                   </select>

@@ -1,22 +1,27 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight, Clock3, Moon, Sun, Menu, X, ChevronDown } from "lucide-react";
+import { ArrowRight, Moon, Sun, Menu, X, ChevronDown } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 import logoLight from "@/assets/logo-light.png";
 import { useAuth } from "@/contexts/AuthContext";
-import { VIBE_ADE_LAUNCH_LABEL, formatVibeAdeCountdown, getVibeAdeCountdown } from "@/lib/vibeAdeRelease";
 
 // Products dropdown items
 const productItems = [
-  { name: "Vibe ADE", path: "/products/vibe-ade", desc: "AI-powered Windows IDE", badge: null },
-  { name: "Quan Bench", path: "/quan-bench", desc: "AI model benchmark index", badge: "LIVE" },
+  { name: "Vibe ADE", path: "/products/vibe-ade", badge: null },
+  { name: "Quan Bench", path: "/quan-bench", badge: "LIVE" },
+];
+
+const exploreItems = [
+  { name: "About", path: "/about" },
+  { name: "Services", path: "/services" },
+  { name: "Blog", path: "/blog" },
 ];
 
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Services", path: "/services" },
-  { name: "Blog", path: "/blog" },
+];
+
+const secondaryNavItems = [
   { name: "Contact", path: "/contact" },
   { name: "Pricing", path: "/products/vibe-ade/pricing" },
 ];
@@ -25,29 +30,19 @@ const Navbar = () => {
   const { session } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileExploreOpen, setIsMobileExploreOpen] = useState(false);
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
+  const [isExploreDropdownOpen, setIsExploreDropdownOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [now, setNow] = useState<number | null>(null);
-  const [isCountdownMounted, setIsCountdownMounted] = useState(false);
   const location = useLocation();
+  const exploreRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const tick = () => setNow(Date.now());
-    tick();
-    const timer = window.setInterval(tick, 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    setIsCountdownMounted(true);
   }, []);
 
   useEffect(() => {
@@ -61,6 +56,7 @@ const Navbar = () => {
   // Close mobile menu on route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsMobileExploreOpen(false);
     setIsMobileProductsOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
@@ -68,6 +64,9 @@ const Navbar = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
+        setIsExploreDropdownOpen(false);
+      }
       if (productsRef.current && !productsRef.current.contains(e.target as Node)) {
         setIsProductsDropdownOpen(false);
       }
@@ -84,13 +83,9 @@ const Navbar = () => {
   };
 
   const isActive = (path: string) => location.pathname === path;
+  const isExploreActive = exploreItems.some((p) => isActive(p.path));
   const isProductsActive = productItems.some((p) => isActive(p.path));
-  const launchCountdown = useMemo(
-    () => (isCountdownMounted && now !== null ? getVibeAdeCountdown(now) : null),
-    [isCountdownMounted, now]
-  );
-  const launchLabel = launchCountdown ? (launchCountdown.isLive ? "Live now" : formatVibeAdeCountdown(launchCountdown)) : "--d --h --m --s";
-  const topBarHeight = "40px";
+  const topBarHeight = "42px";
 
   const paperBg = theme === "dark" ? "rgba(18,17,15,0.92)" : "rgba(245,240,232,0.92)";
   const dropdownBg = theme === "dark" ? "#1a1815" : "#faf7f2";
@@ -131,11 +126,29 @@ const Navbar = () => {
           .qs-mobile-menu { display: none !important; }
         }
         @media (max-width: 767px) {
-          .qs-launch-strip-text { font-size: 9px !important; line-height: 1.1 !important; }
+          .qs-launch-strip {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
+          .qs-launch-label,
+          .qs-launch-separator,
+          .qs-launch-detail {
+            display: none !important;
+          }
+          .qs-launch-message {
+            font-size: 12px !important;
+          }
+          .qs-launch-action {
+            font-size: 9px !important;
+          }
+          .qs-nav-desktop {
+            position: static !important;
+            transform: none !important;
+          }
         }
 
         /* Products dropdown */
-        .qs-products-dropdown {
+        .qs-nav-dropdown {
           position: absolute;
           top: calc(100% + 8px);
           left: 50%;
@@ -156,7 +169,7 @@ const Navbar = () => {
 
         .qs-dropdown-item {
           display: block;
-          padding: 14px 18px;
+          padding: 13px 18px;
           text-decoration: none;
           border-left: 3px solid transparent;
           transition: all 0.15s ease;
@@ -168,6 +181,44 @@ const Navbar = () => {
         .qs-dropdown-item.active {
           border-left-color: var(--amber);
         }
+
+        .qs-dropdown-item:hover .qs-dropdown-label,
+        .qs-dropdown-item.active .qs-dropdown-label {
+          color: var(--amber) !important;
+        }
+
+        .qs-live-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: #ff4d4d;
+          box-shadow: 0 0 0 3px rgba(255,77,77,0.16);
+          flex: 0 0 auto;
+          animation: qsLivePulse 1.8s ease-out infinite;
+        }
+
+        .qs-launch-action:hover .qs-launch-arrow {
+          transform: translateX(2px);
+        }
+
+        @keyframes qsLivePulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(255,77,77,0.45), 0 0 10px rgba(255,77,77,0.4);
+          }
+          70% {
+            box-shadow: 0 0 0 8px rgba(255,77,77,0), 0 0 14px rgba(255,77,77,0.22);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(255,77,77,0), 0 0 10px rgba(255,77,77,0.35);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .qs-live-dot {
+            animation: none;
+            box-shadow: 0 0 0 3px rgba(255,77,77,0.16), 0 0 10px rgba(255,77,77,0.35);
+          }
+        }
       `}</style>
 
       <div
@@ -178,85 +229,118 @@ const Navbar = () => {
           left: 0,
           right: 0,
           zIndex: 1200,
-          height: topBarHeight,
+          minHeight: topBarHeight,
           alignItems: "center",
           justifyContent: "center",
-          borderBottom: "1px solid rgba(200,136,42,0.22)",
-          background:
-            theme === "dark"
-              ? "linear-gradient(180deg, rgba(32,28,24,0.98), rgba(20,18,16,0.96))"
-              : "linear-gradient(180deg, rgba(252,248,242,0.98), rgba(245,240,232,0.96))",
+          borderBottom: "1px solid rgba(245,240,232,0.12)",
+          background: "linear-gradient(180deg, rgba(18,17,15,0.98), rgba(12,12,10,0.98))",
           backdropFilter: "blur(14px)",
-          boxShadow: "0 10px 30px -24px rgba(0,0,0,0.4)",
-          padding: "4px 16px",
+          boxShadow: "0 12px 28px -24px rgba(0,0,0,0.65)",
+          padding: "0 20px",
         }}
       >
         <div
           style={{
             width: "100%",
-            maxWidth: "1280px",
-            display: "flex",
+            maxWidth: "100%",
+            display: "grid",
+            gridTemplateColumns: "1fr auto 1fr",
             alignItems: "center",
-            justifyContent: "space-between",
-            gap: "10px",
-            flexWrap: "wrap",
-            textAlign: "center",
+            justifyContent: "center",
+            gap: "18px",
           }}
         >
-          <span
-            className="qs-launch-strip-text"
+          <span aria-hidden="true" />
+          <div
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "6px",
-              fontFamily: "'Geist Mono', monospace",
-              fontSize: "9px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--ink)",
-              whiteSpace: "nowrap",
+              gap: "18px",
+              minWidth: 0,
             }}
           >
-            <Clock3 size={12} style={{ color: "var(--amber)" }} />
-            Coming soon
-          </span>
-          <span
-            className="qs-launch-strip-text"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              fontFamily: "'Geist Mono', monospace",
-              fontSize: "9px",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--muted-ui)",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <span style={{ color: "var(--amber)" }}>{launchLabel}</span>
-            <span aria-hidden="true">•</span>
-            <span>{VIBE_ADE_LAUNCH_LABEL}</span>
-          </span>
-          <Link
-            to="/products/vibe-ade"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "5px",
-              fontFamily: "'Geist Mono', monospace",
-              fontSize: "9px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--amber)",
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-            }}
-            aria-label="Go to the Vibe ADE product page"
-          >
-            Vibe ADE
-            <ArrowRight size={12} />
-          </Link>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "12px",
+                minWidth: 0,
+              }}
+            >
+              <span
+                className="qs-launch-label"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "7px",
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "10px",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#ff6b6b",
+                  whiteSpace: "nowrap",
+                  fontWeight: 700,
+                }}
+              >
+                <span className="qs-live-dot" aria-hidden="true" />
+                Live
+              </span>
+              <span
+                className="qs-launch-separator"
+                style={{ width: "1px", height: "16px", background: "rgba(245,240,232,0.16)" }}
+                aria-hidden="true"
+              />
+              <span
+                className="qs-launch-message"
+                style={{
+                  fontFamily: "'Geist', sans-serif",
+                  fontSize: "13px",
+                  color: "#f5f0e8",
+                  lineHeight: 1.2,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                Vibe ADE is live now
+              </span>
+              <span
+                className="qs-launch-detail"
+                style={{
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "10px",
+                  letterSpacing: "0.05em",
+                  color: "rgba(245,240,232,0.52)",
+                  textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                AI-powered Windows IDE
+              </span>
+            </div>
+            <Link
+              to="/products/vibe-ade"
+              className="qs-launch-action"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "10px",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#d79a3d",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                fontWeight: 700,
+              }}
+              aria-label="View the Vibe ADE product page"
+            >
+              View product
+              <ArrowRight className="qs-launch-arrow" size={12} style={{ transition: "transform 0.16s ease" }} />
+            </Link>
+          </div>
+          <span aria-hidden="true" />
         </div>
       </div>
 
@@ -275,7 +359,7 @@ const Navbar = () => {
         }}
       >
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px", position: "relative" }}>
 
             {/* Logo */}
             <Link to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
@@ -287,7 +371,17 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Nav */}
-            <div className="qs-nav-desktop" style={{ alignItems: "center", gap: "2px" }}>
+            <div
+              className="qs-nav-desktop"
+              style={{
+                alignItems: "center",
+                gap: "2px",
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
               {navItems.map((item) => (
                 <Link
                   key={item.path}
@@ -324,21 +418,90 @@ const Navbar = () => {
                 </Link>
               ))}
 
+              {/* Explore dropdown trigger */}
+              <div ref={exploreRef} style={{ position: "relative" }}>
+                <button
+                  onClick={() => {
+                    setIsExploreDropdownOpen((o) => !o);
+                    setIsProductsDropdownOpen(false);
+                  }}
+                  style={{
+                    ...linkStyle(isExploreActive),
+                    borderBottom: isExploreActive
+                      ? "2px solid var(--amber)"
+                      : isExploreDropdownOpen
+                      ? "2px solid rgba(200,136,42,0.65)"
+                      : "2px solid transparent",
+                    color: isExploreActive
+                      ? "var(--amber)"
+                      : isExploreDropdownOpen
+                      ? "var(--amber)"
+                      : "var(--muted-ui)",
+                  }}
+                  aria-haspopup="true"
+                  aria-expanded={isExploreDropdownOpen}
+                >
+                  Explore
+                  <ChevronDown
+                    size={12}
+                    style={{
+                      transition: "transform 0.2s ease",
+                      transform: isExploreDropdownOpen ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                  />
+                </button>
+
+                {isExploreDropdownOpen && (
+                  <div
+                    className="qs-nav-dropdown"
+                    style={{ background: dropdownBg }}
+                  >
+                    {exploreItems.map((p) => (
+                      <Link
+                        key={p.path}
+                        to={p.path}
+                        className={`qs-dropdown-item${isActive(p.path) ? " active" : ""}`}
+                        onClick={() => setIsExploreDropdownOpen(false)}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <span
+                            className="qs-dropdown-label"
+                            style={{
+                              fontFamily: "'Geist', sans-serif",
+                              fontSize: "13px",
+                              fontWeight: 600,
+                              color: isActive(p.path) ? "var(--amber)" : "var(--muted-ui)",
+                              letterSpacing: "-0.01em",
+                              transition: "color 0.15s ease",
+                            }}
+                          >
+                            {p.name}
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Products dropdown trigger */}
               <div ref={productsRef} style={{ position: "relative" }}>
                 <button
-                  onClick={() => setIsProductsDropdownOpen((o) => !o)}
+                  onClick={() => {
+                    setIsProductsDropdownOpen((o) => !o);
+                    setIsExploreDropdownOpen(false);
+                  }}
                   style={{
                     ...linkStyle(isProductsActive),
                     borderBottom: isProductsActive
                       ? "2px solid var(--amber)"
                       : isProductsDropdownOpen
-                      ? "2px solid var(--ink)"
+                      ? "2px solid rgba(200,136,42,0.65)"
                       : "2px solid transparent",
                     color: isProductsActive
                       ? "var(--amber)"
                       : isProductsDropdownOpen
-                      ? "var(--ink)"
+                      ? "var(--amber)"
                       : "var(--muted-ui)",
                   }}
                   aria-haspopup="true"
@@ -356,7 +519,7 @@ const Navbar = () => {
 
                 {isProductsDropdownOpen && (
                   <div
-                    className="qs-products-dropdown"
+                    className="qs-nav-dropdown"
                     style={{ background: dropdownBg }}
                   >
                     {productItems.map((p) => (
@@ -366,14 +529,16 @@ const Navbar = () => {
                         className={`qs-dropdown-item${isActive(p.path) ? " active" : ""}`}
                         onClick={() => setIsProductsDropdownOpen(false)}
                       >
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                           <span
+                            className="qs-dropdown-label"
                             style={{
                               fontFamily: "'Geist', sans-serif",
                               fontSize: "13px",
                               fontWeight: 600,
-                              color: "var(--ink)",
+                              color: isActive(p.path) ? "var(--amber)" : "var(--muted-ui)",
                               letterSpacing: "-0.01em",
+                              transition: "color 0.15s ease",
                             }}
                           >
                             {p.name}
@@ -384,21 +549,47 @@ const Navbar = () => {
                             </span>
                           )}
                         </div>
-                        <span
-                          style={{
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "10px",
-                            color: "var(--muted-ui)",
-                            letterSpacing: "0.04em",
-                          }}
-                        >
-                          {p.desc}
-                        </span>
                       </Link>
                     ))}
                   </div>
                 )}
               </div>
+
+              {secondaryNavItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: "11px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.09em",
+                    padding: "6px 14px",
+                    borderRadius: "4px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    fontWeight: 500,
+                    color: isActive(item.path) ? "var(--amber)" : "var(--muted-ui)",
+                    borderBottom: isActive(item.path) ? "2px solid var(--amber)" : "2px solid transparent",
+                    transition: "color 0.18s ease, border-color 0.18s ease",
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive(item.path)) {
+                      (e.currentTarget as HTMLAnchorElement).style.color = "var(--ink)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive(item.path)) {
+                      (e.currentTarget as HTMLAnchorElement).style.color = "var(--muted-ui)";
+                    }
+                  }}
+                >
+                  {item.name}
+                </Link>
+              ))}
             </div>
 
             {/* Controls */}
@@ -531,10 +722,90 @@ const Navbar = () => {
                 </Link>
               ))}
 
+              {/* Mobile Explore accordion */}
+              <div>
+                <button
+                  onClick={() => {
+                    setIsMobileExploreOpen((o) => !o);
+                    setIsMobileProductsOpen(false);
+                  }}
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: "11px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.09em",
+                    padding: "10px 12px",
+                    color: isExploreActive ? "var(--amber)" : "var(--muted-ui)",
+                    borderLeft: isExploreActive ? "2px solid var(--amber)" : "2px solid transparent",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    background: "transparent",
+                    borderTop: "none",
+                    borderRight: "none",
+                    borderBottom: "none",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  Explore
+                  <ChevronDown
+                    size={12}
+                    style={{
+                      transition: "transform 0.2s ease",
+                      transform: isMobileExploreOpen ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                  />
+                </button>
+
+                {isMobileExploreOpen && (
+                  <div
+                    style={{
+                      borderLeft: "2px solid var(--amber)",
+                      marginLeft: "12px",
+                      paddingLeft: "12px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                      background: "rgba(200,136,42,0.04)",
+                      paddingTop: "4px",
+                      paddingBottom: "4px",
+                    }}
+                  >
+                    {exploreItems.map((p) => (
+                      <Link
+                        key={p.path}
+                        to={p.path}
+                        style={{
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "11px",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.09em",
+                          padding: "8px 12px",
+                          color: isActive(p.path) ? "var(--amber)" : "var(--muted-ui)",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          textDecoration: "none",
+                          transition: "all 0.15s ease",
+                        }}
+                      >
+                        {p.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Mobile Products accordion */}
               <div>
                 <button
-                  onClick={() => setIsMobileProductsOpen((o) => !o)}
+                  onClick={() => {
+                    setIsMobileProductsOpen((o) => !o);
+                    setIsMobileExploreOpen(false);
+                  }}
                   style={{
                     width: "100%",
                     textAlign: "left",
@@ -549,7 +820,9 @@ const Navbar = () => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     background: "transparent",
-                    border: "none",
+                    borderTop: "none",
+                    borderRight: "none",
+                    borderBottom: "none",
                     cursor: "pointer",
                     transition: "all 0.15s ease",
                   }}
@@ -607,6 +880,29 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
+
+              {secondaryNavItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: "11px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.09em",
+                    padding: "10px 12px",
+                    color: isActive(item.path) ? "var(--amber)" : "var(--muted-ui)",
+                    borderLeft: isActive(item.path) ? "2px solid var(--amber)" : "2px solid transparent",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    textDecoration: "none",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  {item.name}
+                </Link>
+              ))}
 
               {/* Mobile Auth Button */}
               <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid var(--rule)" }}>

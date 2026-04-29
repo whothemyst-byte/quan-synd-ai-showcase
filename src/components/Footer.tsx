@@ -53,7 +53,7 @@ const Footer = () => {
                 maxWidth: "220px",
               }}
             >
-              A Scube company pioneering AI-driven design and consulting solutions globally.
+              A Scube company pioneering AI-driven design, business solutions, and development globally.
             </p>
             <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
               {[
@@ -192,7 +192,7 @@ const Footer = () => {
               Services
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {["Graphic Design", "AI Consulting", "Agentic AI"].map((s) => (
+              {["Graphic Design", "AI-Powered Business Solutions", "Web & App Development"].map((s) => (
                 <li
                   key={s}
                   style={{
