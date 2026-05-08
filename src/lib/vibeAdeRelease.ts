@@ -1,4 +1,4 @@
-export const VIBE_ADE_DOWNLOAD_VERSION = "0.3.9";
+export const VIBE_ADE_DOWNLOAD_VERSION = "0.4.0";
 
 export const VIBE_ADE_DOWNLOAD_URL =
   `https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v${VIBE_ADE_DOWNLOAD_VERSION}/Vibe-ADE-${VIBE_ADE_DOWNLOAD_VERSION}-setup-x64.exe`;
