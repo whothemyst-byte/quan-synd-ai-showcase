@@ -1,35 +1,11 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, Zap, Brain, Palette, Search } from "lucide-react";
+import { ArrowRight, Bot, Code2, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
 import { Seo } from "@/seo/Seo";
 
 const services = [
-  {
-    icon: Palette,
-    title: "UI Design",
-    category: "Design",
-    description: "Craft beautiful, intuitive interfaces that users love and businesses trust.",
-    features: [
-      "Modern, responsive designs",
-      "Design system creation",
-      "Prototyping & wireframing",
-      "Brand-aligned aesthetics",
-    ],
-  },
-  {
-    icon: Search,
-    title: "UX Research",
-    category: "Research",
-    description: "Deep insights into user behavior and needs to drive informed decisions.",
-    features: [
-      "User interviews & testing",
-      "Journey mapping",
-      "Competitive analysis",
-      "Data-driven recommendations",
-    ],
-  },
   {
     icon: Sparkles,
     title: "Graphic Design",
@@ -43,27 +19,27 @@ const services = [
     ],
   },
   {
-    icon: Brain,
-    title: "AI Consulting",
-    category: "AI",
-    description: "Strategic guidance for seamless AI integration and business transformation.",
+    icon: Bot,
+    title: "AI-Powered Business Solutions",
+    category: "AI Solutions",
+    description: "Intelligent tools that automate, engage, and grow your business.",
     features: [
-      "AI strategy development",
-      "Technology assessment",
-      "Implementation roadmap",
-      "Risk mitigation",
+      "AI chatbots and customer support",
+      "Mini CRMs with AI insights",
+      "Lead capture and qualification",
+      "Smart email automation",
     ],
   },
   {
-    icon: Zap,
-    title: "Agentic AI",
-    category: "AI",
-    description: "Next-generation autonomous AI systems that learn, adapt, and optimise.",
+    icon: Code2,
+    title: "Web & App Development",
+    category: "Development",
+    description: "Pixel-perfect websites and powerful applications built for scale.",
     features: [
-      "Intelligent automation",
-      "Autonomous decision-making",
-      "Multi-agent systems",
-      "Self-improving algorithms",
+      "Custom website development",
+      "React and Next.js applications",
+      "Landing pages and marketing sites",
+      "APIs and integrations",
     ],
   },
 ];
@@ -74,14 +50,14 @@ const Index = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="QuanSynd - AI Design & Consulting | Pioneering the Future"
-        description="QuanSynd pioneers cutting-edge AI solutions and design excellence. Expert services in UI Design, UX Research, Graphic Design, AI Consulting, and Agentic AI."
+        title="QuanSynd - AI, Design & Development | Pioneering the Future"
+        description="QuanSynd pioneers AI-powered business solutions, design excellence, and web and app development for growing teams."
         canonicalPath="/"
         ogType="website"
       />
       <Navbar />
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
+      {/* -- HERO ----------------------------------------------- */}
       <section
         className="dot-grid-bg"
         style={{
@@ -135,8 +111,8 @@ const Index = () => {
               margin: "0 auto 40px",
             }}
           >
-            QuanSynd pioneers cutting-edge AI consulting, design systems, and agentic solutions
-            that transform how organisations think, work, and grow.
+            QuanSynd pioneers AI-powered business solutions, design systems, and web and app
+            development that transform how organisations think, work, and grow.
           </p>
 
           {/* CTAs */}
@@ -227,7 +203,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── TOOLS STRIP ──────────────────────────────────────── */}
+      {/* -- TOOLS STRIP ---------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -271,7 +247,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── SERVICES ─────────────────────────────────────────── */}
+      {/* -- SERVICES ------------------------------------------- */}
       <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           {/* Section header */}
@@ -290,7 +266,7 @@ const Index = () => {
                 marginBottom: "12px",
               }}
             >
-              Comprehensive AI &amp; design solutions
+              Comprehensive AI, design &amp; development solutions
             </h2>
             <p
               style={{
@@ -300,11 +276,11 @@ const Index = () => {
                 maxWidth: "480px",
               }}
             >
-              Tailored to your business needs — from strategy to execution.
+              Tailored to your business needs - from strategy to execution.
             </p>
           </div>
 
-          {/* Row 1 — 3 cards */}
+          {/* Row 1 - 3 cards */}
           <div
             className="svc-grid-top"
             style={{
@@ -313,23 +289,7 @@ const Index = () => {
               gap: "24px",
             }}
           >
-            {services.slice(0, 3).map((s) => (
-              <ServiceCard key={s.title} {...s} />
-            ))}
-          </div>
-
-          {/* Row 2 — 2 cards centered */}
-          <div
-            className="svc-grid-bot"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, minmax(0, calc((100% - 24px) / 3)))",
-              gap: "24px",
-              justifyContent: "center",
-              marginTop: "24px",
-            }}
-          >
-            {services.slice(3).map((s) => (
+            {services.map((s) => (
               <ServiceCard key={s.title} {...s} />
             ))}
           </div>
@@ -358,7 +318,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── QUAN BENCH CTA BAND ───────────────────────────────── */}
+      {/* -- QUAN BENCH CTA BAND --------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -406,7 +366,7 @@ const Index = () => {
                 lineHeight: "1.65",
               }}
             >
-              Our open AI model intelligence index — benchmarking frontier, capable and efficient
+              Our open AI model intelligence index - benchmarking frontier, capable and efficient
               models across reasoning, accuracy, creativity and more.
             </p>
           </div>
@@ -429,7 +389,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── FINAL CTA ────────────────────────────────────────── */}
+      {/* -- FINAL CTA ------------------------------------------ */}
       <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
           <h2
@@ -479,3 +439,5 @@ const Index = () => {
 };
 
 export default Index;
+
+

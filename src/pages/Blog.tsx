@@ -7,7 +7,6 @@ import { Seo } from "@/seo/Seo";
 import featuredImage from "@/assets/blog-agentic-ai.jpg";
 import designSystemsImage from "@/assets/blog-design-systems.jpg";
 import ethicalAiImage from "@/assets/blog-ethical-ai.jpg";
-import uxResearchImage from "@/assets/blog-ux-research.jpg";
 import generativeAiImage from "@/assets/blog-generative-ai.jpg";
 import multiAgentImage from "@/assets/blog-multi-agent.jpg";
 import companyExpansionImage from "@/assets/blog-company-expansion.jpg";
@@ -25,14 +24,12 @@ const featuredPost = {
 
 const blogPosts = [
   { slug: "design-systems-age-of-ai", title: "Design Systems in the Age of AI", excerpt: "How AI is transforming the way we build and maintain design systems at scale.", category: "Design", date: "Oct 2, 2025", readTime: "6 min read", image: designSystemsImage },
-  { slug: "ethical-ai-responsible-systems", title: "Ethical AI: Building Responsible Systems", excerpt: "Best practices for ensuring your AI implementations are ethical, transparent, and fair.", category: "AI Ethics", date: "Sep 28, 2025", readTime: "10 min read", image: ethicalAiImage },
-  { slug: "ux-research-ai-products", title: "UX Research Methods for AI Products", excerpt: "Adapting traditional UX research methodologies for AI-powered applications.", category: "UX Research", date: "Sep 25, 2025", readTime: "7 min read", image: uxResearchImage },
-  { slug: "future-generative-ai-design", title: "The Future of Generative AI in Design", excerpt: "How generative AI tools are empowering designers and transforming creative workflows.", category: "AI Innovation", date: "Sep 20, 2025", readTime: "9 min read", image: generativeAiImage },
+  { slug: "ethical-ai-responsible-systems", title: "Ethical AI: Building Responsible Systems", excerpt: "Best practices for ensuring your AI implementations are ethical, transparent, and fair.", category: "AI Ethics", date: "Sep 28, 2025", readTime: "10 min read", image: ethicalAiImage },  { slug: "future-generative-ai-design", title: "The Future of Generative AI in Design", excerpt: "How generative AI tools are empowering designers and transforming creative workflows.", category: "AI Innovation", date: "Sep 20, 2025", readTime: "9 min read", image: generativeAiImage },
   { slug: "building-multi-agent-ai-systems", title: "Building Multi-Agent AI Systems", excerpt: "Technical deep-dive into coordinating multiple AI agents for complex problem-solving.", category: "Technology", date: "Sep 15, 2025", readTime: "12 min read", image: multiAgentImage },
   { slug: "company-expanding-global-reach", title: "Company Update: Expanding Our Global Reach", excerpt: "QuanSynd announces new partnerships and office locations across three continents.", category: "Company", date: "Sep 10, 2025", readTime: "4 min read", image: companyExpansionImage },
 ];
 
-const categories = ["All", "AI Innovation", "Design", "UX Research", "Technology", "Company", "AI Ethics"];
+const categories = ["All", "AI Innovation", "Design", "Technology", "Company", "AI Ethics"];
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -45,14 +42,14 @@ const Blog = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="Blog | QuanSynd — Insights on AI, Design & Technology"
-        description="Read QuanSynd perspectives on agentic AI, design systems, ethical AI, UX research, and emerging technology—ideas worth exploring."
+        title="Blog | QuanSynd - Insights on AI, Design & Technology"
+        description="Read QuanSynd perspectives on agentic AI, design systems, ethical AI, and emerging technology-ideas worth exploring."
         canonicalPath="/blog"
         ogType="website"
       />
       <Navbar />
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
+      {/* -- HERO ----------------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -92,7 +89,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* ── CATEGORY FILTER ──────────────────────────────────── */}
+      {/* -- CATEGORY FILTER ------------------------------------ */}
       <section
         style={{
           padding: "28px 24px",
@@ -138,7 +135,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* ── FEATURED ARTICLE ─────────────────────────────────── */}
+      {/* -- FEATURED ARTICLE ----------------------------------- */}
       <section style={{ padding: "64px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <Link
@@ -279,7 +276,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* ── ARTICLES GRID ────────────────────────────────────── */}
+      {/* -- ARTICLES GRID -------------------------------------- */}
       <section style={{ padding: "0 24px 96px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <div
@@ -414,7 +411,7 @@ const Blog = () => {
                           letterSpacing: "0.05em",
                         }}
                       >
-                        Read →
+                          Read {"->"}
                       </span>
                     </div>
                   </div>
@@ -439,7 +436,7 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* ── NEWSLETTER ───────────────────────────────────────── */}
+      {/* -- NEWSLETTER ----------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -499,7 +496,7 @@ const Blog = () => {
                 whiteSpace: "nowrap",
               }}
             >
-              Subscribe →
+              Subscribe {"->"}
             </button>
           </div>
           <p
@@ -521,3 +518,4 @@ const Blog = () => {
 };
 
 export default Blog;
+

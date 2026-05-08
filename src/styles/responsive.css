@@ -47,6 +47,18 @@
         grid-template-columns: 1fr !important;
     }
 
+    /* Services process */
+    .process-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 28px 0 !important;
+    }
+
+    .process-step-card {
+        border-left: 1px solid var(--rule) !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+
     /* Blog article grid */
     .blog-grid {
         grid-template-columns: repeat(2, 1fr) !important;
@@ -84,8 +96,21 @@
     }
 
     /* Contact name/email row — 1 col */
-    .contact-name-email {
+    .contact-name-email,
+    .contact-service-budget {
         grid-template-columns: 1fr !important;
+    }
+
+    /* Services process - 1 col */
+    .process-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+    }
+
+    .process-step-card {
+        border-left: none !important;
+        border-top: 1px solid var(--rule) !important;
+        padding: 24px 0 0 !important;
     }
 
     /* Section padding tightened */
@@ -147,5 +172,103 @@
     /* Navbar logo: smaller */
     nav img {
         height: 26px !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   VIBE ADE PRODUCT PAGE — RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 900px) ────────────────────────────────── */
+@media (max-width: 900px) {
+
+    /* 3-col feature strip → 1 col */
+    .vibe-features-strip {
+        grid-template-columns: 1fr !important;
+        gap: 40px !important;
+    }
+
+    /* 2-panel split → stack vertically */
+    .vibe-split-section {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* 3-col features grid → 2 cols */
+    .vibe-features-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* footer with 5 cols → 2 cols */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 32px !important;
+    }
+
+    /* Terminal mockup: shorter */
+    .vibe-terminal-mockup {
+        max-width: 100% !important;
+    }
+}
+
+/* ── Mobile (≤ 640px) ────────────────────────────────── */
+@media (max-width: 640px) {
+
+    /* Features grid → 1 col */
+    .vibe-features-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Split section inner padding */
+    .vibe-split-section > div {
+        padding: 48px 24px !important;
+    }
+
+    /* Tech stack strip — wrap with smaller font */
+    .vibe-tech-strip span {
+        font-size: 11px !important;
+        padding: 0 12px !important;
+    }
+
+    /* footer → 1 col */
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   VIBE ADE PRICING PAGE — RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 900px) ────────────────────────────────── */
+@media (max-width: 900px) {
+
+    /* Pricing cards: 3-col → 1-col */
+    .vibe-pricing-cards {
+        grid-template-columns: 1fr !important;
+        max-width: 480px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* Billing notes: 3-col → 1-col */
+    .vibe-billing-notes {
+        grid-template-columns: 1fr !important;
+        gap: 28px !important;
+    }
+}
+
+/* ── Mobile (≤ 640px) ────────────────────────────────── */
+@media (max-width: 640px) {
+
+    /* Comparison table: horizontal scroll */
+    .vibe-table-wrap {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Pricing cards full-width on mobile */
+    .vibe-pricing-cards {
+        max-width: 100% !important;
     }
 }

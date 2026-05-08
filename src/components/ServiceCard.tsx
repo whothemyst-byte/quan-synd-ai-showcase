@@ -111,23 +111,6 @@ const ServiceCard = ({ icon: Icon, title, description, features, category }: Ser
           </li>
         ))}
       </ul>
-
-      {/* Footer link */}
-      <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "16px" }}>
-        <span
-          style={{
-            fontFamily: "'Geist Mono', monospace",
-            fontSize: "11px",
-            letterSpacing: "0.08em",
-            color: "var(--amber)",
-            cursor: "pointer",
-            textTransform: "uppercase",
-            fontWeight: 500,
-          }}
-        >
-          Explore →
-        </span>
-      </div>
     </div>
   );
 };

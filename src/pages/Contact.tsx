@@ -8,7 +8,7 @@ import { Seo } from "@/seo/Seo";
 const faqs = [
   {
     q: "How long does a typical project take?",
-    a: "Project timelines vary based on scope and complexity. A focused UI/UX sprint can take 2–4 weeks, while a full AI consulting engagement typically runs 6–12 weeks. We provide detailed timelines during our discovery call.",
+    a: "Project timelines vary based on scope and complexity. A focused discovery sprint can take 2-4 weeks, while a full AI-powered business solution or web application typically runs 6-12 weeks. We provide detailed timelines during our discovery call.",
   },
   {
     q: "Do you work with international clients?",
@@ -73,14 +73,14 @@ const Contact = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="Contact | QuanSynd — Let’s Work Together"
-        description="Get in touch with QuanSynd to discuss AI consulting, agentic AI, UI/UX design, or research. Share your goals and we’ll respond within 24 hours."
+        title="Contact | QuanSynd - Let's Work Together"
+        description="Get in touch with QuanSynd to discuss AI-powered business solutions, web and app development, and graphic design services. Share your goals and we'll respond within 24 hours."
         canonicalPath="/contact"
         ogType="website"
       />
       <Navbar />
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
+      {/* -- HERO ----------------------------------------------- */}
       <section
         className="cream-section"
         style={{
@@ -120,7 +120,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* ── MAIN CONTENT ─────────────────────────────────────── */}
+      {/* -- MAIN CONTENT --------------------------------------- */}
       <section style={{ padding: "80px 24px", background: "var(--paper)" }}>
         <div
           className="contact-split"
@@ -133,7 +133,7 @@ const Contact = () => {
             alignItems: "start",
           }}
         >
-          {/* Left — Form */}
+          {/* Left - Form */}
           <div>
             <span className="amber-label" style={{ display: "block", marginBottom: "28px" }}>
               Send a Message
@@ -181,7 +181,7 @@ const Contact = () => {
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div className="contact-service-budget" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                 <div>
                   <label style={labelStyle}>Service of Interest *</label>
                   <select
@@ -192,12 +192,10 @@ const Contact = () => {
                     onFocus={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--amber)")}
                     onBlur={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--rule)")}
                   >
-                    <option value="">Select a service…</option>
-                    <option value="ui-design">UI Design</option>
-                    <option value="ux-research">UX Research</option>
+                    <option value="">Select a service...</option>
                     <option value="graphic-design">Graphic Design</option>
-                    <option value="ai-consulting">AI Consulting</option>
-                    <option value="agentic-ai">Agentic AI</option>
+                    <option value="ai-powered-business-solutions">AI-Powered Business Solutions</option>
+                    <option value="web-app-development">Web & App Development</option>
                     <option value="quan-bench">Quan Bench</option>
                     <option value="multiple">Multiple Services</option>
                   </select>
@@ -211,10 +209,10 @@ const Contact = () => {
                     onFocus={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--amber)")}
                     onBlur={(e) => ((e.target as HTMLSelectElement).style.borderColor = "var(--rule)")}
                   >
-                    <option value="">Select budget range…</option>
+                    <option value="">Select budget range...</option>
                     <option value="under-5l">Under ₹5L</option>
-                    <option value="5l-20l">₹5L – ₹20L</option>
-                    <option value="20l-50l">₹20L – ₹50L</option>
+                    <option value="5l-20l">₹5L - ₹20L</option>
+                    <option value="20l-50l">₹20L - ₹50L</option>
                     <option value="50l-plus">₹50L+</option>
                     <option value="discuss">Let's discuss</option>
                   </select>
@@ -225,7 +223,7 @@ const Contact = () => {
                 <label style={labelStyle}>Tell us about your project *</label>
                 <textarea
                   required
-                  placeholder="Describe your project, goals, timeline, and any specific requirements…"
+                  placeholder="Describe your project, goals, timeline, and any specific requirements..."
                   value={formData.message}
                   onChange={(e) => handleChange("message", e.target.value)}
                   style={{
@@ -273,7 +271,7 @@ const Contact = () => {
             </form>
           </div>
 
-          {/* Right — Info Card */}
+          {/* Right - Info Card */}
           <div>
             <div
               style={{
@@ -309,7 +307,7 @@ const Contact = () => {
                   {
                     Icon: MapPin,
                     href: "#",
-                    text: "Coimbatore, Tamil Nadu — Global Operations",
+                    text: "Coimbatore, Tamil Nadu - Global Operations",
                   },
                 ].map(({ Icon, href, text }) => (
                   <a
@@ -379,8 +377,8 @@ const Contact = () => {
                   Office Hours
                 </p>
                 <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "13px", color: "var(--muted-ui)", lineHeight: "1.6" }}>
-                  Mon–Fri · 9am–6pm IST<br />
-                  Sat · 10am–4pm IST<br />
+                  Mon-Fri · 9am-6pm IST<br />
+                  Sat · 10am-4pm IST<br />
                   <span style={{ fontSize: "12px", opacity: 0.7 }}>* We operate across multiple time zones.</span>
                 </p>
                 <div style={{ marginTop: "16px" }}>
@@ -405,7 +403,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* ── FAQ ──────────────────────────────────────────────── */}
+      {/* -- FAQ ------------------------------------------------ */}
       <section
         className="cream-section"
         style={{ padding: "80px 24px", borderTop: "1px solid var(--rule)" }}
@@ -486,7 +484,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* ── DISCOVERY CALL CTA ───────────────────────────────── */}
+      {/* -- DISCOVERY CALL CTA --------------------------------- */}
       <section
         className="paper-section"
         style={{
@@ -520,7 +518,7 @@ const Contact = () => {
             textDecoration: "none",
           }}
         >
-          Book a Discovery Call →
+          Book a Discovery Call {"->"}
         </a>
       </section>
 
@@ -530,3 +528,4 @@ const Contact = () => {
 };
 
 export default Contact;
+

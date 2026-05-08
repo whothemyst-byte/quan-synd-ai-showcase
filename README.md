@@ -71,3 +71,47 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Razorpay Payment Setup
+
+The checkout flow now uses Razorpay + Supabase Edge Functions.
+
+### 1) Frontend env
+
+Add to your local frontend env file (for example `.env.local`):
+
+```bash
+VITE_RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+```
+
+### 2) Supabase Edge Function secrets
+
+Set these in your Supabase project:
+
+```bash
+supabase secrets set RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+supabase secrets set RAZORPAY_KEY_SECRET=xxxxxxxxxx
+supabase secrets set RAZORPAY_WEBHOOK_SECRET=xxxxxxxxxx
+```
+
+### 3) Deploy edge functions
+
+```bash
+supabase functions deploy create-razorpay-order
+supabase functions deploy verify-razorpay-payment
+supabase functions deploy razorpay-webhook --no-verify-jwt
+```
+
+### 4) Run database migration
+
+Apply:
+
+- `supabase/migrations/20260416_razorpay_checkout_flow.sql`
+
+### 5) Configure Razorpay webhook
+
+In Razorpay dashboard, point webhook URL to:
+
+- `https://<your-project-ref>.functions.supabase.co/razorpay-webhook`
+
+Use the same webhook secret configured as `RAZORPAY_WEBHOOK_SECRET`.

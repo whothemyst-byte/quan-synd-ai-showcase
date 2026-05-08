@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Twitter, Github } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 
@@ -25,7 +25,7 @@ const Footer = () => {
           className="footer-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr",
+            gridTemplateColumns: "1.4fr 1fr 1fr 1fr 1.2fr",
             gap: "48px",
           }}
         >
@@ -53,7 +53,7 @@ const Footer = () => {
                 maxWidth: "220px",
               }}
             >
-              A Scube company pioneering AI-driven design and consulting solutions globally.
+              A Scube company pioneering AI-driven design, business solutions, and development globally.
             </p>
             <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
               {[
@@ -114,6 +114,47 @@ const Footer = () => {
                 { label: "Services", path: "/services" },
                 { label: "Blog", path: "/blog" },
                 { label: "Contact", path: "/contact" },
+                { label: "Pricing", path: "/products/vibe-ade/pricing" },
+              ].map(({ label, path }) => (
+                <li key={path}>
+                  <Link
+                    to={path}
+                    style={{
+                      fontFamily: "'Geist', sans-serif",
+                      fontSize: "13px",
+                      color: FOOTER_MUTED,
+                      textDecoration: "none",
+                      transition: "color 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = FOOTER_TEXT)}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = FOOTER_MUTED)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Products */}
+          <div>
+            <h4
+              style={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "11px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: AMBER,
+                fontWeight: 500,
+                marginBottom: "20px",
+              }}
+            >
+              Products
+            </h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
+              {[
+                { label: "Vibe ADE", path: "/products/vibe-ade" },
+                { label: "Quan Bench", path: "/quan-bench" },
               ].map(({ label, path }) => (
                 <li key={path}>
                   <Link
@@ -151,7 +192,7 @@ const Footer = () => {
               Services
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {["UI Design", "UX Research", "Graphic Design", "AI Consulting", "Agentic AI"].map((s) => (
+              {["Graphic Design", "AI-Powered Business Solutions", "Web & App Development"].map((s) => (
                 <li
                   key={s}
                   style={{
@@ -217,7 +258,7 @@ const Footer = () => {
                   marginTop: "2px",
                 }}
               >
-                Mon–Fri · 9am–6pm IST
+                Mon-Fri · 9am-6pm IST
               </p>
             </div>
           </div>
@@ -242,7 +283,7 @@ const Footer = () => {
               letterSpacing: "0.04em",
             }}
           >
-            © {currentYear} QuanSynd — A Scube Company. All rights reserved.
+            © {currentYear} QuanSynd - A Scube Company. All rights reserved.
           </p>
           <p
             style={{
@@ -261,3 +302,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

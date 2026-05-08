@@ -1,39 +1,11 @@
-import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, Zap, Brain, Palette, Search } from "lucide-react";
+﻿import { Link } from "react-router-dom";
+import { ArrowRight, Bot, Code2, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
 import { Seo } from "@/seo/Seo";
 
 const services = [
-  {
-    icon: Palette,
-    title: "UI Design",
-    category: "Design",
-    description: "Create stunning, user-friendly interfaces that captivate and convert",
-    features: [
-      "Modern, responsive web and mobile designs",
-      "Comprehensive design system development",
-      "Interactive prototyping and wireframing",
-      "Brand-aligned visual aesthetics",
-      "Accessibility-first approach",
-      "Component library creation",
-    ],
-  },
-  {
-    icon: Search,
-    title: "UX Research",
-    category: "Research",
-    description: "Gain deep insights into user behavior to drive informed design decisions",
-    features: [
-      "User interviews and usability testing",
-      "Customer journey mapping",
-      "Competitive analysis and benchmarking",
-      "Persona development",
-      "A/B testing and analytics",
-      "Data-driven design recommendations",
-    ],
-  },
   {
     icon: Sparkles,
     title: "Graphic Design",
@@ -49,31 +21,32 @@ const services = [
     ],
   },
   {
-    icon: Brain,
-    title: "AI Consulting",
-    category: "AI",
-    description: "Strategic guidance for successful AI integration and implementation",
+    icon: Bot,
+    title: "AI-Powered Business Solutions",
+    category: "AI Solutions",
+    description: "Intelligent tools that automate, engage, and grow your business - powered by AI",
     features: [
-      "AI strategy and roadmap development",
-      "Technology stack assessment",
-      "Use case identification and validation",
-      "Implementation planning",
-      "Risk assessment and mitigation",
-      "Team training and workshops",
+      "AI chatbots for websites and customer support",
+      "Mini CRMs with AI-driven insights and automation",
+      "AI-powered lead capture and qualification systems",
+      "Smart email automation and follow-up workflows",
+      "Business dashboards with AI analytics",
+      "Document processing and summarisation tools",
+      "AI form builders and intelligent data collection",
     ],
   },
   {
-    icon: Zap,
-    title: "Agentic AI",
-    category: "AI",
-    description: "Build autonomous AI systems that learn and adapt intelligently",
+    icon: Code2,
+    title: "Web & App Development",
+    category: "Development",
+    description: "From pixel-perfect websites to powerful web applications - built for performance and scale",
     features: [
-      "Intelligent process automation",
-      "Autonomous decision-making systems",
-      "Multi-agent coordination",
-      "Self-improving algorithms",
-      "Adaptive learning models",
-      "Real-time optimisation",
+      "Custom website design and development",
+      "Web application development with React, Next.js, and modern stacks",
+      "Landing pages and marketing sites",
+      "E-commerce development",
+      "Progressive Web Apps (PWA)",
+      "API development and third-party integrations",
     ],
   },
 ];
@@ -85,20 +58,17 @@ const processSteps = [
   { number: "04", title: "Deploy", desc: "Launching, iterating, and optimising" },
 ];
 
-
-
 const Services = () => {
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
-        title="Services | QuanSynd — AI Consulting, UI/UX & Agentic AI"
-        description="Explore QuanSynd services: UI Design, UX Research, Graphic Design, AI Consulting, and Agentic AI—end-to-end delivery for business transformation."
+        title="Services | QuanSynd - AI-Powered Business Solutions, Web & App Development"
+        description="Explore QuanSynd services: Graphic Design, AI-powered business solutions, and web and app development - end-to-end delivery for business transformation."
         canonicalPath="/services"
         ogType="website"
       />
       <Navbar />
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
       <section
         className="cream-section"
         style={{
@@ -123,8 +93,7 @@ const Services = () => {
               marginBottom: "16px",
             }}
           >
-            End-to-end AI and Design{" "}
-            <em style={{ fontStyle: "italic" }}>built for transformation.</em>
+            End-to-end AI, Design, and Development <em style={{ fontStyle: "italic" }}>built for transformation.</em>
           </h1>
           <p
             style={{
@@ -141,10 +110,8 @@ const Services = () => {
         </div>
       </section>
 
-      {/* ── SERVICES GRID ────────────────────────────────────── */}
       <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-          {/* Row 1 — 3 cards */}
           <div
             className="svc-grid-top"
             style={{
@@ -153,30 +120,13 @@ const Services = () => {
               gap: "24px",
             }}
           >
-            {services.slice(0, 3).map((s) => (
-              <ServiceCard key={s.title} {...s} />
-            ))}
-          </div>
-
-          {/* Row 2 — 2 cards centered below */}
-          <div
-            className="svc-grid-bot"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, minmax(0, calc((100% - 24px) / 3)))",
-              gap: "24px",
-              justifyContent: "center",
-              marginTop: "24px",
-            }}
-          >
-            {services.slice(3).map((s) => (
+            {services.map((s) => (
               <ServiceCard key={s.title} {...s} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── PROCESS ───────────────────────────────────────────── */}
       <section
         className="cream-section"
         style={{
@@ -200,19 +150,15 @@ const Services = () => {
                 color: "var(--ink)",
               }}
             >
-              A proven process that{" "}
-              <em>delivers results.</em>
+              A proven process that <em>delivers results.</em>
             </h2>
           </div>
 
-          {/* Steps */}
-          <div
-            style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }}
-            className="grid-cols-2 md:grid-cols-4"
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }} className="process-grid">
             {processSteps.map((step, i) => (
               <div
                 key={i}
+                className="process-step-card"
                 style={{
                   borderLeft: i === 0 ? "none" : "1px solid var(--rule)",
                   paddingLeft: i === 0 ? "0" : "40px",
@@ -260,17 +206,7 @@ const Services = () => {
         </div>
       </section>
 
-
-
-      {/* ── CTA ──────────────────────────────────────────────── */}
-      <section
-        className="cream-section"
-        style={{
-          padding: "96px 24px",
-          borderTop: "1px solid var(--rule)",
-          textAlign: "center",
-        }}
-      >
+      <section className="cream-section" style={{ padding: "96px 24px", borderTop: "1px solid var(--rule)", textAlign: "center" }}>
         <div style={{ maxWidth: "600px", margin: "0 auto" }}>
           <h2
             style={{
@@ -284,53 +220,20 @@ const Services = () => {
           >
             Need help with any of these services?
           </h2>
-          <p
-            style={{
-              fontFamily: "'Geist', sans-serif",
-              fontSize: "16px",
-              color: "var(--muted-ui)",
-              marginBottom: "36px",
-              lineHeight: "1.7",
-            }}
-          >
+          <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "16px", color: "var(--muted-ui)", marginBottom: "36px", lineHeight: "1.7" }}>
             Our experts are ready to discuss your project and provide tailored solutions.
           </p>
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <Link
-              to="/contact"
-              className="amber-btn"
-              style={{
-                padding: "14px 28px",
-                borderRadius: "6px",
-                fontSize: "15px",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                textDecoration: "none",
-              }}
-            >
+            <Link to="/contact" className="amber-btn" style={{ padding: "14px 28px", borderRadius: "6px", fontSize: "15px", display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
               Start Your Project <ArrowRight size={16} />
             </Link>
-            <Link
-              to="/about"
-              className="outline-ink-btn"
-              style={{
-                padding: "14px 28px",
-                borderRadius: "6px",
-                fontSize: "15px",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                textDecoration: "none",
-              }}
-            >
+            <Link to="/about" className="outline-ink-btn" style={{ padding: "14px 28px", borderRadius: "6px", fontSize: "15px", display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
               About Us
             </Link>
           </div>
         </div>
       </section>
 
-      {/* €€ INSIGHTS CTA €€ */}
       <section style={{ padding: "72px 24px", background: "var(--paper)", borderTop: "1px solid var(--rule)" }}>
         <div style={{ maxWidth: "960px", margin: "0 auto", textAlign: "center" }}>
           <span className="amber-label" style={{ display: "block", marginBottom: "16px" }}>
@@ -349,17 +252,14 @@ const Services = () => {
             Learn what we’re building and why it works.
           </h2>
           <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "16px", color: "var(--muted-ui)", lineHeight: "1.7", marginBottom: "28px" }}>
-            Explore our writing on agentic AI, ethical implementation, UX research, and scalable design systems.
+            Explore our writing on AI implementation, product engineering, and scalable design systems.
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link to="/blog" className="outline-ink-btn" style={{ padding: "12px 22px", borderRadius: "6px", textDecoration: "none" }}>
               Read the Blog
             </Link>
-            <Link to="/blog/rise-of-agentic-ai" className="outline-ink-btn" style={{ padding: "12px 22px", borderRadius: "6px", textDecoration: "none" }}>
-              Agentic AI
-            </Link>
-            <Link to="/blog/ux-research-ai-products" className="outline-ink-btn" style={{ padding: "12px 22px", borderRadius: "6px", textDecoration: "none" }}>
-              UX Research for AI
+            <Link to="/contact" className="outline-ink-btn" style={{ padding: "12px 22px", borderRadius: "6px", textDecoration: "none" }}>
+              Discuss a Build
             </Link>
           </div>
         </div>
