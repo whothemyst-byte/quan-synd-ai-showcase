@@ -17,10 +17,11 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { NewsletterSignupModal } from "@/components/NewsletterSignupModal";
 import { Seo } from "@/seo/Seo";
-
-const DOWNLOAD_VERSION = "0.3.9";
+import {
+  VIBE_ADE_DOWNLOAD_URL,
+  VIBE_ADE_DOWNLOAD_VERSION as DOWNLOAD_VERSION,
+} from "@/lib/vibeAdeRelease";
 
 const features = [
   {
@@ -102,7 +103,6 @@ const techStack = [
 
 const VibeADE = () => {
   const [releaseOpen, setReleaseOpen] = useState(false);
-  const [newsletterOpen, setNewsletterOpen] = useState(false);
   useEffect(() => {
     if (releaseOpen) {
       const previous = document.body.style.overflow;
@@ -117,8 +117,8 @@ const VibeADE = () => {
   const releaseNotes = useMemo(
     () => ({
       version: `v${DOWNLOAD_VERSION}`,
-      date: "March 20, 2026",
-      intro: "Vibe ADE 0.3.9 adds browser integration to the workspace.",
+      date: "May 9, 2026",
+      intro: "Vibe ADE 0.4.0 ships the current Windows installer and update channel.",
       highlights: [
         "Windows-native AI development environment with multi-agent swarms, PTY terminals, and intelligent workspaces.",
         "Subscription-ready experience with Spark, Flux, and Forge tiers, usage tracking, and upgrade paths.",
@@ -155,8 +155,6 @@ const VibeADE = () => {
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <NewsletterSignupModal open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
-
       <section
         className="dot-grid-bg hero-section"
         style={{
@@ -229,9 +227,9 @@ const VibeADE = () => {
             className="cta-buttons-row"
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
-            <button
-              type="button"
-              onClick={() => setNewsletterOpen(true)}
+            <a
+              href={VIBE_ADE_DOWNLOAD_URL}
+              download
               className="amber-btn"
               style={{
                 padding: "14px 28px",
@@ -241,12 +239,10 @@ const VibeADE = () => {
                 alignItems: "center",
                 gap: "8px",
                 textDecoration: "none",
-                border: "none",
-                cursor: "pointer",
               }}
             >
               <Download size={16} /> Download Free
-            </button>
+            </a>
             <a
               href="#release-notes"
               onClick={(event) => {
@@ -684,9 +680,9 @@ const VibeADE = () => {
             className="cta-buttons-row"
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
-            <button
-              type="button"
-              onClick={() => setNewsletterOpen(true)}
+            <a
+              href={VIBE_ADE_DOWNLOAD_URL}
+              download
               className="amber-btn"
               style={{
                 padding: "14px 32px",
@@ -696,12 +692,10 @@ const VibeADE = () => {
                 alignItems: "center",
                 gap: "8px",
                 textDecoration: "none",
-                border: "none",
-                cursor: "pointer",
               }}
             >
               <Download size={16} /> Download Vibe ADE
-            </button>
+            </a>
             <a
               href="#release-notes"
               onClick={(event) => {
@@ -768,14 +762,14 @@ const VibeADE = () => {
                 <p>{releaseNotes.date}</p>
               </div>
               <div className="release-notes-header-actions">
-                <button
-                  type="button"
-                  onClick={() => setNewsletterOpen(true)}
+                <a
+                  href={VIBE_ADE_DOWNLOAD_URL}
+                  download
                   className="amber-btn release-notes-download"
-                  style={{ textDecoration: "none", border: "none", cursor: "pointer" }}
+                  style={{ textDecoration: "none" }}
                 >
                   <Download size={16} /> Download v{DOWNLOAD_VERSION}
-                </button>
+                </a>
               </div>
             </header>
 

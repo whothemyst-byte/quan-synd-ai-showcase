@@ -4,7 +4,6 @@ import { Check, Minus, ArrowRight, Download, Zap, ChevronDown, ChevronUp } from 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Seo } from "@/seo/Seo";
-import { NewsletterSignupModal } from "@/components/NewsletterSignupModal";
 import { VIBE_ADE_DOWNLOAD_URL } from "@/lib/vibeAdePricing";
 
 /* --- DATA --------------------------------------------------- */
@@ -140,7 +139,6 @@ function CheckCell({ value }: { value: string | boolean }) {
 const VibePricing = () => {
   const [annual, setAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [newsletterOpen, setNewsletterOpen] = useState(false);
   const usd = (value: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
   const annualDiscountPct = Math.round(
@@ -448,11 +446,8 @@ const VibePricing = () => {
                 {/* CTA */}
                 {plan.ctaExternal ? (
                   <a
-                    href="#newsletter"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      setNewsletterOpen(true);
-                    }}
+                    href={plan.ctaHref}
+                    download
                     className="amber-btn"
                     style={{
                       display: "flex",
@@ -764,11 +759,8 @@ const VibePricing = () => {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             <a
-              href="#newsletter"
-              onClick={(event) => {
-                event.preventDefault();
-                setNewsletterOpen(true);
-              }}
+              href={VIBE_ADE_DOWNLOAD_URL}
+              download
               className="amber-btn"
               style={{
                 padding: "14px 28px",
@@ -810,12 +802,10 @@ const VibePricing = () => {
         </div>
       </section>
 
-      <NewsletterSignupModal open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
       <Footer />
     </div>
   );
 };
 
 export default VibePricing;
-
 

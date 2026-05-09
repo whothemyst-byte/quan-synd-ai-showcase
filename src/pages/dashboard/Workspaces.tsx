@@ -6,14 +6,13 @@ import { useCloudDashboard, type CloudWorkspace } from "@/components/dashboard/c
 import { useDashboardTheme } from "@/components/dashboard/dashboardTheme";
 import { formatDateTime } from "@/components/dashboard/dashboardData";
 import { deleteDashboardWorkspace } from "@/components/dashboard/dashboardSupabase";
-import { NewsletterSignupModal } from "@/components/NewsletterSignupModal";
+import { VIBE_ADE_DOWNLOAD_URL } from "@/lib/vibeAdeRelease";
 
 export default function DashboardWorkspaces() {
   const { user } = useAuth();
   const theme = useDashboardTheme();
   const { snapshot, plan, loading } = useCloudDashboard(user?.id);
   const [deletingWorkspaceId, setDeletingWorkspaceId] = useState<string | null>(null);
-  const [newsletterOpen, setNewsletterOpen] = useState(false);
 
   const amber = theme === "dark" ? "#d79a3d" : "#c8882a";
   const ink = theme === "dark" ? "#f3eee5" : "var(--ink)";
@@ -95,11 +94,8 @@ export default function DashboardWorkspaces() {
             <p style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "22px", color: ink, marginBottom: "8px" }}>No workspaces connected yet.</p>
             <p style={{ fontFamily: "'Geist', sans-serif", fontSize: "14px", color: muted, marginBottom: "24px" }}>Open Vibe ADE on your desktop to sync workspaces here.</p>
             <a
-              href="#newsletter"
-              onClick={(event) => {
-                event.preventDefault();
-                setNewsletterOpen(true);
-              }}
+              href={VIBE_ADE_DOWNLOAD_URL}
+              download
               style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "11px 22px", borderRadius: "6px", fontSize: "12px", textDecoration: "none", fontFamily: "'Geist Mono', monospace", textTransform: "uppercase", letterSpacing: "0.08em", background: "transparent", border: `1px solid ${amber}`, color: amber }}
             >
               <Download size={13} /> Download Vibe ADE
@@ -150,7 +146,6 @@ export default function DashboardWorkspaces() {
           Workspaces are automatically synced from the <strong style={{ color: ink }}>Vibe ADE</strong> desktop application. Changes may take a few moments to reflect.
         </p>
       </div>
-      <NewsletterSignupModal open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
     </div>
   );
 }
