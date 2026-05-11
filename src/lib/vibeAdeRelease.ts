@@ -1,7 +1,8 @@
-export const VIBE_ADE_DOWNLOAD_VERSION = "0.4.0";
+export const VIBE_ADE_DOWNLOAD_VERSION = "0.4.1";
+export const VIBE_ADE_DOWNLOAD_FILENAME = `Vibe-ADE-${VIBE_ADE_DOWNLOAD_VERSION}-setup-x64.exe`;
 
 export const VIBE_ADE_DOWNLOAD_URL =
-  `https://github.com/whothemyst-byte/Vibe_ADE/releases/download/v${VIBE_ADE_DOWNLOAD_VERSION}/Vibe-ADE-${VIBE_ADE_DOWNLOAD_VERSION}-setup-x64.exe`;
+  `https://github.com/whothemyst-byte/Vibe_ADE/releases/latest/download/${VIBE_ADE_DOWNLOAD_FILENAME}`;
 
 export const VIBE_ADE_LAUNCH_LABEL = "April 12, 2026";
 export const VIBE_ADE_LAUNCH_AT = new Date(2026, 3, 12, 0, 0, 0, 0);
