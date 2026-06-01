@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Linkedin, Twitter, Github } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Youtube, Twitter } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 
 // Footer always uses the dark ink theme regardless of page light/dark mode
@@ -57,14 +57,16 @@ const Footer = () => {
             </p>
             <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
               {[
-                { Icon: Linkedin, href: "#", label: "LinkedIn" },
-                { Icon: Twitter, href: "#", label: "Twitter" },
-                { Icon: Github, href: "#", label: "GitHub" },
+                { Icon: Instagram, href: "https://www.instagram.com/quansynd/", label: "Instagram" },
+                { Icon: Youtube, href: "https://www.youtube.com/@Quansynd", label: "YouTube" },
+                { Icon: Twitter, href: "https://x.com/Quansyndai", label: "X" },
               ].map(({ Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     width: "32px",
                     height: "32px",
