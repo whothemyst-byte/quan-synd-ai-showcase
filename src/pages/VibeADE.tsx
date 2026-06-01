@@ -3,24 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   Download,
-  Github,
-  X,
+  FileText,
   Cpu,
-  Globe,
   Terminal,
-  FolderOpen,
-  Cloud,
-  Columns,
-  ShieldCheck,
   RefreshCw,
-  Zap,
   LayoutDashboard,
-  Move,
-  Network,
-  LayoutGrid,
-  Package,
-  ShieldAlert,
-  Radar,
+  Ghost,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -30,118 +18,95 @@ import {
   VIBE_ADE_DOWNLOAD_VERSION as DOWNLOAD_VERSION,
 } from "@/lib/vibeAdeRelease";
 
-const features = [
+const stats = [
+  "16 panes",
+  "4 agent roles",
+  "3 workspace modes",
+  "100% local execution",
+  "Windows-native",
+];
+
+const capabilities: [string, string][] = [
+  ["Multi-agent swarms", "Coordinator, builder, scout and reviewer working in parallel."],
+  ["PTY terminals", "Real shells, resizable panes and persistent session snapshots."],
+  ["Workspace modes", "Environment, Swarm and Wall — one shell, three ways to work."],
+  ["Browser panes", "Inspect live web apps alongside your terminals."],
+  ["Task board", "A Kanban board tied to every workspace."],
+  ["Cloud sync", "State preserved and synced across sessions."],
+  ["Crash recovery", "Automatic detection and restore on restart."],
+];
+
+const pillars: {
+  icon: typeof Cpu;
+  label: string;
+  heading: string;
+  body: string;
+  features: [string, string][];
+}[] = [
   {
     icon: Cpu,
     label: "Orchestration",
-    heading: "Multi-Agent Swarms",
+    heading: "A swarm that ships beside you.",
     body:
-      "Spin up coordinated AI agent swarms — coordinator, builder, scout and reviewer — all working on your codebase in parallel. Powered by QuanSwarm.",
-  },
-  {
-    icon: Terminal,
-    label: "Terminal",
-    heading: "PTY Terminals",
-    body:
-      "Full pseudo-terminal support via node-pty. Multiple panes, resizable layouts, xterm.js rendering, and persistent session snapshots.",
-  },
-  {
-    icon: FolderOpen,
-    label: "Environments",
-    heading: "Smart Workspaces",
-    body:
-      "Create, save, clone and restore development environments in seconds. Cloud sync keeps every workspace in perfect state across sessions.",
-  },
-  {
-    icon: Globe,
-    label: "Browser",
-    heading: "Browser Integration",
-    body:
-      "Open browser panes directly inside Vibe ADE to inspect web apps, test flows, and keep browser state alongside your terminals and workspaces.",
-  },
-];
-
-const keyFeatures = [
-  {
-    icon: Cpu,
-    title: "Agent Orchestration",
-    desc: "Route messages between specialist agents intelligently. The SwarmOrchestrator assigns tasks, resolves conflicts and tracks progress.",
-  },
-  {
-    icon: Cloud,
-    title: "Cloud Sync",
-    desc: "Every workspace is synced to Supabase. Last-write-wins conflict resolution keeps your state consistent across devices.",
-  },
-  {
-    icon: Columns,
-    title: "Task Board",
-    desc: "A built-in Kanban board tied to each workspace. Create, move, archive and filter tasks without ever leaving your IDE.",
-  },
-  {
-    icon: Globe,
-    title: "Browser Integration",
-    desc: "Run browser panes inside the workspace so you can inspect live apps, validate flows, and keep browser context next to your terminal sessions.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "File Ownership",
-    desc: "Prevent agent conflicts with a deterministic file ownership system. Agents request, hold and release file locks gracefully.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Crash Recovery",
-    desc: "Automatic crash detection and state recovery on restart. Your environment comes back exactly where you left it.",
-  },
-  {
-    icon: Zap,
-    title: "Auto-Updates",
-    desc: "Silent background update checks via electron-updater. Ship features to your team without any manual distribution steps.",
+      "Spin up coordinated agent roles — coordinator, builder, scout and reviewer — that reason, build and review on your codebase in parallel. File ownership keeps them from colliding; blocker detection keeps them from stalling.",
+    features: [
+      ["Agent roles", "Four specialist roles routed by the orchestrator."],
+      ["File ownership", "Deterministic locks prevent agent conflicts."],
+      ["Blocker detection", "Timeouts, crashes and backlogs escalate automatically."],
+    ],
   },
   {
     icon: LayoutDashboard,
-    title: "Workspace Modes",
-    desc: "Start every project in Space, Swarm, or Canvas mode — a focused terminal grid, a multi-agent command center, or a free-form plane.",
+    label: "Workspaces",
+    heading: "Three ways to hold a project.",
+    body:
+      "Every workspace opens in the mode that fits the work. Switch layouts per workspace, save presets, and spin up Node, Python, React or automation templates in one click.",
+    features: [
+      ["Workspace modes", "Environment, Swarm and Wall, switchable per workspace."],
+      ["Layout presets", "Single, 2×2, 3×2 and 4×2 grids, remembered per workspace."],
+      ["Templates", "Node, Python AI, React and automation, set up in one click."],
+    ],
   },
   {
-    icon: Move,
-    title: "Canvas Mode",
-    desc: "An infinite pan-and-zoom canvas where terminals become cards you arrange spatially — built for sprawling, multi-service projects.",
+    icon: Terminal,
+    label: "Terminal & browser",
+    heading: "Real shells. Live web. One window.",
+    body:
+      "Full pseudo-terminal support through node-pty — multiple panes, xterm rendering and per-pane working directories. Open browser panes right beside them to inspect apps without leaving the shell.",
+    features: [
+      ["PTY terminals", "Real shells with persistent session snapshots."],
+      ["Browser panes", "Inspect live web apps next to your terminals."],
+      ["Command safety", "A guard flags rm -rf, force pushes and disk formats."],
+    ],
   },
   {
-    icon: Network,
-    title: "Mindmap View",
-    desc: "Visualise how tasks, agents and files connect. The live mindmap maps task-to-file ownership so you always see who's touching what.",
-  },
-  {
-    icon: LayoutGrid,
-    title: "Layout Presets",
-    desc: "Switch instantly between card-grid presets — single pane, 2×2, 3×2, 4×2 — and Vibe ADE remembers the layout per workspace.",
-  },
-  {
-    icon: Package,
-    title: "Workspace Templates",
-    desc: "Spin up Node, Python AI, React or automation workspaces in one click. Templates run their setup commands sequentially with live progress.",
-  },
-  {
-    icon: ShieldAlert,
-    title: "Command Safety",
-    desc: "A destructive-command guard flags risky operations — rm -rf, git reset --hard, disk formats, force pushes — before they run.",
-  },
-  {
-    icon: Radar,
-    title: "Blocker Detection",
-    desc: "Stuck agents never stay stuck. Vibe ADE detects timeouts, file conflicts, crashes and message backlogs, then escalates automatically.",
+    icon: RefreshCw,
+    label: "Reliability & sync",
+    heading: "Never lose your place.",
+    body:
+      "Cloud sync keeps every workspace consistent across sessions, crash recovery restores your environment exactly where you left it, and silent background updates ship features without manual steps.",
+    features: [
+      ["Cloud sync", "Last-write-wins keeps state consistent everywhere."],
+      ["Crash recovery", "Your environment returns exactly as you left it."],
+      ["Auto-updates", "Signed Windows installers, delivered silently."],
+    ],
   },
 ];
 
-const techStack = [
-  "Electron 34",
-  "React 18",
-  "TypeScript",
-  "node-pty",
-  "Zustand",
-  "Supabase",
+const modes: [string, string][] = [
+  ["Environment", "A focused terminal grid for everyday work — panes, tabs and presets."],
+  ["Swarm", "A multi-agent command centre where the swarm ships alongside you."],
+  ["Wall", "A free-form pan-and-zoom plane where terminals become cards."],
 ];
+
+function TermLine({ prefix, text, color }: { prefix: string; text: string; color: string }) {
+  return (
+    <div style={{ display: "flex", gap: "8px" }}>
+      <span style={{ color, flexShrink: 0 }}>{prefix}</span>
+      <span style={{ color: "rgba(243,238,229,0.78)" }}>{text}</span>
+    </div>
+  );
+}
 
 const VibeADE = () => {
   const [releaseOpen, setReleaseOpen] = useState(false);
@@ -164,33 +129,34 @@ const VibeADE = () => {
       highlights: [
         "Windows-native AI development environment with multi-agent swarms, PTY terminals, and intelligent workspaces.",
         "Subscription-ready experience with Spark, Flux, and Forge tiers, usage tracking, and upgrade paths.",
-        "Production-grade onboarding, environment management, cloud sync foundation, and browser panes."
+        "Production-grade onboarding, environment management, cloud sync foundation, and browser panes.",
       ],
       whatsNew: [
         "Multi-agent QuanSwarm orchestration with coordinated roles and live state.",
         "Per-pane working directory awareness and terminal session persistence.",
         "Browser integration with live web app inspection alongside terminal panes.",
         "Task Board with filtering, archiving, and export for workflow continuity.",
-        "Plan-aware UX controls, locking, and in-app upgrade prompts."
+        "Plan-aware UX controls, locking, and in-app upgrade prompts.",
       ],
       fixes: [
         "Improved terminal session stability, layout switching, and pane management.",
         "Refined UI consistency across themes, dialogs, and workspace controls.",
-        "Streamlined update checks, release delivery, and download flows."
+        "Streamlined update checks, release delivery, and download flows.",
       ],
       known: [
         "Windows only for this release; macOS support is planned.",
         "Auto-update delivery is limited to signed Windows installers.",
-        "Some third-party LLM CLIs may require manual setup for advanced integrations."
-      ]
+        "Some third-party LLM CLIs may require manual setup for advanced integrations.",
+      ],
     }),
     []
   );
+
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
         title="Vibe ADE — AI-Powered Windows Development Environment | QuanSynd"
-        description="Vibe ADE is a Windows-native development environment with multi-agent AI swarms, PTY terminals, smart workspaces, and cloud sync. Build faster, with intelligence."
+        description="Vibe ADE is a Windows-native agentic development environment with multi-agent AI swarms, PTY terminals, smart workspaces, and cloud sync. Build faster, with intelligence."
         canonicalPath="/products/vibe-ade"
         ogType="website"
       />
@@ -202,278 +168,277 @@ const VibeADE = () => {
         style={{
           minHeight: "100vh",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          padding: "120px 24px 0",
+          padding: "140px 24px 80px",
           position: "relative",
         }}
       >
-        <div
-          style={{
-            maxWidth: "800px",
-            width: "100%",
-            textAlign: "center",
-            paddingBottom: "64px",
-          }}
-        >
-          {/* Eyebrow */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "12px",
-              marginBottom: "28px",
-              borderLeft: "2px solid var(--amber)",
-              paddingLeft: "12px",
-            }}
-          >
-            <span className="amber-label">Products — Vibe ADE</span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="hero-headline"
-            style={{
-              fontFamily: "'Instrument Serif', serif",
-              fontWeight: 400,
-              fontSize: "clamp(2.8rem, 6vw, 5rem)",
-              lineHeight: "1.08",
-              letterSpacing: "-0.02em",
-              color: "var(--ink)",
-              marginBottom: "24px",
-            }}
-          >
-            Your AI Development Environment.{" "}
-            <em style={{ fontStyle: "italic" }}>Amplified.</em>
-          </h1>
-
-          {/* Subheadline */}
-          <p
-            style={{
-              fontFamily: "'Geist', sans-serif",
-              fontSize: "18px",
-              lineHeight: "1.7",
-              color: "var(--muted-ui)",
-              maxWidth: "580px",
-              margin: "0 auto 40px",
-            }}
-          >
-            A Windows-native IDE with multi-agent AI swarms, persistent PTY
-            terminals, and intelligent workspace management — all in one
-            Electron-powered shell.
-          </p>
-
-          {/* CTAs */}
-          <div
-            className="cta-buttons-row"
-            style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
-          >
-            <a
-              href={VIBE_ADE_DOWNLOAD_URL}
-              download
-              className="amber-btn"
+        <div className="vibe-hero-grid">
+          {/* Left — copy */}
+          <div>
+            <div
               style={{
-                padding: "14px 28px",
-                borderRadius: "6px",
-                fontSize: "15px",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "8px",
-                textDecoration: "none",
+                gap: "12px",
+                marginBottom: "26px",
+                borderLeft: "2px solid var(--amber)",
+                paddingLeft: "12px",
               }}
             >
-              <Download size={16} /> Download Free
-            </a>
-            <a
-              href="#release-notes"
-              onClick={(event) => {
-                event.preventDefault();
-                setReleaseOpen(true);
-              }}
-              className="outline-ink-btn"
+              <span className="amber-label">Products — Vibe ADE</span>
+            </div>
+
+            <h1
+              className="hero-headline"
               style={{
-                padding: "14px 28px",
-                borderRadius: "6px",
-                fontSize: "15px",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                textDecoration: "none",
+                fontFamily: "'Instrument Serif', serif",
+                fontWeight: 400,
+                fontSize: "clamp(2.6rem, 5vw, 4.4rem)",
+                lineHeight: "1.06",
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                marginBottom: "22px",
               }}
             >
-              <Github size={16} /> View Release Notes
-            </a>
-          </div>
+              The agentic development environment for{" "}
+              <em style={{ fontStyle: "italic" }}>Windows.</em>
+            </h1>
 
-          <p
-            style={{
-              fontFamily: "'Geist Mono', monospace",
-              fontSize: "10px",
-              letterSpacing: "0.07em",
-              color: "var(--muted-ui)",
-              opacity: 0.65,
-              marginTop: "24px",
-              textTransform: "uppercase",
-            }}
-          >
-            Windows · Subscription · v{DOWNLOAD_VERSION}
-          </p>
-        </div>
+            <p
+              style={{
+                fontFamily: "'Geist', sans-serif",
+                fontSize: "17px",
+                lineHeight: "1.7",
+                color: "var(--muted-ui)",
+                maxWidth: "480px",
+                marginBottom: "34px",
+              }}
+            >
+              Multi-agent swarms, persistent PTY terminals, and intelligent
+              workspaces in one native shell — where AI agents are first-class
+              citizens of your workflow, not a plugin.
+            </p>
 
-        {/* Terminal mockup */}
-        <div
-          className="vibe-terminal-mockup"
-          style={{
-            width: "100%",
-            maxWidth: "900px",
-            margin: "0 auto",
-            borderRadius: "10px 10px 0 0",
-            overflow: "hidden",
-            border: "1px solid var(--rule)",
-            borderBottom: "none",
-            boxShadow: "var(--shadow-card)",
-          }}
-        >
-          {/* Window chrome */}
-          <div
-            style={{
-              background: "var(--ink)",
-              padding: "10px 16px",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
-            {["#ff5f57", "#febc2e", "#28c840"].map((c, i) => (
-              <span
-                key={i}
+            <div
+              className="cta-buttons-row"
+              style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}
+            >
+              <a
+                href={VIBE_ADE_DOWNLOAD_URL}
+                download
+                className="amber-btn"
                 style={{
-                  width: "12px",
-                  height: "12px",
-                  borderRadius: "50%",
-                  background: c,
-                  display: "inline-block",
-                  opacity: 0.85,
+                  padding: "14px 28px",
+                  borderRadius: "6px",
+                  fontSize: "15px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  textDecoration: "none",
                 }}
-              />
-            ))}
-            <span
+              >
+                <Download size={16} /> Download Free
+              </a>
+              <button
+                type="button"
+                onClick={() => setReleaseOpen(true)}
+                className="outline-ink-btn"
+                style={{
+                  padding: "14px 28px",
+                  borderRadius: "6px",
+                  fontSize: "15px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  cursor: "pointer",
+                  background: "transparent",
+                }}
+              >
+                <FileText size={16} /> Release Notes
+              </button>
+            </div>
+
+            <p
               style={{
                 fontFamily: "'Geist Mono', monospace",
-                fontSize: "11px",
-                color: "rgba(255,255,255,0.35)",
-                marginLeft: "8px",
-                letterSpacing: "0.04em",
+                fontSize: "10px",
+                letterSpacing: "0.07em",
+                color: "var(--muted-ui)",
+                opacity: 0.65,
+                marginTop: "22px",
+                textTransform: "uppercase",
               }}
             >
-              Vibe ADE — my-project
-            </span>
+              Windows · Subscription · v{DOWNLOAD_VERSION}
+            </p>
           </div>
-          {/* Terminal lines */}
-          <div
-            style={{
-              background: "#161411",
-              padding: "20px 24px",
-              fontFamily: "'Geist Mono', monospace",
-              fontSize: "13px",
-              lineHeight: "1.9",
-              display: "flex",
-              flexDirection: "column",
-              gap: "2px",
-            }}
-          >
-            {[
-              { prefix: "❯", text: "vibe swarm --goal 'Build REST API with auth'", color: "#d79a3d" },
-              { prefix: "●", text: "Coordinator: Analysing codebase...", color: "#22c55e" },
-              { prefix: "●", text: "Builder:     Scaffolding /src/routes/auth.ts", color: "#60a5fa" },
-              { prefix: "●", text: "Scout:       Reading existing type defs...", color: "#a78bfa" },
-              { prefix: "●", text: "Reviewer:    style validation → PASS", color: "#34d399" },
-              { prefix: "❯", text: "_", color: "#d79a3d" },
-            ].map((l, i) => (
-              <div key={i} style={{ display: "flex", gap: "10px" }}>
-                <span style={{ color: l.color, flexShrink: 0 }}>{l.prefix}</span>
-                <span style={{ color: "rgba(243,238,229,0.8)" }}>{l.text}</span>
+
+          {/* Right — app window mock */}
+          <div className="vibe-app-mock">
+            <div className="vibe-app-titlebar">
+              {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
+                <span
+                  key={c}
+                  style={{
+                    width: "11px",
+                    height: "11px",
+                    borderRadius: "50%",
+                    background: c,
+                    display: "inline-block",
+                    opacity: 0.9,
+                  }}
+                />
+              ))}
+              <div style={{ display: "flex", gap: "6px", marginLeft: "12px" }}>
+                {([
+                  ["environment", false],
+                  ["swarm", true],
+                  ["wall", false],
+                ] as [string, boolean][]).map(([name, active]) => (
+                  <span
+                    key={name}
+                    style={{
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "10px",
+                      letterSpacing: "0.04em",
+                      textTransform: "uppercase",
+                      padding: "3px 9px",
+                      borderRadius: "4px",
+                      color: active ? "#f3eee5" : "rgba(243,238,229,0.4)",
+                      background: active ? "rgba(215,154,61,0.18)" : "transparent",
+                      border: active
+                        ? "1px solid rgba(215,154,61,0.45)"
+                        : "1px solid transparent",
+                    }}
+                  >
+                    {name}
+                  </span>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div className="vibe-app-body">
+              {/* Rail */}
+              <div
+                style={{
+                  background: "#1a1714",
+                  borderRight: "1px solid rgba(255,255,255,0.05)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "16px",
+                  padding: "14px 0",
+                }}
+              >
+                {[Cpu, Terminal, LayoutDashboard, RefreshCw].map((Icon, i) => (
+                  <Icon
+                    key={i}
+                    size={15}
+                    style={{ color: i === 0 ? "var(--amber)" : "rgba(243,238,229,0.3)" }}
+                  />
+                ))}
+              </div>
+
+              {/* Main pane */}
+              <div className="vibe-app-pane">
+                <TermLine prefix="❯" text="vibe swarm --goal 'Build REST API with auth'" color="#d79a3d" />
+                <TermLine prefix="●" text="Coordinator  analysing codebase…" color="#22c55e" />
+                <TermLine prefix="●" text="Builder      scaffolding /src/routes/auth.ts" color="#60a5fa" />
+                <TermLine prefix="●" text="Scout        reading existing type defs…" color="#a78bfa" />
+                <TermLine prefix="●" text="Reviewer     style validation → PASS" color="#34d399" />
+                <TermLine prefix="❯" text="_" color="#d79a3d" />
+              </div>
+
+              {/* Task board */}
+              <div
+                className="vibe-app-board"
+                style={{
+                  background: "#1a1714",
+                  borderLeft: "1px solid rgba(255,255,255,0.05)",
+                  padding: "12px 10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: "9px",
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "rgba(243,238,229,0.35)",
+                  }}
+                >
+                  Task board
+                </span>
+                {[
+                  ["Auth routes", "#34d399"],
+                  ["Type defs", "#60a5fa"],
+                  ["Tests", "#febc2e"],
+                ].map(([t, c]) => (
+                  <div
+                    key={t}
+                    style={{
+                      background: "#13100d",
+                      border: "1px solid rgba(255,255,255,0.05)",
+                      borderRadius: "5px",
+                      padding: "8px 9px",
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "10px",
+                      color: "rgba(243,238,229,0.7)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "7px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: c,
+                        flexShrink: 0,
+                      }}
+                    />
+                    {t}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── 3-FEATURE STRIP ──────────────────────────────────── */}
+      {/* ── STAT BAND ─────────────────────────────────────────── */}
       <section
         className="cream-section"
         style={{
-          padding: "80px 24px",
+          padding: "26px 24px",
           borderTop: "1px solid var(--rule)",
           borderBottom: "1px solid var(--rule)",
         }}
       >
-        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-          <div
-            className="vibe-features-strip"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "48px",
-            }}
-          >
-            {features.map((f) => (
-              <div
-                key={f.label}
-                style={f.label === "Browser" ? { gridColumn: "2 / 3" } : undefined}
-              >
-                <span className="section-rule" />
-                <span className="amber-label" style={{ display: "block", marginBottom: "12px" }}>
-                  {f.label}
-                </span>
-                <f.icon
-                  size={22}
-                  style={{ color: "var(--amber)", marginBottom: "14px" }}
-                />
-                <h3
-                  style={{
-                    fontFamily: "'Instrument Serif', serif",
-                    fontWeight: 400,
-                    fontSize: "clamp(1.3rem, 2.2vw, 1.6rem)",
-                    letterSpacing: "-0.01em",
-                    color: "var(--ink)",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {f.heading}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "'Geist', sans-serif",
-                    fontSize: "14px",
-                    lineHeight: "1.7",
-                    color: "var(--muted-ui)",
-                  }}
-                >
-                  {f.body}
-                </p>
-              </div>
-            ))}
-          </div>
+        <div className="vibe-statband" style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          {stats.map((s, i) => {
+            const [num, ...rest] = s.split(" ");
+            return (
+              <span key={i}>
+                <b>{num}</b> {rest.join(" ")}
+              </span>
+            );
+          })}
         </div>
       </section>
 
-      {/* ── WHAT IS VIBE ADE — split ──────────────────────────── */}
-      <section
-        className="vibe-split-section"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          minHeight: "520px",
-        }}
-      >
+      {/* ── ADE THESIS — split ────────────────────────────────── */}
+      <section className="vibe-thesis">
         {/* Left — dark */}
         <div
           className="ink-section"
           style={{
-            padding: "80px 64px",
+            padding: "88px 64px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -484,16 +449,16 @@ const VibeADE = () => {
             className="amber-label"
             style={{ display: "block", marginBottom: "12px", color: "var(--amber)" }}
           >
-            What is Vibe ADE
+            Not an IDE. An ADE.
           </span>
           <h2
             style={{
               fontFamily: "'Instrument Serif', serif",
               fontWeight: 400,
-              fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
+              fontSize: "clamp(1.9rem, 3vw, 2.7rem)",
               letterSpacing: "-0.02em",
               color: "var(--paper)",
-              lineHeight: "1.2",
+              lineHeight: "1.18",
               marginBottom: "20px",
             }}
           >
@@ -509,10 +474,10 @@ const VibeADE = () => {
               marginBottom: "16px",
             }}
           >
-            Vibe ADE is an Electron-based development environment built
-            natively for Windows. Unlike traditional IDEs, Vibe ADE puts
-            AI agents at the core — not as a plugin, but as first-class
-            citizens of your workflow.
+            Traditional IDEs bolt AI on as an assistant. Vibe ADE is built the
+            other way around — agents are first-class citizens of the workflow,
+            orchestrated across real terminals, real workspaces and a live
+            browser, natively on Windows.
           </p>
           <p
             style={{
@@ -522,9 +487,9 @@ const VibeADE = () => {
               color: "rgba(245,240,232,0.65)",
             }}
           >
-            Powered by QuanSwarm, teams of specialist AI agents collaborate on
-            your codebase in real time — reasoning, building, reviewing and
-            iterating while you stay in control.
+            Powered by QuanSwarm, teams of specialist agents collaborate on your
+            codebase in real time — reasoning, building, reviewing and iterating
+            while you stay in control.
           </p>
         </div>
 
@@ -532,7 +497,7 @@ const VibeADE = () => {
         <div
           className="cream-section"
           style={{
-            padding: "80px 64px",
+            padding: "88px 64px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -540,36 +505,23 @@ const VibeADE = () => {
           }}
         >
           <span className="amber-label" style={{ display: "block", marginBottom: "24px" }}>
-            Core Capabilities
+            Core capabilities
           </span>
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            {[
-              ["Agent Swarms", "Multiple AI roles coordinating on a single goal"],
-              ["PTY Terminals", "Full shell access with persistent session snapshots"],
-              ["Workspace Tabs", "Multiple dev environments open simultaneously"],
-              ["Browser Integration", "Inspect live web apps in integrated browser panes"],
-              ["Cloud Sync", "State preserved and synced via Supabase"],
-              ["Task Board", "Built-in Kanban per workspace — no external tools"],
-              ["Blocker Detection", "Automatic detection of stalled agents and recovery"],
-            ].map(([title, desc]) => (
-              <div
-                key={title}
-                style={{
-                  display: "flex",
-                  gap: "16px",
-                  alignItems: "flex-start",
-                }}
-              >
+          <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+            {capabilities.map(([title, desc]) => (
+              <div key={title} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
                 <span
                   style={{
-                    width: "6px",
-                    height: "6px",
-                    borderRadius: "50%",
-                    background: "var(--amber)",
+                    color: "var(--amber)",
                     flexShrink: 0,
-                    marginTop: "7px",
+                    fontSize: "13px",
+                    lineHeight: "1.5",
+                    marginTop: "1px",
                   }}
-                />
+                  aria-hidden
+                >
+                  ✶
+                </span>
                 <div>
                   <span
                     style={{
@@ -599,13 +551,13 @@ const VibeADE = () => {
         </div>
       </section>
 
-      {/* ── KEY FEATURES GRID ─────────────────────────────────── */}
+      {/* ── FEATURE PILLARS ───────────────────────────────────── */}
       <section style={{ padding: "96px 24px", background: "var(--paper)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "64px" }}>
+          <div style={{ marginBottom: "72px", maxWidth: "560px" }}>
             <span className="section-rule" />
             <span className="amber-label" style={{ display: "block", marginBottom: "12px" }}>
-              What's Inside
+              What's inside
             </span>
             <h2
               style={{
@@ -614,66 +566,179 @@ const VibeADE = () => {
                 fontSize: "clamp(2rem, 4vw, 3rem)",
                 letterSpacing: "-0.02em",
                 color: "var(--ink)",
-                marginBottom: "12px",
+                lineHeight: "1.12",
               }}
             >
-              Architected for power.{" "}
-              <em style={{ fontStyle: "italic" }}>Built for developers.</em>
+              Four pillars, one{" "}
+              <em style={{ fontStyle: "italic" }}>coherent shell.</em>
             </h2>
-            <p
-              style={{
-                fontFamily: "'Geist', sans-serif",
-                fontSize: "16px",
-                color: "var(--muted-ui)",
-                maxWidth: "480px",
-              }}
-            >
-              Every component of Vibe ADE is purpose-built to make AI-assisted
-              development feel natural and reliable.
-            </p>
           </div>
 
-          <div
-            className="vibe-features-grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "24px",
-            }}
-          >
-            {keyFeatures.map((feat) => (
-              <div
-                key={feat.title}
-                className="editorial-card"
-                style={{
-                  padding: "32px 28px",
-                }}
-              >
-                <feat.icon
-                  size={20}
-                  style={{ color: "var(--amber)", marginBottom: "16px" }}
-                />
+          <div style={{ display: "flex", flexDirection: "column", gap: "88px" }}>
+            {pillars.map((p, i) => (
+              <div key={p.label} className={`vibe-pillar${i % 2 === 1 ? " reverse" : ""}`}>
+                {/* Text */}
+                <div>
+                  <span className="amber-label" style={{ display: "block", marginBottom: "14px" }}>
+                    {String(i + 1).padStart(2, "0")} — {p.label}
+                  </span>
+                  <h3
+                    style={{
+                      fontFamily: "'Instrument Serif', serif",
+                      fontWeight: 400,
+                      fontSize: "clamp(1.5rem, 2.6vw, 2.1rem)",
+                      letterSpacing: "-0.01em",
+                      color: "var(--ink)",
+                      lineHeight: "1.15",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    {p.heading}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: "'Geist', sans-serif",
+                      fontSize: "15px",
+                      lineHeight: "1.75",
+                      color: "var(--muted-ui)",
+                      marginBottom: "26px",
+                    }}
+                  >
+                    {p.body}
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                    {p.features.map(([t, d]) => (
+                      <div key={t} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                        <span
+                          style={{ color: "var(--amber)", flexShrink: 0, fontSize: "12px", marginTop: "2px" }}
+                          aria-hidden
+                        >
+                          ✶
+                        </span>
+                        <div>
+                          <span
+                            style={{
+                              fontFamily: "'Geist', sans-serif",
+                              fontWeight: 600,
+                              fontSize: "13.5px",
+                              color: "var(--ink)",
+                            }}
+                          >
+                            {t}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: "'Geist', sans-serif",
+                              fontSize: "13px",
+                              color: "var(--muted-ui)",
+                              marginLeft: "7px",
+                            }}
+                          >
+                            — {d}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Visual */}
+                <div
+                  className="vibe-pillar-visual editorial-card"
+                  style={{
+                    minHeight: "300px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background:
+                      "linear-gradient(155deg, var(--cream) 0%, var(--paper) 100%)",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  <p.icon size={120} strokeWidth={1} style={{ color: "var(--amber)", opacity: 0.18 }} />
+                  <span
+                    className="amber-label"
+                    style={{
+                      position: "absolute",
+                      bottom: "20px",
+                      left: "24px",
+                      color: "var(--amber-dim)",
+                    }}
+                  >
+                    {p.label}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── WORKSPACE MODES ───────────────────────────────────── */}
+      <section
+        className="cream-section"
+        style={{
+          padding: "96px 24px",
+          borderTop: "1px solid var(--rule)",
+          borderBottom: "1px solid var(--rule)",
+        }}
+      >
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <div style={{ marginBottom: "56px", maxWidth: "560px" }}>
+            <span className="section-rule" />
+            <span className="amber-label" style={{ display: "block", marginBottom: "12px" }}>
+              Workspace modes
+            </span>
+            <h2
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontWeight: 400,
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                lineHeight: "1.12",
+              }}
+            >
+              One shell.{" "}
+              <em style={{ fontStyle: "italic" }}>Three ways to work.</em>
+            </h2>
+          </div>
+
+          <div className="vibe-modes-grid">
+            {modes.map(([name, desc], i) => (
+              <div key={name} className="editorial-card" style={{ padding: "32px 28px" }}>
+                <span
+                  style={{
+                    fontFamily: "'Geist Mono', monospace",
+                    fontSize: "11px",
+                    letterSpacing: "0.08em",
+                    color: "var(--amber)",
+                  }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <h3
                   style={{
                     fontFamily: "'Instrument Serif', serif",
                     fontWeight: 400,
-                    fontSize: "1.2rem",
+                    fontSize: "1.5rem",
                     letterSpacing: "-0.01em",
                     color: "var(--ink)",
-                    marginBottom: "10px",
+                    margin: "10px 0 10px",
                   }}
                 >
-                  {feat.title}
+                  {name}
                 </h3>
                 <p
                   style={{
                     fontFamily: "'Geist', sans-serif",
-                    fontSize: "13px",
+                    fontSize: "14px",
                     lineHeight: "1.7",
                     color: "var(--muted-ui)",
                   }}
                 >
-                  {feat.desc}
+                  {desc}
                 </p>
               </div>
             ))}
@@ -681,15 +746,79 @@ const VibeADE = () => {
         </div>
       </section>
 
+      {/* ── VIBE PET CALLOUT ──────────────────────────────────── */}
+      <section
+        className="cream-section"
+        style={{ padding: "64px 24px", borderBottom: "1px solid var(--rule)" }}
+      >
+        <div
+          style={{
+            maxWidth: "1280px",
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            gap: "32px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{
+              width: "88px",
+              height: "88px",
+              borderRadius: "50%",
+              border: "1px solid var(--rule)",
+              background: "var(--paper)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              boxShadow: "var(--shadow-card)",
+            }}
+          >
+            <Ghost size={40} style={{ color: "var(--amber)" }} />
+          </div>
+          <div style={{ flex: 1, minWidth: "280px" }}>
+            <span className="amber-label" style={{ display: "block", marginBottom: "10px" }}>
+              Meet the Vibe
+            </span>
+            <h2
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontWeight: 400,
+                fontSize: "clamp(1.6rem, 3vw, 2.3rem)",
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                marginBottom: "12px",
+                lineHeight: 1.2,
+              }}
+            >
+              Your workspace has a <em style={{ fontStyle: "italic" }}>companion.</em>
+            </h2>
+            <p
+              style={{
+                fontFamily: "'Geist', sans-serif",
+                fontSize: "15px",
+                lineHeight: 1.7,
+                color: "var(--muted-ui)",
+                maxWidth: "620px",
+              }}
+            >
+              The Vibe is a small, draggable mascot that floats on your workspace
+              — breathing softly, staying out of the way, and following along
+              wherever you place it. Switch it on or off any time from Settings.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ── CTA ───────────────────────────────────────────────── */}
-      <section
-        className="ink-section"
-        style={{ padding: "96px 24px", textAlign: "center" }}
-      >
+      <section className="ink-section" style={{ padding: "96px 24px", textAlign: "center" }}>
         <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-          <span className="amber-label" style={{ display: "block", marginBottom: "20px", color: "var(--amber)" }}>
-            Get Started
+          <span
+            className="amber-label"
+            style={{ display: "block", marginBottom: "20px", color: "var(--amber)" }}
+          >
+            Get started
           </span>
           <h2
             style={{
@@ -714,8 +843,8 @@ const VibeADE = () => {
               marginBottom: "40px",
             }}
           >
-            Download Vibe ADE for free and bring the power of multi-agent AI
-            into your development environment today.
+            Download Vibe ADE for free and bring the power of multi-agent AI into
+            your development environment today.
           </p>
           <div
             className="cta-buttons-row"
@@ -737,19 +866,18 @@ const VibeADE = () => {
             >
               <Download size={16} /> Download Vibe ADE
             </a>
-            <a
-              href="#release-notes"
-              onClick={(event) => {
-                event.preventDefault();
-                setReleaseOpen(true);
-              }}
+            <button
+              type="button"
+              onClick={() => setReleaseOpen(true)}
               style={{
                 fontFamily: "'Geist Mono', monospace",
                 fontSize: "12px",
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 color: "rgba(245,240,232,0.45)",
-                textDecoration: "none",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "8px",
@@ -757,14 +885,14 @@ const VibeADE = () => {
                 transition: "color 0.18s ease",
               }}
               onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,240,232,0.9)")
+                ((e.currentTarget as HTMLButtonElement).style.color = "rgba(245,240,232,0.9)")
               }
               onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,240,232,0.45)")
+                ((e.currentTarget as HTMLButtonElement).style.color = "rgba(245,240,232,0.45)")
               }
             >
-              <Github size={14} /> View Release Notes
-            </a>
+              <FileText size={14} /> View Release Notes
+            </button>
           </div>
           <p
             style={{
@@ -789,10 +917,7 @@ const VibeADE = () => {
           aria-label="Release Notes"
           onClick={() => setReleaseOpen(false)}
         >
-          <section
-            className="release-notes-modal"
-            onClick={(event) => event.stopPropagation()}
-          >
+          <section className="release-notes-modal" onClick={(event) => event.stopPropagation()}>
             <header className="release-notes-header">
               <div>
                 <span className="release-notes-kicker">Release Notes</span>
@@ -818,8 +943,8 @@ const VibeADE = () => {
               <strong>{releaseNotes.intro}</strong>
               <p>
                 Vibe ADE is now production-ready for Windows teams building with
-                AI. This release focuses on stability, orchestration, and
-                polished workflows for serious daily use.
+                AI. This release focuses on stability, orchestration, and polished
+                workflows for serious daily use.
               </p>
             </div>
 
@@ -828,7 +953,7 @@ const VibeADE = () => {
                 { title: "Highlights", items: releaseNotes.highlights },
                 { title: "What’s New", items: releaseNotes.whatsNew },
                 { title: "Fixes & Stability", items: releaseNotes.fixes },
-                { title: "Known Limitations", items: releaseNotes.known }
+                { title: "Known Limitations", items: releaseNotes.known },
               ].map((section) => (
                 <div key={section.title} className="release-notes-section">
                   <h3>{section.title}</h3>
@@ -875,7 +1000,9 @@ const VibeADE = () => {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
               <span className="amber-label">Also from QuanSynd</span>
-              <span className="qb-live-pill" style={{ marginLeft: 0 }}>LIVE</span>
+              <span className="qb-live-pill" style={{ marginLeft: 0 }}>
+                LIVE
+              </span>
             </div>
             <h2
               style={{
