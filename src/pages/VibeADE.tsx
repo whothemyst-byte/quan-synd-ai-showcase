@@ -14,6 +14,13 @@ import {
   ShieldCheck,
   RefreshCw,
   Zap,
+  LayoutDashboard,
+  Move,
+  Network,
+  LayoutGrid,
+  Package,
+  ShieldAlert,
+  Radar,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -90,6 +97,41 @@ const keyFeatures = [
     title: "Auto-Updates",
     desc: "Silent background update checks via electron-updater. Ship features to your team without any manual distribution steps.",
   },
+  {
+    icon: LayoutDashboard,
+    title: "Workspace Modes",
+    desc: "Start every project in Space, Swarm, or Canvas mode — a focused terminal grid, a multi-agent command center, or a free-form plane.",
+  },
+  {
+    icon: Move,
+    title: "Canvas Mode",
+    desc: "An infinite pan-and-zoom canvas where terminals become cards you arrange spatially — built for sprawling, multi-service projects.",
+  },
+  {
+    icon: Network,
+    title: "Mindmap View",
+    desc: "Visualise how tasks, agents and files connect. The live mindmap maps task-to-file ownership so you always see who's touching what.",
+  },
+  {
+    icon: LayoutGrid,
+    title: "Layout Presets",
+    desc: "Switch instantly between card-grid presets — single pane, 2×2, 3×2, 4×2 — and Vibe ADE remembers the layout per workspace.",
+  },
+  {
+    icon: Package,
+    title: "Workspace Templates",
+    desc: "Spin up Node, Python AI, React or automation workspaces in one click. Templates run their setup commands sequentially with live progress.",
+  },
+  {
+    icon: ShieldAlert,
+    title: "Command Safety",
+    desc: "A destructive-command guard flags risky operations — rm -rf, git reset --hard, disk formats, force pushes — before they run.",
+  },
+  {
+    icon: Radar,
+    title: "Blocker Detection",
+    desc: "Stuck agents never stay stuck. Vibe ADE detects timeouts, file conflicts, crashes and message backlogs, then escalates automatically.",
+  },
 ];
 
 const techStack = [
@@ -117,8 +159,8 @@ const VibeADE = () => {
   const releaseNotes = useMemo(
     () => ({
       version: `v${DOWNLOAD_VERSION}`,
-      date: "May 9, 2026",
-      intro: "Vibe ADE 0.4.0 ships the current Windows installer and update channel.",
+      date: "June 1, 2026",
+      intro: `Vibe ADE ${DOWNLOAD_VERSION} ships the current Windows installer and update channel.`,
       highlights: [
         "Windows-native AI development environment with multi-agent swarms, PTY terminals, and intelligent workspaces.",
         "Subscription-ready experience with Spark, Flux, and Forge tiers, usage tracking, and upgrade paths.",
@@ -605,7 +647,6 @@ const VibeADE = () => {
                 className="editorial-card"
                 style={{
                   padding: "32px 28px",
-                  ...(feat.title === "Auto-Updates" ? { gridColumn: "2 / 3" } : null),
                 }}
               >
                 <feat.icon

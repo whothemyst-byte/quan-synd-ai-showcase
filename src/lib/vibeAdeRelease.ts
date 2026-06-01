@@ -1,4 +1,4 @@
-export const VIBE_ADE_DOWNLOAD_VERSION = "0.4.1";
+export const VIBE_ADE_DOWNLOAD_VERSION = "0.5.5";
 export const VIBE_ADE_DOWNLOAD_FILENAME = `Vibe-ADE-${VIBE_ADE_DOWNLOAD_VERSION}-setup-x64.exe`;
 
 export const VIBE_ADE_DOWNLOAD_URL =
