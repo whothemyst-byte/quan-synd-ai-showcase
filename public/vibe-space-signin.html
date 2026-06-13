@@ -111,26 +111,34 @@
         if (!isLocalRedirect(redirect)) { fail("Invalid return address."); return; }
         if (provider !== "google" && provider !== "github") { fail("Unsupported sign-in provider."); return; }
 
+        const startUrl = selfUrl();        // start page (no callback marker)
+        const cbUrl = startUrl + "&cb=1";  // dedicated OAuth-return marker we control
+
         try {
           await loadClerk();
           const clerk = window.Clerk;
           await clerk.load();
 
-          // Already signed in (or clerk-js auto-processed the OAuth callback on load).
+          // 1) Already signed in -> hand the session back to the app.
           if (clerk.user) { await handoff(clerk); return; }
 
-          // Returning from the provider but not yet finalized — process the callback.
-          if (location.href.includes("__clerk")) {
-            await clerk.handleRedirectCallback({});
+          // 2) Returning from the provider (our own cb marker) -> finalize the sign-in.
+          //    handleRedirectCallback completes the session and navigates to afterSignInUrl
+          //    (startUrl, no marker), where branch 1 then runs the handoff.
+          if (params.get("cb") === "1") {
+            setStatus("Completing sign-in…");
+            await clerk.handleRedirectCallback({ afterSignInUrl: startUrl, afterSignUpUrl: startUrl });
             if (clerk.user) { await handoff(clerk); return; }
+            fail("Could not complete sign-in. Please try again.");
+            return;
           }
 
-          // Fresh start: kick off OAuth in this real browser.
+          // 3) Fresh start: kick off OAuth in this real browser.
           setStatus("Redirecting to " + provider + "…");
           await clerk.client.signIn.authenticateWithRedirect({
             strategy: "oauth_" + provider,
-            redirectUrl: selfUrl(),
-            redirectUrlComplete: selfUrl(),
+            redirectUrl: cbUrl,
+            redirectUrlComplete: startUrl,
           });
         } catch (e) {
           fail((e && e.message) ? e.message : String(e));
