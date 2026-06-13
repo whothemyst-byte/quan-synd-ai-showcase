@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Sign in to Vibe Space</title>
+    <style>
+      :root {
+        --bg: #12110f; --surface: #161411; --rule: rgba(243,238,229,.14);
+        --text: #f3eee5; --muted: #b1a692; --accent: #d79a3d; --danger: #c0563f;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        background: radial-gradient(1200px 600px at 50% -10%, rgba(215,154,61,.06), transparent 60%), var(--bg);
+        color: var(--text); font: 15px/1.5 "Geist", system-ui, -apple-system, sans-serif;
+        display: grid; place-items: center;
+      }
+      .card {
+        width: 360px; max-width: calc(100vw - 48px); text-align: center;
+        background: var(--surface); border: 1px solid var(--rule); border-radius: 12px;
+        box-shadow: 0 10px 30px -18px rgba(0,0,0,.6); padding: 40px 32px;
+      }
+      h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 32px; margin: 0 0 6px; }
+      .sub { color: var(--muted); font-size: 13px; margin: 0 0 24px; }
+      .spinner {
+        width: 28px; height: 28px; margin: 8px auto 0; border-radius: 50%;
+        border: 3px solid var(--rule); border-top-color: var(--accent); animation: spin .8s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      #status { color: var(--muted); font-size: 13px; margin-top: 18px; min-height: 1em; }
+      #err { color: var(--danger); font-size: 13px; margin-top: 14px; min-height: 1em; }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Vibe Space</h1>
+      <p class="sub">Secure sign-in</p>
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="status">Starting…</p>
+      <p id="err"></p>
+    </main>
+
+    <script>
+      // --- Configuration (all values here are public/safe to expose) ---
+      const PUBLISHABLE_KEY = "pk_test_Y29zbWljLXNoaW5lci01NS5jbGVyay5hY2NvdW50cy5kZXYk";
+      const FAPI = "https://cosmic-shiner-55.clerk.accounts.dev";
+      const TICKET_ENDPOINT = "https://tfaouguiyvmfarfqungk.supabase.co/functions/v1/clerk-ticket";
+      const SUPABASE_ANON = "sb_publishable_v8wsw73IIk2hMpoSIjz55Q_CeHSJRNA";
+
+      const params = new URLSearchParams(location.search);
+      const provider = params.get("provider"); // "google" | "github"
+      const redirect = params.get("redirect"); // http://127.0.0.1:<port>
+      const state = params.get("state") || "";
+
+      const statusEl = document.getElementById("status");
+      const errEl = document.getElementById("err");
+      const setStatus = (s) => { statusEl.textContent = s; };
+      const fail = (m) => { errEl.textContent = m; setStatus(""); };
+
+      function isLocalRedirect(u) {
+        try {
+          const x = new URL(u);
+          return x.protocol === "http:" && (x.hostname === "127.0.0.1" || x.hostname === "localhost");
+        } catch { return false; }
+      }
+
+      function selfUrl() {
+        return location.origin + location.pathname +
+          "?provider=" + encodeURIComponent(provider) +
+          "&redirect=" + encodeURIComponent(redirect) +
+          "&state=" + encodeURIComponent(state);
+      }
+
+      function loadClerk() {
+        return new Promise((resolve, reject) => {
+          const s = document.createElement("script");
+          s.async = true;
+          s.crossOrigin = "anonymous";
+          s.setAttribute("data-clerk-publishable-key", PUBLISHABLE_KEY);
+          s.src = FAPI + "/npm/@clerk/clerk-js@5/dist/clerk.browser.js";
+          s.onload = () => resolve();
+          s.onerror = () => reject(new Error("Failed to load Clerk."));
+          document.head.appendChild(s);
+        });
+      }
+
+      async function handoff(clerk) {
+        setStatus("Finishing up…");
+        const token = await clerk.session.getToken();
+        const res = await fetch(TICKET_ENDPOINT, {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + token,
+            apikey: SUPABASE_ANON,
+            "Content-Type": "application/json",
+          },
+        });
+        if (!res.ok) { fail("Could not complete sign-in (error " + res.status + "). Please try again."); return; }
+        const data = await res.json();
+        if (!data.ticket) { fail("Sign-in token missing. Please try again."); return; }
+        const url = redirect.replace(/\/+$/, "") + "/?ticket=" + encodeURIComponent(data.ticket) +
+          "&state=" + encodeURIComponent(state);
+        setStatus("Signed in — returning to Vibe Space…");
+        location.replace(url);
+      }
+
+      (async () => {
+        if (!provider || !redirect) { fail("Invalid sign-in request (missing parameters)."); return; }
+        if (!isLocalRedirect(redirect)) { fail("Invalid return address."); return; }
+        if (provider !== "google" && provider !== "github") { fail("Unsupported sign-in provider."); return; }
+
+        try {
+          await loadClerk();
+          const clerk = window.Clerk;
+          await clerk.load();
+
+          // Already signed in (or clerk-js auto-processed the OAuth callback on load).
+          if (clerk.user) { await handoff(clerk); return; }
+
+          // Returning from the provider but not yet finalized — process the callback.
+          if (location.href.includes("__clerk")) {
+            await clerk.handleRedirectCallback({});
+            if (clerk.user) { await handoff(clerk); return; }
+          }
+
+          // Fresh start: kick off OAuth in this real browser.
+          setStatus("Redirecting to " + provider + "…");
+          await clerk.client.signIn.authenticateWithRedirect({
+            strategy: "oauth_" + provider,
+            redirectUrl: selfUrl(),
+            redirectUrlComplete: selfUrl(),
+          });
+        } catch (e) {
+          fail((e && e.message) ? e.message : String(e));
+        }
+      })();
+    </script>
+  </body>
+</html>
