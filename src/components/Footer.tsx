@@ -197,7 +197,7 @@ const Footer = () => {
               {["Graphic Design", "AI-Powered Business Solutions", "Web & App Development"].map((s) => (
                 <li key={s}>
                   <Link
-                    to={`/services#${s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}
+                    to="/services"
                     style={{
                       fontFamily: "'Geist', sans-serif",
                       fontSize: "13px",
