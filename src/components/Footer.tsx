@@ -193,15 +193,21 @@ const Footer = () => {
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               {["Graphic Design", "AI-Powered Business Solutions", "Web & App Development"].map((s) => (
-                <li
-                  key={s}
-                  style={{
-                    fontFamily: "'Geist', sans-serif",
-                    fontSize: "13px",
-                    color: FOOTER_MUTED,
-                  }}
-                >
-                  {s}
+                <li key={s}>
+                  <Link
+                    to={`/services#${s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}
+                    style={{
+                      fontFamily: "'Geist', sans-serif",
+                      fontSize: "13px",
+                      color: FOOTER_MUTED,
+                      textDecoration: "none",
+                      transition: "color 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = FOOTER_TEXT)}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = FOOTER_MUTED)}
+                  >
+                    {s}
+                  </Link>
                 </li>
               ))}
             </ul>

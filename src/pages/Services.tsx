@@ -1,4 +1,5 @@
-﻿import { Link } from "react-router-dom";
+﻿import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { ArrowRight, Bot, Code2, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -59,6 +60,19 @@ const processSteps = [
 ];
 
 const Services = () => {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      // Small delay to let the page render before scrolling
+      const timer = setTimeout(() => {
+        const el = document.getElementById(hash.replace("#", ""));
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+      return () => clearTimeout(timer);
+    }
+  }, [hash]);
+
   return (
     <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <Seo
@@ -121,7 +135,9 @@ const Services = () => {
             }}
           >
             {services.map((s) => (
-              <ServiceCard key={s.title} {...s} />
+              <div key={s.title} id={s.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}>
+                <ServiceCard {...s} />
+              </div>
             ))}
           </div>
         </div>
