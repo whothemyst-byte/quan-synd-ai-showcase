@@ -147,7 +147,9 @@ const Services = () => {
             }}
           >
             {services.slice(0, 3).map((s) => (
-              <ServiceCard key={s.title} {...s} />
+              <div key={s.title} id={s.title.toLowerCase().replace(/\s+/g, "-")}>
+                <ServiceCard {...s} />
+              </div>
             ))}
           </div>
 
@@ -163,7 +165,9 @@ const Services = () => {
             }}
           >
             {services.slice(3).map((s) => (
-              <ServiceCard key={s.title} {...s} />
+              <div key={s.title} id={s.title.toLowerCase().replace(/\s+/g, "-")}>
+                <ServiceCard {...s} />
+              </div>
             ))}
           </div>
         </div>
