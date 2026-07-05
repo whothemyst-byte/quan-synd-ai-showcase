@@ -281,7 +281,7 @@ const Footer = () => {
             padding: "20px 0",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
           }}
         >
           <p
@@ -293,16 +293,6 @@ const Footer = () => {
             }}
           >
             © {currentYear} QuanSynd - A Scube Company. All rights reserved.
-          </p>
-          <p
-            style={{
-              fontFamily: "'Geist Mono', monospace",
-              fontSize: "10px",
-              color: AMBER,
-              letterSpacing: "0.08em",
-            }}
-          >
-            PART OF SCUBE GROUP
           </p>
         </div>
       </div>
