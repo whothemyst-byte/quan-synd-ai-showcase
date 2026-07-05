@@ -198,6 +198,7 @@ const Footer = () => {
                 <li key={s}>
                   <Link
                     to="/services"
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     style={{
                       fontFamily: "'Geist', sans-serif",
                       fontSize: "13px",
