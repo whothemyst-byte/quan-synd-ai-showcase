@@ -111,34 +111,47 @@
         if (!isLocalRedirect(redirect)) { fail("Invalid return address."); return; }
         if (provider !== "google" && provider !== "github") { fail("Unsupported sign-in provider."); return; }
 
-        const startUrl = selfUrl();        // start page (no callback marker)
-        const cbUrl = startUrl + "&cb=1";  // dedicated OAuth-return marker we control
+        const startUrl = selfUrl();          // fresh-start page (no markers)
+        const cbUrl = startUrl + "&cb=1";    // OAuth-provider return leg
+        const doneUrl = startUrl + "&done=1"; // post-callback leg: session is ready to hand back
 
         try {
           await loadClerk();
           const clerk = window.Clerk;
           await clerk.load();
 
-          // 1) Already signed in -> hand the session back to the app.
-          if (clerk.user) { await handoff(clerk); return; }
-
-          // 2) Returning from the provider (our own cb marker) -> finalize the sign-in.
-          //    handleRedirectCallback completes the session and navigates to afterSignInUrl
-          //    (startUrl, no marker), where branch 1 then runs the handoff.
-          if (params.get("cb") === "1") {
-            setStatus("Completing sign-in…");
-            await clerk.handleRedirectCallback({ afterSignInUrl: startUrl, afterSignUpUrl: startUrl });
+          // 1) Back from a completed callback -> hand the session to the app.
+          if (params.get("done") === "1") {
             if (clerk.user) { await handoff(clerk); return; }
             fail("Could not complete sign-in. Please try again.");
             return;
           }
 
-          // 3) Fresh start: kick off OAuth in this real browser.
+          // 2) Returning from the provider (our own cb marker) -> finalize the sign-in.
+          //    handleRedirectCallback completes the session and navigates to doneUrl,
+          //    where branch 1 then runs the handoff.
+          if (params.get("cb") === "1") {
+            setStatus("Completing sign-in…");
+            await clerk.handleRedirectCallback({ afterSignInUrl: doneUrl, afterSignUpUrl: doneUrl });
+            if (clerk.user) { await handoff(clerk); return; }
+            fail("Could not complete sign-in. Please try again.");
+            return;
+          }
+
+          // 3) Fresh start. A leftover browser session from an earlier sign-in must not
+          //    short-circuit the flow back to the old account, so drop it; oidcPrompt
+          //    makes Google show its account chooser instead of silently reusing the
+          //    last Google session (GitHub ignores the prompt).
+          if (clerk.user) {
+            setStatus("Switching account…");
+            await clerk.signOut();
+          }
           setStatus("Redirecting to " + provider + "…");
           await clerk.client.signIn.authenticateWithRedirect({
             strategy: "oauth_" + provider,
             redirectUrl: cbUrl,
-            redirectUrlComplete: startUrl,
+            redirectUrlComplete: doneUrl,
+            oidcPrompt: "select_account",
           });
         } catch (e) {
           fail((e && e.message) ? e.message : String(e));
